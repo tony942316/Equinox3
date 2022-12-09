@@ -10,6 +10,8 @@ int main()
 
 	Tester test;
 	test.testAll();
+	eqx::Random::randInt(0, 10);
+	eqx::Random::randDouble(0.0, 10.0);
 
 	std::cout << "End" << std::endl;
 	std::cin.get();
