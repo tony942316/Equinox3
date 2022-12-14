@@ -239,7 +239,7 @@ bool Tester::testIntDistribution()
 	std::unordered_map<int, int> intDistribution;
 	for (size_t i = 1; i <= 100; i++)
 	{
-		intDistribution[i] = 0;
+		intDistribution[static_cast<int>(i)] = 0;
 	}
 
 	for (int i = 0; i < 100'000; i++)
@@ -295,7 +295,19 @@ bool Tester::testGenerateSeed()
 	for (int i = 0; i < 100'000; i++)
 	{
 		seed = eqx::Random::generateSeed();
-		std::this_thread::sleep_for(std::chrono::nanoseconds(1));
+
+		std::chrono::system_clock::time_point start = std::chrono::system_clock::now();
+		std::chrono::system_clock::time_point end = start;
+		while (seed == eqx::Random::generateSeed())
+		{
+			if (seed != eqx::Random::generateSeed() ||
+				std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count() > 50)
+			{
+				break;
+			}
+			end = std::chrono::system_clock::now();
+		}
+
 		if (seed == eqx::Random::generateSeed())
 		{
 			std::cout << "GenerateSeed Fail!" << std::endl;
