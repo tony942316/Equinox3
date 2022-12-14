@@ -1,0 +1,3 @@
+..\Tester.cpp(testLogClear,136) [ERROR]: TestClear
+..\Tester.cpp(testLogGetLastLogType,162) [INFO]: TestGetLogType
+..\Tester.cpp(testLogGetLastLogMessage,179) [INFO]: TestGetLogMessage

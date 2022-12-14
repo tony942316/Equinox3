@@ -194,9 +194,11 @@ Xcopy /Y $(SolutionDir)bin\$(Platform)Release\Equinox3\Equinox3.lib $(SolutionDi
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="src\Headers\EquinoxSTD.h" />
+    <ClInclude Include="src\Headers\Log.h" />
     <ClInclude Include="src\Headers\Random.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Log.cpp" />
     <ClCompile Include="src\Random.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

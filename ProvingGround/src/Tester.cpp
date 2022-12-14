@@ -2,6 +2,9 @@
 
 #include <iostream>
 #include <unordered_map>
+#include <sstream>
+#include <chrono>
+#include <thread>
 
 #include "EquinoxSTD.h"
 
@@ -9,64 +12,305 @@ Tester::Tester()
 {
 }
 
-void Tester::testAll()
+bool Tester::testLog()
 {
-	testRandom();
+	if (testLogLog() &&
+		testLogSetLevel() &&
+		testLogSetOutputStream() &&
+		testLogSetOutputFile() &&
+		testLogClear() &&
+		testLogGetLastLogType() &&
+		testLogGetLastLogMessage())
+	{
+		std::cout << "Log Tests Passed" << std::endl;
+		return true;
+	}
+	else
+	{
+		std::cout << "Log Tests Failed!" << std::endl;
+		return false;
+	}
 }
 
-void Tester::testRandom()
+bool Tester::testLogLog()
 {
-	bool fail = false;
-	int randomInteger = 0;
-	double randomDouble = 0.0;
-	unsigned int seed1 = 0, seed2 = 0;
-	std::unordered_map<int, int> intDist;
-	for (int i = 0; i < 101; i++)
+	std::stringstream ss;
+	std::string line = "", ans = "";
+
+	eqx::Log::setOutputStream(ss);
+	eqx::Log::setLevel(eqx::Log::Level::error);
+	eqx::Log::log(eqx::Log::Level::error, "Testing");
+
+	ans = "..\\Tester.cpp(testLogLog,42) [ERROR]: Testing";
+	std::getline(ss, line);
+	if (ans != line)
 	{
-		intDist[i] = 0;
+		std::cout << "Logging Fail!" << std::endl;
+		return false;
 	}
+
+	return true;
+}
+
+bool Tester::testLogSetLevel()
+{
+	std::stringstream ss;
+	std::string line = "", ans = "";
+
+	eqx::Log::setOutputStream(ss);
+	eqx::Log::setLevel(eqx::Log::Level::info);
+	eqx::Log::log(eqx::Log::Level::info, "This Should Stream");
+
+	ans = "..\\Tester.cpp(testLogSetLevel,62) [INFO]: This Should Stream";
+	std::getline(ss, line);
+	if (ans != line)
+	{
+		std::cout << "SetLevel Fail!" << std::endl;
+		return false;
+	}
+
+	eqx::Log::setLevel(eqx::Log::Level::error);
+	eqx::Log::log(eqx::Log::Level::info, "This Should Not Stream");
+
+	std::getline(ss, line);
+	ans = "";
+	if (ans != line)
+	{
+		std::cout << "SetLevel Fail!" << std::endl;
+		return false;
+	}
+
+	return true;
+}
+
+bool Tester::testLogSetOutputStream()
+{
+	std::stringstream ss;
+	std::string line = "", ans = "";
+
+	eqx::Log::setOutputStream(ss);
+	eqx::Log::setLevel(eqx::Log::Level::info);
+	eqx::Log::log(eqx::Log::Level::error, "String Stream");
+
+	ans = "..\\Tester.cpp(testLogSetOutputStream,93) [ERROR]: String Stream";
+	std::getline(ss, line);
+	if (ans != line)
+	{
+		std::cout << "SetOutputStream Fail!" << std::endl;
+		return false;
+	}
+
+	return true;
+}
+
+bool Tester::testLogSetOutputFile()
+{
+	std::stringstream ss;
+	std::string line = "", ans = "";
+	std::ifstream file;
+
+	eqx::Log::setOutputStream(ss);
+	eqx::Log::setOutputFile("TestOutputFile.txt");
+	eqx::Log::setLevel(eqx::Log::Level::info);
+	eqx::Log::log(eqx::Log::Level::error, "OutputFile");
+	eqx::Log::setOutputFile("Log.txt");
+
+	file.open("TestOutputFile.txt", std::ios::in);
+	ans = "..\\Tester.cpp(testLogSetOutputFile,115) [ERROR]: OutputFile";
+	std::getline(file, line);
+	if (ans != line)
+	{
+		std::cout << "SetOutputFile Fail!" << std::endl;
+		return false;
+	}
+
+	return true;
+}
+
+bool Tester::testLogClear()
+{
+	std::stringstream ss;
+
+	eqx::Log::setOutputStream(ss);
+	eqx::Log::setLevel(eqx::Log::Level::info);
+	eqx::Log::log(eqx::Log::Level::error, "TestClear", eqx::Log::Type::runtimeError);
+
+	if (eqx::Log::getLastLogMessage() != "TestClear" ||
+		eqx::Log::getLastLogType() != eqx::Log::Type::runtimeError)
+	{
+		std::cout << "LogClear Fail!" << std::endl;
+		return false;
+	}
+
+	eqx::Log::clear();
+	if (eqx::Log::getLastLogMessage() != "" ||
+		eqx::Log::getLastLogType() != eqx::Log::Type::none)
+	{
+		std::cout << "LogClear Fail!" << std::endl;
+		return false;
+	}
+
+	return true;
+}
+
+bool Tester::testLogGetLastLogType()
+{
+	std::stringstream ss;
+
+	eqx::Log::setOutputStream(ss);
+	eqx::Log::setLevel(eqx::Log::Level::info);
+	eqx::Log::log(eqx::Log::Level::info, "TestGetLogType", eqx::Log::Type::info);
+
+	if (eqx::Log::getLastLogType() != eqx::Log::Type::info)
+	{
+		std::cout << "GetLastLogType Fail!" << std::endl;
+		return false;
+	}
+
+	return true;
+}
+
+bool Tester::testLogGetLastLogMessage()
+{
+	std::stringstream ss;
+
+	eqx::Log::setOutputStream(ss);
+	eqx::Log::setLevel(eqx::Log::Level::info);
+	eqx::Log::log(eqx::Log::Level::info, "TestGetLogMessage");
+
+	if (eqx::Log::getLastLogMessage() != "TestGetLogMessage")
+	{
+		std::cout << "GetLastLogMessage Fail!" << std::endl;
+		return false;
+	}
+
+	return true;
+}
+
+bool Tester::testRandom()
+{
+	if (testRandInt() &&
+		testRandDouble() &&
+		testGenerateSeed() &&
+		testIntDistribution())
+	{
+		std::cout << "Random Tests Passed" << std::endl;
+		return true;
+	}
+	else
+	{
+		std::cout << "Random Test Failed!" << std::endl;
+		return false;
+	}
+}
+
+bool Tester::testRandInt()
+{
+	int randomInteger = 0;
 	for (int i = 0; i < 100'000; i++)
 	{
-		seed1 = eqx::Random::generateSeed();
-
 		randomInteger = eqx::Random::randInt(0, 100);
 		if (randomInteger > 100 || randomInteger < 0)
 		{
-			std::cout << "Random Fail 0-100: " << randomInteger << std::endl;
-			fail = true;
-			break;
-		}
-		intDist[randomInteger]++;
-
-		randomDouble = eqx::Random::randDouble(0.0, 100.0);
-		if (randomDouble > 100.0 || randomDouble < 0.0)
-		{
-			std::cout << "Random Fail 0.0-100.0: " << randomDouble << std::endl;
-			fail = true;
-			break;
+			std::cout << "RandInt Fail!" << std::endl;
+			return false;
 		}
 
-		seed2 = eqx::Random::generateSeed();
-		if (seed1 == seed2)
+		randomInteger = eqx::Random::randInt(-100, 0);
+		if (randomInteger < -100 || randomInteger > 0)
 		{
-			std::cout << "Random Fail seed == seed: " << seed1 << ", " << seed2 << std::endl;
-			fail = true;
-			break;
+			std::cout << "RandInt Fail!" << std::endl;
+			return false;
+		}
+
+		randomInteger = eqx::Random::randInt(-100, 100);
+		if (randomInteger < -100 || randomInteger > 100)
+		{
+			std::cout << "RandInt Fail!" << std::endl;
+			return false;
 		}
 	}
 
-	for (const std::pair<int, int>& num : intDist)
+	return true;
+}
+
+bool Tester::testIntDistribution()
+{
+	std::unordered_map<int, int> intDistribution;
+	for (size_t i = 1; i <= 100; i++)
 	{
-		if (num.second > 1400 || num.second < 600)
+		intDistribution[i] = 0;
+	}
+
+	for (int i = 0; i < 100'000; i++)
+	{
+		intDistribution[eqx::Random::randInt(1, 100)]++;
+	}
+
+	for (std::pair<int, int> link : intDistribution)
+	{
+		if (link.second > 1'300 || link.second < 700)
 		{
-			std::cout << "Unexpected Distribution: " << num.first << ", " << num.second << std::endl;
-			fail = true;
-			break;
+			std::cout << "IntDistribution Fail!" << std::endl;
+			return false;
 		}
 	}
 
-	if (!fail)
+	return true;
+}
+
+bool Tester::testRandDouble()
+{
+	double randomDouble = 0.0;
+	for (int i = 0; i < 100'000; i++)
 	{
-		std::cout << "Random Tests Pass" << std::endl;
+		randomDouble = eqx::Random::randDouble(0.0, 1.0);
+		if (randomDouble > 1.0 || randomDouble < 0.0)
+		{
+			std::cout << "RandDouble Fail!" << std::endl;
+			return false;
+		}
+
+		randomDouble = eqx::Random::randDouble(-1.0, 0.0);
+		if (randomDouble < -1.0 || randomDouble > 0.0)
+		{
+			std::cout << "RandDouble Fail!" << std::endl;
+			return false;
+		}
+
+		randomDouble = eqx::Random::randDouble(-1.0, 1.0);
+		if (randomDouble < -1.0 || randomDouble > 1.0)
+		{
+			std::cout << "RandDouble Fail!" << std::endl;
+			return false;
+		}
 	}
+
+	return true;
+}
+
+bool Tester::testGenerateSeed()
+{
+	unsigned int seed = 0;
+	for (int i = 0; i < 100'000; i++)
+	{
+		seed = eqx::Random::generateSeed();
+		std::this_thread::sleep_for(std::chrono::nanoseconds(1));
+		if (seed == eqx::Random::generateSeed())
+		{
+			std::cout << "GenerateSeed Fail!" << std::endl;
+			return false;
+		}
+	}
+
+	return true;
+}
+
+void Tester::testAll()
+{
+	std::cout << "\n";
+	testLog();
+	std::cout << "\n";
+	testRandom();
+	std::cout << "\n";
 }
