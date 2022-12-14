@@ -8,7 +8,7 @@
 namespace eqx
 {
 	/**
-	 * @brief Logs Errors and Warnings To A Stream And A File
+	 * @brief Logs Errors And Warnings To A Stream And A File
 	 */
 	class Log
 	{
