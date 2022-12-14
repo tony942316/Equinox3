@@ -32,7 +32,7 @@ namespace eqx
 		static double randDouble(double lowerBound, double upperBound);
 
 		/**
-		 * @brief Generate A Random Seed
+		 * @brief Generate A Random Seed From Current Time
 		 * 
 		 * @returns Seed
 		*/
