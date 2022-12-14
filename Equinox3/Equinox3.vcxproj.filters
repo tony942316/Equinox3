@@ -24,12 +24,18 @@
     <ClInclude Include="src\Headers\Log.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\Headers\StopWatch.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Random.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Log.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\StopWatch.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

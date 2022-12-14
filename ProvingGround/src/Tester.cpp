@@ -48,7 +48,7 @@ bool Tester::testLogLog()
 	std::getline(ss, line);
 	if (ans != line)
 	{
-		std::cout << "Logging Fail!" << std::endl;
+		std::cout << "\nLogging Fail!" << std::endl;
 		return false;
 	}
 
@@ -68,7 +68,7 @@ bool Tester::testLogSetLevel()
 	std::getline(ss, line);
 	if (ans != line)
 	{
-		std::cout << "SetLevel Fail!" << std::endl;
+		std::cout << "\nSetLevel Fail!" << std::endl;
 		return false;
 	}
 
@@ -79,7 +79,7 @@ bool Tester::testLogSetLevel()
 	ans = "";
 	if (ans != line)
 	{
-		std::cout << "SetLevel Fail!" << std::endl;
+		std::cout << "\nSetLevel Fail!" << std::endl;
 		return false;
 	}
 
@@ -99,7 +99,7 @@ bool Tester::testLogSetOutputStream()
 	std::getline(ss, line);
 	if (ans != line)
 	{
-		std::cout << "SetOutputStream Fail!" << std::endl;
+		std::cout << "\nSetOutputStream Fail!" << std::endl;
 		return false;
 	}
 
@@ -123,7 +123,7 @@ bool Tester::testLogSetOutputFile()
 	std::getline(file, line);
 	if (ans != line)
 	{
-		std::cout << "SetOutputFile Fail!" << std::endl;
+		std::cout << "\nSetOutputFile Fail!" << std::endl;
 		return false;
 	}
 
@@ -141,7 +141,7 @@ bool Tester::testLogClear()
 	if (eqx::Log::getLastLogMessage() != "TestClear" ||
 		eqx::Log::getLastLogType() != eqx::Log::Type::runtimeError)
 	{
-		std::cout << "LogClear Fail!" << std::endl;
+		std::cout << "\nLogClear Fail!" << std::endl;
 		return false;
 	}
 
@@ -149,7 +149,7 @@ bool Tester::testLogClear()
 	if (eqx::Log::getLastLogMessage() != "" ||
 		eqx::Log::getLastLogType() != eqx::Log::Type::none)
 	{
-		std::cout << "LogClear Fail!" << std::endl;
+		std::cout << "\nLogClear Fail!" << std::endl;
 		return false;
 	}
 
@@ -166,7 +166,7 @@ bool Tester::testLogGetLastLogType()
 
 	if (eqx::Log::getLastLogType() != eqx::Log::Type::info)
 	{
-		std::cout << "GetLastLogType Fail!" << std::endl;
+		std::cout << "\nGetLastLogType Fail!" << std::endl;
 		return false;
 	}
 
@@ -183,7 +183,7 @@ bool Tester::testLogGetLastLogMessage()
 
 	if (eqx::Log::getLastLogMessage() != "TestGetLogMessage")
 	{
-		std::cout << "GetLastLogMessage Fail!" << std::endl;
+		std::cout << "\nGetLastLogMessage Fail!" << std::endl;
 		return false;
 	}
 
@@ -215,21 +215,21 @@ bool Tester::testRandInt()
 		randomInteger = eqx::Random::randInt(0, 100);
 		if (randomInteger > 100 || randomInteger < 0)
 		{
-			std::cout << "RandInt Fail!" << std::endl;
+			std::cout << "\nRandInt Fail!" << std::endl;
 			return false;
 		}
 
 		randomInteger = eqx::Random::randInt(-100, 0);
 		if (randomInteger < -100 || randomInteger > 0)
 		{
-			std::cout << "RandInt Fail!" << std::endl;
+			std::cout << "\nRandInt Fail!" << std::endl;
 			return false;
 		}
 
 		randomInteger = eqx::Random::randInt(-100, 100);
 		if (randomInteger < -100 || randomInteger > 100)
 		{
-			std::cout << "RandInt Fail!" << std::endl;
+			std::cout << "\nRandInt Fail!" << std::endl;
 			return false;
 		}
 	}
@@ -254,7 +254,7 @@ bool Tester::testIntDistribution()
 	{
 		if (link.second > 1'300 || link.second < 700)
 		{
-			std::cout << "IntDistribution Fail!" << std::endl;
+			std::cout << "\nIntDistribution Fail!" << std::endl;
 			return false;
 		}
 	}
@@ -270,21 +270,21 @@ bool Tester::testRandDouble()
 		randomDouble = eqx::Random::randDouble(0.0, 1.0);
 		if (randomDouble > 1.0 || randomDouble < 0.0)
 		{
-			std::cout << "RandDouble Fail!" << std::endl;
+			std::cout << "\nRandDouble Fail!" << std::endl;
 			return false;
 		}
 
 		randomDouble = eqx::Random::randDouble(-1.0, 0.0);
 		if (randomDouble < -1.0 || randomDouble > 0.0)
 		{
-			std::cout << "RandDouble Fail!" << std::endl;
+			std::cout << "\nRandDouble Fail!" << std::endl;
 			return false;
 		}
 
 		randomDouble = eqx::Random::randDouble(-1.0, 1.0);
 		if (randomDouble < -1.0 || randomDouble > 1.0)
 		{
-			std::cout << "RandDouble Fail!" << std::endl;
+			std::cout << "\nRandDouble Fail!" << std::endl;
 			return false;
 		}
 	}
@@ -313,7 +313,96 @@ bool Tester::testGenerateSeed()
 
 		if (seed == eqx::Random::generateSeed())
 		{
-			std::cout << "GenerateSeed Fail!" << std::endl;
+			std::cout << "\nGenerateSeed Fail!" << std::endl;
+			return false;
+		}
+	}
+
+	return true;
+}
+
+bool Tester::testStopWatch()
+{
+	if (testStartStop() &&
+		testReading() &&
+		testGetting())
+	{
+		std::cout << "StopWatch Tests Passed" << std::endl;
+		return true;
+	}
+	else
+	{
+		std::cout << "StopWatch Tests Failed!" << std::endl;
+		return false;
+	}
+}
+
+bool Tester::testStartStop()
+{
+	eqx::StopWatch watch;
+	for (int i = 0; i < 100'000; i++)
+	{
+		watch.start();
+		watch.stop();
+		std::chrono::system_clock::time_point start = std::chrono::system_clock::now();
+		std::chrono::system_clock::time_point end = start;
+		while (watch.getTimeNano() < 1)
+		{
+			watch.stop();
+			if (watch.getTimeNano() > 0 ||
+				std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count() > 50)
+			{
+				break;
+			}
+			end = std::chrono::system_clock::now();
+		}
+
+		if (watch.getTimeNano() < 1)
+		{
+			std::cout << "\nStartStop Fail!" << std::endl;
+			return false;
+		}
+	}
+
+	return true;
+}
+
+bool Tester::testReading()
+{
+	eqx::StopWatch watch;
+	for (int i = 0; i < 100'000; i++)
+	{
+		watch.start();
+		std::chrono::system_clock::time_point start = std::chrono::system_clock::now();
+		std::chrono::system_clock::time_point end = start;
+		while (watch.readTimeNano() < 1)
+		{
+			if (watch.readTimeNano() > 0 ||
+				std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count() > 50)
+			{
+				break;
+			}
+			end = std::chrono::system_clock::now();
+		}
+
+		if (watch.getTimeNano() < 1)
+		{
+			std::cout << "\nTestReading Fail!" << std::endl;
+			return false;
+		}
+	}
+
+	return true;
+}
+
+bool Tester::testGetting()
+{
+	eqx::StopWatch watch;
+	for (int i = 0; i < 100'000; i++)
+	{
+		if (watch.getTimeNano() > 0)
+		{
+			std::cout << "\nTestGetting Fail!" << std::endl;
 			return false;
 		}
 	}
@@ -323,9 +412,12 @@ bool Tester::testGenerateSeed()
 
 void Tester::testAll()
 {
-	std::cout << "\n";
-	testLog();
-	std::cout << "\n";
-	testRandom();
-	std::cout << "\n";
+	std::cout << "\n*********************" << std::endl;;
+	if (testLog() &&
+		testRandom() &&
+		testStopWatch())
+	{
+		std::cout << "All Pass" << std::endl;
+	}
+	std::cout << "*********************\n" << std::endl;
 }
