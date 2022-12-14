@@ -196,10 +196,12 @@ Xcopy /Y $(SolutionDir)bin\$(Platform)Release\Equinox3\Equinox3.lib $(SolutionDi
     <ClInclude Include="src\Headers\EquinoxSTD.h" />
     <ClInclude Include="src\Headers\Log.h" />
     <ClInclude Include="src\Headers\Random.h" />
+    <ClInclude Include="src\Headers\StopWatch.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Log.cpp" />
     <ClCompile Include="src\Random.cpp" />
+    <ClCompile Include="src\StopWatch.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -20,6 +20,11 @@ public:
 	bool testRandDouble();
 	bool testGenerateSeed();
 
+	bool testStopWatch();
+	bool testStartStop();
+	bool testReading();
+	bool testGetting();
+
 	void testAll();
 
 private:
