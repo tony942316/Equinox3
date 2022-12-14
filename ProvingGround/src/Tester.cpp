@@ -23,6 +23,9 @@ bool Tester::testLog()
 		testLogGetLastLogMessage())
 	{
 		std::cout << "Log Tests Passed" << std::endl;
+		eqx::Log::setLevel(eqx::Log::Level::none);
+		eqx::Log::setOutputStream(std::cout);
+		eqx::Log::setOutputFile("Log.txt");
 		return true;
 	}
 	else
@@ -41,7 +44,7 @@ bool Tester::testLogLog()
 	eqx::Log::setLevel(eqx::Log::Level::error);
 	eqx::Log::log(eqx::Log::Level::error, "Testing");
 
-	ans = "..\\Tester.cpp(testLogLog,42) [ERROR]: Testing";
+	ans = "..\\Tester.cpp(testLogLog,45) [ERROR]: Testing";
 	std::getline(ss, line);
 	if (ans != line)
 	{
@@ -61,7 +64,7 @@ bool Tester::testLogSetLevel()
 	eqx::Log::setLevel(eqx::Log::Level::info);
 	eqx::Log::log(eqx::Log::Level::info, "This Should Stream");
 
-	ans = "..\\Tester.cpp(testLogSetLevel,62) [INFO]: This Should Stream";
+	ans = "..\\Tester.cpp(testLogSetLevel,65) [INFO]: This Should Stream";
 	std::getline(ss, line);
 	if (ans != line)
 	{
@@ -92,7 +95,7 @@ bool Tester::testLogSetOutputStream()
 	eqx::Log::setLevel(eqx::Log::Level::info);
 	eqx::Log::log(eqx::Log::Level::error, "String Stream");
 
-	ans = "..\\Tester.cpp(testLogSetOutputStream,93) [ERROR]: String Stream";
+	ans = "..\\Tester.cpp(testLogSetOutputStream,96) [ERROR]: String Stream";
 	std::getline(ss, line);
 	if (ans != line)
 	{
@@ -116,7 +119,7 @@ bool Tester::testLogSetOutputFile()
 	eqx::Log::setOutputFile("Log.txt");
 
 	file.open("TestOutputFile.txt", std::ios::in);
-	ans = "..\\Tester.cpp(testLogSetOutputFile,115) [ERROR]: OutputFile";
+	ans = "..\\Tester.cpp(testLogSetOutputFile,118) [ERROR]: OutputFile";
 	std::getline(file, line);
 	if (ans != line)
 	{
