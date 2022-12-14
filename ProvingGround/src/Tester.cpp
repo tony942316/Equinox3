@@ -412,12 +412,12 @@ bool Tester::testGetting()
 
 void Tester::testAll()
 {
-	std::cout << "\n*********************" << std::endl;;
+	std::cout << "\n*********************" << std::endl;
 	if (testLog() &&
 		testRandom() &&
 		testStopWatch())
 	{
-		std::cout << "All Pass" << std::endl;
+		std::cout << "---All Pass---" << std::endl;
 	}
 	std::cout << "*********************\n" << std::endl;
 }

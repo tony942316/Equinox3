@@ -55,28 +55,28 @@ namespace eqx
 		 * 
 		 * @returns Past Time In Seconds
 		 */
-		long long getTimeSeconds();
+		long long getTimeSeconds() const;
 
 		/**
 		 * @brief Gives Past Time From Last Stop In MilliSeconds
 		 *
 		 * @returns Past Time In MilliSeconds
 		 */
-		long long getTimeMilli();
+		long long getTimeMilli() const;
 
 		/**
 		 * @brief Gives Past Time From Last Stop In MicroSeconds
 		 *
 		 * @returns Past Time In MicroSeconds
 		 */
-		long long getTimeMicro();
+		long long getTimeMicro() const;
 
 		/**
 		 * @brief Gives Past Time In NanoSeconds
 		 *
 		 * @returns Past Time In NanoSeconds
 		 */
-		long long getTimeNano();
+		long long getTimeNano() const;
 
 	private:
 		std::chrono::time_point<std::chrono::high_resolution_clock> m_StartTime, m_EndTime;
