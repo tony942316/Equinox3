@@ -25,6 +25,10 @@ public:
 	bool testReading();
 	bool testGetting();
 
+	bool testMathematics();
+	bool testWillOverflowAddition();
+	bool testDistanceGeneric();
+
 	void testAll();
 
 private:

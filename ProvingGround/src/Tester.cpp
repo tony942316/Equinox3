@@ -23,7 +23,7 @@ bool Tester::testLog()
 		testLogGetLastLogMessage())
 	{
 		std::cout << "Log Tests Passed" << std::endl;
-		eqx::Log::setLevel(eqx::Log::Level::none);
+		eqx::Log::setLevel(eqx::Log::Level::warning);
 		eqx::Log::setOutputStream(std::cout);
 		eqx::Log::setOutputFile("Log.txt");
 		return true;
@@ -410,12 +410,38 @@ bool Tester::testGetting()
 	return true;
 }
 
+bool Tester::testMathematics()
+{
+	if (testWillOverflowAddition() &&
+		testDistanceGeneric())
+	{
+		std::cout << "Mathematics Tests Passed" << std::endl;
+		return true;
+	}
+	else
+	{
+		std::cout << "Mathematics Tests Failed!" << std::endl;
+		return false;
+	}
+}
+
+bool Tester::testWillOverflowAddition()
+{
+	return false;
+}
+
+bool Tester::testDistanceGeneric()
+{
+	return false;
+}
+
 void Tester::testAll()
 {
 	std::cout << "\n*********************" << std::endl;
 	if (testLog() &&
 		testRandom() &&
-		testStopWatch())
+		testStopWatch() &&
+		testMathematics())
 	{
 		std::cout << "---All Pass---" << std::endl;
 	}

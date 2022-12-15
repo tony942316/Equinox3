@@ -36,7 +36,8 @@ namespace eqx
 			info,
 			runtimeWarning,
 			runtimeError,
-			overflowError
+			overflowError,
+			unreachableCodeError
 		};
 
 		/**
