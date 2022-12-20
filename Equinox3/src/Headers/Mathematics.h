@@ -9,23 +9,28 @@ namespace eqx
 {
 	/**
 	 * @brief Check If Two Aritmetic Types Will Overflow
-	 * 
+	 *
 	 * @param val1 Value To Be Checked
 	 * @param val2 Other Value To Be Checked
-	 * 
+	 *
 	 * @returns If Overflow Would Occur
 	 */
 	template<typename T>
-	bool willOverflowAddition(T val1, T val2)
+	bool willOverflowAddition(T x, T y)
 	{
 		T zero = static_cast<T>(0);
-		if (val1 == zero || val2 == zero)
+		if (!std::is_arithmetic<T>::value)
+		{
+			eqx::Log::log(eqx::Log::Level::error, "Not defined for non arithmetic types", eqx::Log::Type::runtimeError);
+			return true;
+		}
+		else if (x == zero || y == zero)
 		{
 			return false;
 		}
-		else if (val1 > zero && val2 > zero)
+		else if (x > zero && y > zero)
 		{
-			if (val1 + val2 <= val1)
+			if ((std::numeric_limits<T>::max() - x) < y)
 			{
 				return true;
 			}
@@ -34,9 +39,9 @@ namespace eqx
 				return false;
 			}
 		}
-		else if (val1 < zero && val2 < zero)
+		else if (x < zero && y < zero)
 		{
-			if (val1 + val2 >= val1)
+			if ((std::numeric_limits<T>::lowest() - x) > y)
 			{
 				return true;
 			}
@@ -45,13 +50,14 @@ namespace eqx
 				return false;
 			}
 		}
-		else if ((val1 < zero && val2 > zero) || (val1 > zero && val2 < zero))
+		else if (x > zero && y < zero ||
+				 x < zero && y > zero)
 		{
 			return false;
 		}
 		else
 		{
-			eqx::Log::log(eqx::Log::Level::error, "willOverflowAddition should not have reached this line", eqx::Log::Type::unreachableCodeError);
+			eqx::Log::log(eqx::Log::Level::error, "willOverflowAdditionIntegral should not have reached this line", eqx::Log::Type::unreachableCodeError);
 			return true;
 		}
 	}
@@ -68,7 +74,13 @@ namespace eqx
 	template<typename T>
 	T distance(T x1, T x2)
 	{
-		if (willOverflowAddition(x1, -x2))
+		if (!std::is_arithmetic<T>::value)
+		{
+			eqx::Log::log(eqx::Log::Level::error, "Not defined for non arithmetic types", eqx::Log::Type::runtimeError);
+			return static_cast<T>(0);
+		}
+		else if (willOverflowAddition(x1, -x2) ||
+				 std::is_integral<T>::value && (x1 - x2) == std::numeric_limits<T>::lowest())
 		{
 			eqx::Log::log(eqx::Log::Level::error, "Arithmetic Overflow", eqx::Log::Type::overflowError);
 			return static_cast<T>(0);

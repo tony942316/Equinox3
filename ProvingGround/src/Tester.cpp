@@ -193,7 +193,10 @@ bool Tester::testLogGetLastLogMessage()
 bool Tester::testRandom()
 {
 	if (testRandInt() &&
+		testRandUnsignedInt() &&
 		testRandDouble() &&
+		testFlipCoin() &&
+		testRollDice() &&
 		testGenerateSeed() &&
 		testIntDistribution())
 	{
@@ -210,27 +213,48 @@ bool Tester::testRandom()
 bool Tester::testRandInt()
 {
 	int randomInteger = 0;
+	std::vector<std::pair<int, int>> tests;
+	tests.emplace_back(0, 100);
+	tests.emplace_back(-100, 0);
+	tests.emplace_back(-100, 100);
 	for (int i = 0; i < 100'000; i++)
 	{
-		randomInteger = eqx::Random::randInt(0, 100);
-		if (randomInteger > 100 || randomInteger < 0)
+		for (const std::pair<int, int>& test : tests)
 		{
-			std::cout << "\nRandInt Fail!" << std::endl;
-			return false;
+			randomInteger = eqx::Random::randInt(test.first, test.second);
+			if (randomInteger < test.first || randomInteger > test.second)
+			{
+				std::cout << "\nRandInt Fail!" << std::endl;
+				std::cout << "lower: " << test.first << std::endl;
+				std::cout << "upper: " << test.second << std::endl;
+				std::cout << "generated: " << randomInteger << std::endl;
+				return false;
+			}
 		}
+	}
 
-		randomInteger = eqx::Random::randInt(-100, 0);
-		if (randomInteger < -100 || randomInteger > 0)
-		{
-			std::cout << "\nRandInt Fail!" << std::endl;
-			return false;
-		}
+	return true;
+}
 
-		randomInteger = eqx::Random::randInt(-100, 100);
-		if (randomInteger < -100 || randomInteger > 100)
+bool Tester::testRandUnsignedInt()
+{
+	unsigned int randomUInteger = 0;
+	std::vector<std::pair<unsigned int, unsigned int>> tests;
+	tests.emplace_back(0U, 100U);
+	tests.emplace_back(0U, std::numeric_limits<unsigned int>::max());
+	for (int i = 0; i < 100'000; i++)
+	{
+		for (const std::pair<unsigned int, unsigned int>& test : tests)
 		{
-			std::cout << "\nRandInt Fail!" << std::endl;
-			return false;
+			randomUInteger = eqx::Random::randUnsignedInt(test.first, test.second);
+			if (randomUInteger < test.first || randomUInteger > test.second)
+			{
+				std::cout << "\nRandUnsignedInt Fail!" << std::endl;
+				std::cout << "lower: " << test.first << std::endl;
+				std::cout << "upper: " << test.second << std::endl;
+				std::cout << "generated: " << randomUInteger << std::endl;
+				return false;
+			}
 		}
 	}
 
@@ -265,27 +289,79 @@ bool Tester::testIntDistribution()
 bool Tester::testRandDouble()
 {
 	double randomDouble = 0.0;
+	std::vector<std::pair<double, double>> tests;
+	tests.emplace_back(0.0, 1.0);
+	tests.emplace_back(-1.0, 0.0);
+	tests.emplace_back(-1.0, 1.0);
+	tests.emplace_back(-10.0, 1.0);
+	tests.emplace_back(-1.0, 10.0);
+	tests.emplace_back(0.0, std::numeric_limits<double>::max());
+	tests.emplace_back(std::numeric_limits<double>::lowest(), 0.0);
+	tests.emplace_back(std::numeric_limits<double>::lowest(), std::numeric_limits<double>::max());
 	for (int i = 0; i < 100'000; i++)
 	{
-		randomDouble = eqx::Random::randDouble(0.0, 1.0);
-		if (randomDouble > 1.0 || randomDouble < 0.0)
+		for (const std::pair<double, double>& test : tests)
 		{
-			std::cout << "\nRandDouble Fail!" << std::endl;
+			randomDouble = eqx::Random::randDouble(test.first, test.second);
+			if (randomDouble < test.first || randomDouble > test.second)
+			{
+				std::cout << std::setprecision(20);
+				std::cout << "\nRandDouble Fail" << std::endl;
+				std::cout << "lower: " << test.first << std::endl;
+				std::cout << "upper: " << test.second << std::endl;
+				std::cout << "generated: " << randomDouble << std::endl;
+				std::cout << std::setprecision(6);
+				return false;
+			}
+		}
+	}
+
+	return true;
+}
+
+bool Tester::testFlipCoin()
+{
+	int result = 0;
+	int count = 0;
+	for (int i = 0; i < 100'000; i++)
+	{
+		result = eqx::Random::flipCoin();
+		if (result != 1 && result != 0)
+		{
+			std::cout << "\nFlipCoin Fail" << std::endl;
+			std::cout << "Produced: " << result << std::endl;
 			return false;
 		}
-
-		randomDouble = eqx::Random::randDouble(-1.0, 0.0);
-		if (randomDouble < -1.0 || randomDouble > 0.0)
+		else
 		{
-			std::cout << "\nRandDouble Fail!" << std::endl;
-			return false;
+			count += result;
 		}
+	}
 
-		randomDouble = eqx::Random::randDouble(-1.0, 1.0);
-		if (randomDouble < -1.0 || randomDouble > 1.0)
+	if (count > 60'000 || count < 40'000)
+	{
+		std::cout << "\nFlipCoin Fail" << std::endl;
+		std::cout << "Landed " << count << " heads" << std::endl;
+		return false;
+	}
+
+	return true;
+}
+
+bool Tester::testRollDice()
+{
+	unsigned int roll = 0U;
+	for (int i = 0; i < 100'000; i++)
+	{
+		for (unsigned int j = 2; j < 100; j++)
 		{
-			std::cout << "\nRandDouble Fail!" << std::endl;
-			return false;
+			roll = eqx::Random::rollDice(j);
+			if (roll < 1 || roll > j)
+			{
+				std::cout << "\nRollDice Fail" << std::endl;
+				std::cout << j << " Sided Dice Rolled: " << roll << std::endl;
+				return false;
+			}
 		}
 	}
 
@@ -295,25 +371,26 @@ bool Tester::testRandDouble()
 bool Tester::testGenerateSeed()
 {
 	unsigned int seed = 0;
-	for (int i = 0; i < 100'000; i++)
+	std::unordered_map<unsigned int, unsigned int> seedCounts;
+	for (int i = 0; i < 500'000; i++)
 	{
 		seed = eqx::Random::generateSeed();
-
-		std::chrono::system_clock::time_point start = std::chrono::system_clock::now();
-		std::chrono::system_clock::time_point end = start;
-		while (seed == eqx::Random::generateSeed())
+		if (seedCounts.find(seed) == seedCounts.end())
 		{
-			if (seed != eqx::Random::generateSeed() ||
-				std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count() > 50)
-			{
-				break;
-			}
-			end = std::chrono::system_clock::now();
+			seedCounts[seed] = 1;
 		}
+		else
+		{
+			seedCounts[seed]++;
+		}
+	}
 
-		if (seed == eqx::Random::generateSeed())
+	for (const std::pair<unsigned int, unsigned int>& link : seedCounts)
+	{
+		if (link.second > 5)
 		{
 			std::cout << "\nGenerateSeed Fail!" << std::endl;
+			std::cout << link.first << " Generated " << link.second << " Times" << std::endl;
 			return false;
 		}
 	}
@@ -427,12 +504,129 @@ bool Tester::testMathematics()
 
 bool Tester::testWillOverflowAddition()
 {
-	return false;
+	std::vector<std::tuple<int, int, bool>> integralTests;
+	integralTests.reserve(200'000);
+	integralTests.emplace_back(0, 0, false);
+	integralTests.emplace_back(1, 0, false);
+	integralTests.emplace_back(-1, 0, false);
+	integralTests.emplace_back(1, 1, false);
+	integralTests.emplace_back(-1, -1, false);
+	integralTests.emplace_back(-1, 1, false);
+	integralTests.emplace_back(1, -1, false);
+	integralTests.emplace_back(std::numeric_limits<int>::max(), 1, true);
+	integralTests.emplace_back(std::numeric_limits<int>::lowest(), -1, true);
+	integralTests.emplace_back(std::numeric_limits<int>::max(), std::numeric_limits<int>::max(), true);
+	integralTests.emplace_back(std::numeric_limits<int>::lowest(), std::numeric_limits<int>::lowest(), true);
+	integralTests.emplace_back(std::numeric_limits<int>::lowest(), std::numeric_limits<int>::max(), false);
+	integralTests.emplace_back(std::numeric_limits<int>::max(), std::numeric_limits<int>::lowest(), false);
+
+	for (int i = 0; i < 50'000; i++)
+	{
+		integralTests.emplace_back(std::numeric_limits<int>::max(), eqx::Random::randInt(1, std::numeric_limits<int>::max()), true);
+		integralTests.emplace_back(std::numeric_limits<int>::lowest(), eqx::Random::randInt(std::numeric_limits<int>::lowest(), -1), true);
+		integralTests.emplace_back(eqx::Random::randInt(std::numeric_limits<int>::lowest(), -1), eqx::Random::randInt(1, std::numeric_limits<int>::max()), false);
+	}
+
+	for (const std::tuple<int, int, bool>& test : integralTests)
+	{
+		if (eqx::willOverflowAddition(std::get<0>(test), std::get<1>(test)) != std::get<2>(test))
+		{
+			std::cout << "\nTestWillOverflowAddition Integral Fail!" << std::endl;
+			return false;
+		}
+	}
+
+	std::vector<std::tuple<unsigned int, unsigned int, bool>> unsignedTests;
+	unsignedTests.reserve(200'000);
+	unsignedTests.emplace_back(0U, 0U, false);
+	unsignedTests.emplace_back(1U, 0U, false);
+	unsignedTests.emplace_back(1U, 1U, false);
+	unsignedTests.emplace_back(std::numeric_limits<unsigned int>::max(), 1U, true);
+	unsignedTests.emplace_back(std::numeric_limits<unsigned int>::max(), std::numeric_limits<unsigned int>::max(), true);
+	unsignedTests.emplace_back(std::numeric_limits<unsigned int>::max(), 0U, false);
+
+	for (const std::tuple<unsigned int, unsigned int, bool>& test : unsignedTests)
+	{
+		if (eqx::willOverflowAddition(std::get<0>(test), std::get<1>(test)) != std::get<2>(test))
+		{
+			std::cout << std::boolalpha;
+			std::cout << "\nTestWillOverflowAddition Unsigned Fail!" << std::endl;
+			std::cout << std::get<0>(test) << " + " << std::get<1>(test) << " = " << std::get<2>(test) << std::endl;
+			std::cout << std::noboolalpha;
+			return false;
+		}
+	}
+
+	std::vector<std::tuple<double, double, bool>> doubleTests;
+	double smallPosDouble = std::nexttoward(0.0, std::numeric_limits<double>::max());
+	double smallNegDouble = std::nexttoward(0.0, std::numeric_limits<double>::lowest());
+	doubleTests.reserve(200'000);
+	doubleTests.emplace_back(0.0, 0.0, false);
+	doubleTests.emplace_back(1.0, 0.0, false);
+	doubleTests.emplace_back(smallPosDouble, 0.0, false);
+	doubleTests.emplace_back(-1.0, 0.0, false);
+	doubleTests.emplace_back(smallNegDouble, 0.0, false);
+	doubleTests.emplace_back(1.0, 1.0, false);
+	doubleTests.emplace_back(smallPosDouble, smallPosDouble, false);
+	doubleTests.emplace_back(-1.0, -1.0, false);
+	doubleTests.emplace_back(smallNegDouble, smallNegDouble, false);
+	doubleTests.emplace_back(-1.0, 1.0, false);
+	doubleTests.emplace_back(smallNegDouble, smallPosDouble, false);
+	doubleTests.emplace_back(1.0, -1.0, false);
+	doubleTests.emplace_back(smallPosDouble, smallNegDouble, false);
+	doubleTests.emplace_back(std::numeric_limits<double>::max(), 1.0, true);
+	doubleTests.emplace_back(std::numeric_limits<double>::max(), smallPosDouble, true);
+	doubleTests.emplace_back(std::numeric_limits<double>::lowest(), -1.0, true);
+	doubleTests.emplace_back(std::numeric_limits<double>::lowest(), smallNegDouble, true);
+	doubleTests.emplace_back(std::numeric_limits<double>::max(), std::numeric_limits<double>::max(), true);
+	doubleTests.emplace_back(std::numeric_limits<double>::lowest(), std::numeric_limits<double>::lowest(), true);
+	doubleTests.emplace_back(std::numeric_limits<double>::lowest(), std::numeric_limits<double>::max(), false);
+	doubleTests.emplace_back(std::numeric_limits<double>::max(), std::numeric_limits<double>::lowest(), false);
+
+	for (int i = 0; i < 50'000; i++)
+	{
+		doubleTests.emplace_back(std::numeric_limits<double>::max(), eqx::Random::randDouble(1.0, std::numeric_limits<double>::max()), true);
+		doubleTests.emplace_back(std::numeric_limits<double>::lowest(), eqx::Random::randDouble(std::numeric_limits<double>::lowest(), -1.0), true);
+		doubleTests.emplace_back(eqx::Random::randDouble(std::numeric_limits<double>::lowest(), -1.0), eqx::Random::randDouble(1.0, std::numeric_limits<double>::max()), false);
+	}
+
+	for (const std::tuple<double, double, bool>& test : doubleTests)
+	{
+		if (eqx::willOverflowAddition(std::get<0>(test), std::get<1>(test)) != std::get<2>(test))
+		{
+			std::cout << std::boolalpha;
+			std::cout << "\nTestWillOverflowAddition Double Fail!" << std::endl;
+			std::cout << std::get<0>(test) << " + " << std::get<1>(test) << " = " << std::get<2>(test) << std::endl;
+			std::cout << std::noboolalpha;
+			return false;
+		}
+	}
+
+	return true;
 }
 
 bool Tester::testDistanceGeneric()
 {
-	return false;
+	int result = 0;
+	std::vector<std::tuple<int, int, int>> integerTests;
+	integerTests.emplace_back(0, 0, 0);
+	integerTests.emplace_back(-1, 0, 1);
+	integerTests.emplace_back(0, 1, 1);
+	integerTests.emplace_back(0, std::numeric_limits<int>::max(), std::numeric_limits<int>::max());
+	integerTests.emplace_back(std::numeric_limits<int>::lowest() + 1, 0, std::numeric_limits<int>::max());
+
+	for (const std::tuple<int, int, int>& test : integerTests)
+	{
+		result = eqx::distance(std::get<0>(test), std::get<1>(test));
+		if (result != std::get<2>(test))
+		{
+			std::cout << "\nTestDistanceGeneric Fail!" << std::endl;
+			std::cout << "Distance from " << std::get<0>(test) << " to " << std::get<1>(test) << " is " << result << std::endl;
+			return false;
+		}
+	}
+
+	return true;
 }
 
 void Tester::testAll()

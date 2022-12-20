@@ -10,6 +10,8 @@ int main()
 
 	eqx::Log::setLevel(eqx::Log::Level::warning);
 
+	std::cout << std::abs(std::numeric_limits<int>::lowest()) << std::endl;
+
 	Tester test;
 	test.testAll();
 

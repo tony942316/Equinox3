@@ -16,8 +16,11 @@ public:
 
 	bool testRandom();
 	bool testRandInt();
+	bool testRandUnsignedInt();
 	bool testIntDistribution();
 	bool testRandDouble();
+	bool testFlipCoin();
+	bool testRollDice();
 	bool testGenerateSeed();
 
 	bool testStopWatch();
