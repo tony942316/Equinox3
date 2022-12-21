@@ -42,21 +42,21 @@ namespace eqx
 		return getTimeNano();
 	}
 
-	long long eqx::StopWatch::getTimeSeconds()
+	long long eqx::StopWatch::getTimeSeconds() const
 	{
 		return std::chrono::duration_cast<std::chrono::seconds>(m_EndTime - m_StartTime).count();
 	}
 
-	long long eqx::StopWatch::getTimeMilli()
+	long long eqx::StopWatch::getTimeMilli() const
 	{
 		return std::chrono::duration_cast<std::chrono::milliseconds>(m_EndTime - m_StartTime).count();
 	}
 
-	long long eqx::StopWatch::getTimeMicro()
+	long long eqx::StopWatch::getTimeMicro() const
 	{
 		return std::chrono::duration_cast<std::chrono::microseconds>(m_EndTime - m_StartTime).count();
 	}
-	long long StopWatch::getTimeNano()
+	long long StopWatch::getTimeNano() const
 	{
 		return std::chrono::duration_cast<std::chrono::nanoseconds>(m_EndTime - m_StartTime).count();
 	}

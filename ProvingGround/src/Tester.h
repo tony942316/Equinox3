@@ -16,14 +16,26 @@ public:
 
 	bool testRandom();
 	bool testRandInt();
+	bool testRandUnsignedInt();
 	bool testIntDistribution();
 	bool testRandDouble();
+	bool testFlipCoin();
+	bool testRollDice();
 	bool testGenerateSeed();
 
 	bool testStopWatch();
 	bool testStartStop();
 	bool testReading();
 	bool testGetting();
+
+	bool testMathematics();
+	bool testWillOverflowAddition();
+	bool testDistanceGeneric();
+
+	bool testPoint();
+	bool testPointConstruction();
+	bool testPointOperator();
+	bool testPointFunction();
 
 	void testAll();
 

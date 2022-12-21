@@ -195,7 +195,10 @@ Xcopy /Y $(SolutionDir)bin\$(Platform)Release\Equinox3\Equinox3.lib $(SolutionDi
   <ItemGroup>
     <ClInclude Include="src\Headers\EquinoxSTD.h" />
     <ClInclude Include="src\Headers\Log.h" />
+    <ClInclude Include="src\Headers\Mathematics.h" />
+    <ClInclude Include="src\Headers\Point.h" />
     <ClInclude Include="src\Headers\Random.h" />
+    <ClInclude Include="src\Headers\Rectangle.h" />
     <ClInclude Include="src\Headers\StopWatch.h" />
   </ItemGroup>
   <ItemGroup>
