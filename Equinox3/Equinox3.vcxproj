@@ -203,6 +203,7 @@ Xcopy /Y $(SolutionDir)bin\$(Platform)Release\Equinox3\Equinox3.lib $(SolutionDi
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Log.cpp" />
+    <ClCompile Include="src\Mathematics.cpp" />
     <ClCompile Include="src\Random.cpp" />
     <ClCompile Include="src\StopWatch.cpp" />
   </ItemGroup>

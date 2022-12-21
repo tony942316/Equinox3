@@ -1,12 +1,17 @@
 #pragma once
 
-#include <cmath>
 #include <type_traits>
+#include <limits>
 
 #include "Log.h"
 
 namespace eqx
 {
+	/**
+	 * @brief Long Double Pi Accurate To 36 Decimal Points
+	 */
+	long double constexpr pi = 3.141592653589793238462643383279502884L;
+
 	/**
 	 * @brief Check If Two Aritmetic Types Will Overflow
 	 *
@@ -98,5 +103,27 @@ namespace eqx
 			eqx::Log::log(eqx::Log::Level::error, "Unknown Case", eqx::Log::Type::runtimeError);
 			return static_cast<T>(0);
 		}
+	}
+
+	template <typename T>
+	T degreesToRadians(T degrees)
+	{
+		if (std::is_integral<T>::value)
+		{
+			eqx::Log::log(eqx::Log::Level::warning, "Integer degree to radian conversion", eqx::Log::Type::runtimeWarning);
+		}
+		
+		return static_cast<T>(degrees * (static_cast<long double>(eqx::pi) / 180.0l));
+	}
+
+	template <typename T>
+	T radiansToDegrees(T radians)
+	{
+		if (std::is_integral<T>::value)
+		{
+			eqx::Log::log(eqx::Log::Level::warning, "Integer degree to radian conversion", eqx::Log::Type::runtimeWarning);
+		}
+
+		return static_cast<T>(radians * (180.0l / static_cast<long double>(eqx::pi)));
 	}
 }
