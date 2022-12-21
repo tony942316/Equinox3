@@ -54,9 +54,9 @@ namespace eqx
 		/**
 		 * @brief Assign Point With Type Accurate Values From Another Point
 		 * 
-		 * @param Other Point To Assign From
+		 * @param other Point To Assign From
 		 */
-		template <typename U>
+		template<typename U>
 		void operator= (const Point<U>& other)
 		{
 			this->x = static_cast<T>(other.x);
@@ -79,7 +79,7 @@ namespace eqx
 			if (eqx::willOverflowAddition(this->x, other.y) ||
 				eqx::willOverflowAddition(this->y, other.y))
 			{
-				eqx::Log::log(eqx::Log::Level::error, "Overflow", eqx::Log::Type::overflowError);
+				eqx::Log::log(eqx::Log::Level::error, "Arithmetic Overflow", eqx::Log::Type::overflowError);
 				return Point<T>();
 			}
 			else
@@ -100,7 +100,7 @@ namespace eqx
 			if (eqx::willOverflowAddition(this->x, -other.y) ||
 				eqx::willOverflowAddition(this->y, -other.y))
 			{
-				eqx::Log::log(eqx::Log::Level::error, "Overflow", eqx::Log::Type::overflowError);
+				eqx::Log::log(eqx::Log::Level::error, "Arithmetic Overflow", eqx::Log::Type::overflowError);
 				return Point<T>();
 			}
 			else
@@ -205,7 +205,7 @@ namespace eqx
 			result > std::numeric_limits<T>::max() ||
 			result < std::numeric_limits<T>::lowest())
 		{
-			eqx::Log::log(eqx::Log::Level::error, "Overflow Error", eqx::Log::Type::overflowError);
+			eqx::Log::log(eqx::Log::Level::error, "Arithmetic Overflow", eqx::Log::Type::overflowError);
 			return static_cast<T>(0);
 		}
 		else
