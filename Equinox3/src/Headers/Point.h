@@ -76,7 +76,16 @@ namespace eqx
 		 */
 		Point<T> operator+ (const Point<T>& other) const
 		{
-			return Point<T>(this->x + other.x, this->y + other.y);
+			if (eqx::willOverflowAddition(this->x, other.y) ||
+				eqx::willOverflowAddition(this->y, other.y))
+			{
+				eqx::Log::log(eqx::Log::Level::error, "Overflow", eqx::Log::Type::overflowError);
+				return Point<T>();
+			}
+			else
+			{
+				return Point<T>(this->x + other.x, this->y + other.y);
+			}
 		}
 
 		/**
@@ -88,7 +97,16 @@ namespace eqx
 		 */
 		Point<T> operator- (const Point<T>& other) const
 		{
-			return Point<T>(this->x - other.x, this->y - other.y);
+			if (eqx::willOverflowAddition(this->x, -other.y) ||
+				eqx::willOverflowAddition(this->y, -other.y))
+			{
+				eqx::Log::log(eqx::Log::Level::error, "Overflow", eqx::Log::Type::overflowError);
+				return Point<T>();
+			}
+			else
+			{
+				return Point<T>(this->x - other.x, this->y - other.y);
+			}
 		}
 
 		/**
@@ -98,8 +116,7 @@ namespace eqx
 		 */
 		void operator+= (const Point<T>& other)
 		{
-			this->x += other.x;
-			this->y += other.y;
+			*this = *this + other;
 		}
 
 		/**
@@ -109,8 +126,7 @@ namespace eqx
 		 */
 		void operator-= (const Point<T>& other)
 		{
-			this->x -= other.x;
-			this->y -= other.y;
+			*this = *this - other;
 		}
 
 		/**
@@ -182,12 +198,12 @@ namespace eqx
 	{
 		errno = 0;
 		long double 
-			dx = static_cast<long double>(distance(point1.x, point2.x)),
-			dy = static_cast<long double>(distance(point1.y, point2.y)),
+			dx = static_cast<long double>(eqx::distance(point1.x, point2.x)),
+			dy = static_cast<long double>(eqx::distance(point1.y, point2.y)),
 			result = std::hypot(dx, dy);
 		if (errno == ERANGE ||
 			result > std::numeric_limits<T>::max() ||
-			result < std::numeric_limits<T>::min())
+			result < std::numeric_limits<T>::lowest())
 		{
 			eqx::Log::log(eqx::Log::Level::error, "Overflow Error", eqx::Log::Type::overflowError);
 			return static_cast<T>(0);
@@ -213,9 +229,9 @@ namespace eqx
 			eqx::Log::log(eqx::Log::Level::warning, "Normalizing integral value!", eqx::Log::Type::runtimeWarning);
 		}
 		
-		Point<T> origin, result;
-		result.x = distance(origin, point) == static_cast<T>(0) ? static_cast<T>(0) : point.x / distance(origin, point);
-		result.y = distance(origin, point) == static_cast<T>(0) ? static_cast<T>(0) : point.y / distance(origin, point);
+		Point<T> origin = { static_cast<T>(0), static_cast<T>(0) }, result;
+		result.x = eqx::distance(origin, point) == static_cast<T>(0) ? static_cast<T>(0) : point.x / distance(origin, point);
+		result.y = eqx::distance(origin, point) == static_cast<T>(0) ? static_cast<T>(0) : point.y / distance(origin, point);
 		return result;
 	}
 }

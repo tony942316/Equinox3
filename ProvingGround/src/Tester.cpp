@@ -607,7 +607,7 @@ bool Tester::testWillOverflowAddition()
 
 bool Tester::testDistanceGeneric()
 {
-	int result = 0;
+	int integerDist = 0;
 	std::vector<std::tuple<int, int, int>> integerTests;
 	integerTests.emplace_back(0, 0, 0);
 	integerTests.emplace_back(-1, 0, 1);
@@ -617,11 +617,312 @@ bool Tester::testDistanceGeneric()
 
 	for (const std::tuple<int, int, int>& test : integerTests)
 	{
-		result = eqx::distance(std::get<0>(test), std::get<1>(test));
-		if (result != std::get<2>(test))
+		integerDist = eqx::distance(std::get<0>(test), std::get<1>(test));
+		if (integerDist != std::get<2>(test) ||
+			integerDist != eqx::distance(std::get<1>(test), std::get<0>(test)))
 		{
-			std::cout << "\nTestDistanceGeneric Fail!" << std::endl;
-			std::cout << "Distance from " << std::get<0>(test) << " to " << std::get<1>(test) << " is " << result << std::endl;
+			std::cout << "\nTestDistanceGeneric Integer Fail!" << std::endl;
+			std::cout << "Distance from " << std::get<0>(test) << " to " << std::get<1>(test) << " is " << integerDist << std::endl;
+			std::cout << "Reverse: " << eqx::distance(std::get<1>(test), std::get<0>(test)) << std::endl;
+			return false;
+		}
+	}
+
+	double doubleDist = 0.0;
+	std::vector<std::tuple<double, double, double>> doubleTests;
+	doubleTests.emplace_back(0.0, 0.0, 0.0);
+	doubleTests.emplace_back(-1.0, 0.0, 1.0);
+	doubleTests.emplace_back(std::nexttoward(0.0, std::numeric_limits<double>::lowest()), 0.0, std::nexttoward(0.0, std::numeric_limits<double>::max()));
+	doubleTests.emplace_back(0.0, 1.0, 1.0);
+	doubleTests.emplace_back(0.0, std::nexttoward(0.0, std::numeric_limits<double>::max()), std::nexttoward(0.0, std::numeric_limits<double>::max()));
+	doubleTests.emplace_back(0.0, std::numeric_limits<double>::max(), std::numeric_limits<double>::max());
+	doubleTests.emplace_back(std::numeric_limits<double>::lowest(), 0.0, std::numeric_limits<double>::max());
+
+	for (const std::tuple<double, double, double>& test : doubleTests)
+	{
+		doubleDist = eqx::distance(std::get<0>(test), std::get<1>(test));
+		if (doubleDist != std::get<2>(test) ||
+			doubleDist != eqx::distance(std::get<1>(test), std::get<0>(test)))
+		{
+			std::cout << std::setprecision(20);
+			std::cout << "\nTestDistanceGeneric Double Fail!" << std::endl;
+			std::cout << "Distance from " << std::get<0>(test) << " to " << std::get<1>(test) << " is " << doubleDist << std::endl;
+			std::cout << std::setprecision(6);
+			return false;
+		}
+	}
+
+	return true;
+}
+
+bool Tester::testPoint()
+{
+	if (testPointConstruction() &&
+		testPointOperator() &&
+		testPointFunction())
+	{
+		std::cout << "Point Tests Passed" << std::endl;
+		return true;
+	}
+	else
+	{
+		std::cout << "Point Tests Failed!" << std::endl;
+		return false;
+	}
+}
+
+bool Tester::testPointConstruction()
+{
+	eqx::Point<int> defalutConInt;
+	if (defalutConInt.x != 0 || defalutConInt.y != 0)
+	{
+		std::cout << "\nTestPointConstruction IntDefault Fail!" << std::endl;
+		return false;
+	}
+
+	eqx::Point<double> defalutConDouble;
+	if (defalutConDouble.x != 0.0 || defalutConDouble.y != 0.0)
+	{
+		std::cout << "\nTestPointConstruction DoubleDefault Fail!" << std::endl;
+		return false;
+	}
+
+	int paramInt1, paramInt2;
+	double paramDouble1, paramDouble2;
+	std::stringstream ss;
+	eqx::Log::setOutputStream(ss);
+	eqx::Log::setOutputFile("TestOutputFile.txt");
+	eqx::Log::clear();
+	for (int i = 0; i < 100'000; i++)
+	{
+		paramInt1 = eqx::Random::randInt(-100'000, 100'000);
+		paramInt2 = eqx::Random::randInt(-100'000, 100'000);
+		eqx::Point<int> paramConInt(paramInt1, paramInt2);
+		if (paramConInt.x != paramInt1 || paramConInt.y != paramInt2)
+		{
+			std::cout << "\nTestPointConstruction IntParam Fail!" << std::endl;
+			return false;
+		}
+
+		paramDouble1 = eqx::Random::randDouble(-100'000.0, 100'000.0);
+		paramDouble2 = eqx::Random::randDouble(-100'000.0, 100'000.0);
+		eqx::Point<double> paramConDouble(paramDouble1, paramDouble2);
+		if (paramConDouble.x != paramDouble1 || paramConDouble.y != paramDouble2)
+		{
+			std::cout << "\nTestPointConstruction DoubleParam Fail!" << std::endl;
+			return false;
+		}
+
+		eqx::Point<int> copyConInt(paramConDouble);
+		if (copyConInt.x != static_cast<int>(paramConDouble.x) || copyConInt.y != static_cast<int>(paramConDouble.y) ||
+			eqx::Log::getLastLogMessage() != "Lossy Conversion" || eqx::Log::getLastLogType() != eqx::Log::Type::runtimeWarning)
+		{
+			std::cout << "\nTestPointConstruction IntCopyDouble Fail!" << std::endl;
+			return false;
+		}
+		eqx::Log::clear();
+
+		eqx::Point<double> copyConDouble(paramConInt);
+		if (copyConDouble.x != static_cast<double>(paramConInt.x) || copyConDouble.y != static_cast<double>(paramConInt.y))
+		{
+			std::cout << "\nTestPointConstruction DoubleCopy Fail!" << std::endl;
+			return false;
+		}
+	}
+	eqx::Log::setOutputStream(std::cout);
+	eqx::Log::setOutputFile("Log.txt");
+	eqx::Log::clear();
+
+	return true;
+}
+
+bool Tester::testPointOperator()
+{
+	int intParam1, intParam2;
+	eqx::Point<int> intPoint, intPlusPoint;
+	double doubleParam1, doubleParam2;
+	eqx::Point<double> doublePoint, doublePlusPoint;
+	std::stringstream ss;
+	eqx::Log::setOutputStream(ss);
+	eqx::Log::setOutputFile("TestOutputFile.txt");
+	eqx::Log::clear();
+	for (int i = 0; i < 100'000; i++)
+	{
+		intParam1 = eqx::Random::randInt(-100'000, 100'000);
+		intParam2 = eqx::Random::randInt(-100'000, 100'000);
+		intPoint = eqx::Point<int>(intParam1, intParam2);
+		if (intPoint.x != intParam1 || intPoint.y != intParam2)
+		{
+			std::cout << "\nTestPointOperator Int== Fail!" << std::endl;
+			return false;
+		}
+
+		doubleParam1 = eqx::Random::randDouble(-100'000.0, 100'000.0);
+		doubleParam2 = eqx::Random::randDouble(-100'000.0, 100'000.0);
+		doublePoint = eqx::Point<double>(doubleParam1, doubleParam2);
+		if (doublePoint.x != doubleParam1 || doublePoint.y != doubleParam2)
+		{
+			std::cout << "\nTestPointOperator Double== Fail!" << std::endl;
+			return false;
+		}
+
+		intPoint = doublePoint;
+		if (intPoint.x != static_cast<int>(doublePoint.x) || intPoint.y != static_cast<int>(doublePoint.y) ||
+			eqx::Log::getLastLogMessage() != "Lossy Conversion" || eqx::Log::getLastLogType() != eqx::Log::Type::runtimeWarning)
+		{
+			std::cout << "\nTestPointOperator Int==Double Fail" << std::endl;
+			return false;
+		}
+		eqx::Log::clear();
+
+		intPoint = eqx::Point<int>(intParam1, intParam2);
+		doublePoint = eqx::Point<double>(doubleParam1, doubleParam2);
+
+		intPlusPoint = intPoint + intPoint;
+		if (intPlusPoint.x != (2 * intPoint.x) || intPlusPoint.y != (2 * intPoint.y))
+		{
+			std::cout << "\nTestPointOperator Int+ Fail" << std::endl;
+			return false;
+		}
+
+		doublePlusPoint = doublePoint + doublePoint;
+		if (doublePlusPoint.x != (2.0 * doublePoint.x) || doublePlusPoint.y != (2.0 * doublePoint.y))
+		{
+			std::cout << "\nTestPointOperator Double+ Fail" << std::endl;
+			return false;
+		}
+
+		intPlusPoint = intPoint - intPoint;
+		if (intPlusPoint.x != 0 || intPlusPoint.y != 0)
+		{
+			std::cout << "\nTestPointOperator Int- Fail" << std::endl;
+			return false;
+		}
+
+		doublePlusPoint = doublePoint - doublePoint;
+		if (doublePlusPoint.x != 0.0 || doublePlusPoint.y != 0.0)
+		{
+			std::cout << "\nTestPointOperator Double- Fail" << std::endl;
+			return false;
+		}
+
+		intPlusPoint += intPoint;
+		if (intPlusPoint.x != intPoint.x || intPlusPoint.y != intPoint.y)
+		{
+			std::cout << "\nTestPointOperator Int+= Fail" << std::endl;
+			return false;
+		}
+
+		doublePlusPoint += doublePoint;
+		if (doublePlusPoint.x != doublePoint.x || doublePlusPoint.y != doublePoint.y)
+		{
+			std::cout << "\nTestPointOperator Double+= Fail" << std::endl;
+			return false;
+		}
+
+		intPlusPoint -= intPoint;
+		if (intPlusPoint.x != 0 || intPlusPoint.y != 0)
+		{
+			std::cout << "\nTestPointOperator Int-= Fail" << std::endl;
+			return false;
+		}
+
+		doublePlusPoint -= doublePoint;
+		if (doublePlusPoint.x != 0.0 || doublePlusPoint.y != 0.0)
+		{
+			std::cout << "\nTestPointOperator Double-= Fail" << std::endl;
+			return false;
+		}
+
+		intPlusPoint = intPoint + intPoint;
+		if (intPlusPoint == intPoint)
+		{
+			std::cout << "\nTestPointOperator Int== Fail" << std::endl;
+			return false;
+		}
+
+		doublePlusPoint = doublePoint + doublePoint;
+		if (doublePlusPoint == doublePoint)
+		{
+			std::cout << "\nTestPointOperator Double== Fail" << std::endl;
+		}
+
+		intPlusPoint = intPoint;
+		if (intPlusPoint != intPoint)
+		{
+			std::cout << "\nTestPointOperator Int!= Fail" << std::endl;
+			return false;
+		}
+
+		doublePlusPoint = doublePoint;
+		if (doublePlusPoint != doublePoint)
+		{
+			std::cout << "\nTestPointOperator Double!= Fail" << std::endl;
+			return false;
+		}
+	}
+
+	eqx::Log::setOutputStream(std::cout);
+	eqx::Log::setOutputFile("Log.txt");
+	eqx::Log::clear();
+
+	return true;
+}
+
+bool Tester::testPointFunction()
+{
+	eqx::Point<int> intPoint;
+	eqx::Point<double> doublePoint;
+	std::string ans = "";
+	for (int i = 0; i < 100'000; i++)
+	{
+		intPoint = { eqx::Random::randInt(-100'000, 100'000), eqx::Random::randInt(-100'000, 100'000) };
+		ans = std::string("(") + std::to_string(intPoint.x) + std::string(", ") + std::to_string(intPoint.y) + std::string(")");
+		if (intPoint.toString() != ans)
+		{
+			std::cout << "\nTestPointFunction toStringInt Fail" << std::endl;
+			return false;
+		}
+
+		doublePoint = { eqx::Random::randDouble(-100'000.0, 100'000.0), eqx::Random::randDouble(-100'000.0, 100'000.0) };
+		ans = std::string("(") + std::to_string(doublePoint.x) + std::string(", ") + std::to_string(doublePoint.y) + std::string(")");
+		if (doublePoint.toString() != ans)
+		{
+			std::cout << "\nTestPointFunction toStringDouble Fail" << std::endl;
+			return false;
+		}
+	}
+
+	std::vector<std::tuple<eqx::Point<int>, eqx::Point<int>, int>> intTests;
+	intTests.emplace_back(eqx::Point<int>(0, 0), eqx::Point<int>(0, 0), 0);
+	intTests.emplace_back(eqx::Point<int>(0, 0), eqx::Point<int>(1, 1), 1);
+	intTests.emplace_back(eqx::Point<int>(0, 0), eqx::Point<int>(-1, -1), 1);
+	intTests.emplace_back(eqx::Point<int>(1, 1), eqx::Point<int>(1, 1), 0);
+	intTests.emplace_back(eqx::Point<int>(0, 0), eqx::Point<int>(0, 10), 10);
+	intTests.emplace_back(eqx::Point<int>(10, 10), eqx::Point<int>(-10, -10), 28);
+
+	for (const std::tuple<eqx::Point<int>, eqx::Point<int>, int>& test : intTests)
+	{
+		if (eqx::distance(std::get<0>(test), std::get<1>(test)) != std::get<2>(test) ||
+			eqx::distance(std::get<1>(test), std::get<0>(test)) != std::get<2>(test))
+		{
+			std::cout << "\nTestPointFunction distanceInt Fail" << std::endl;
+			return false;
+		}
+	}
+
+	std::vector<std::tuple<eqx::Point<double>, eqx::Point<double>, double>> doubleTests;
+	doubleTests.emplace_back(eqx::Point<double>(0.0, 0.0), eqx::Point<double>(0.0, 0.0), 0.0);
+	doubleTests.emplace_back(eqx::Point<double>(0.0, 0.0), eqx::Point<double>(0.0, 1.0), 1.0);
+	doubleTests.emplace_back(eqx::Point<double>(0.0, 0.0), eqx::Point<double>(1.0, 0.0), 1.0);
+	doubleTests.emplace_back(eqx::Point<double>(0.0, 0.0), eqx::Point<double>(1.0, 1.0), std::sqrt(2.0));
+
+	for (const std::tuple<eqx::Point<double>, eqx::Point<double>, double>& test : doubleTests)
+	{
+		if (eqx::distance(std::get<0>(test), std::get<1>(test)) != std::get<2>(test) ||
+			eqx::distance(std::get<1>(test), std::get<0>(test)) != std::get<2>(test))
+		{
+			std::cout << "\nTestPointFunction distanceDouble Fail" << std::endl;
 			return false;
 		}
 	}
@@ -635,7 +936,8 @@ void Tester::testAll()
 	if (testLog() &&
 		testRandom() &&
 		testStopWatch() &&
-		testMathematics())
+		testMathematics() &&
+		testPoint())
 	{
 		std::cout << "---All Pass---" << std::endl;
 	}

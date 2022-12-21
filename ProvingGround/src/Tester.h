@@ -32,6 +32,11 @@ public:
 	bool testWillOverflowAddition();
 	bool testDistanceGeneric();
 
+	bool testPoint();
+	bool testPointConstruction();
+	bool testPointOperator();
+	bool testPointFunction();
+
 	void testAll();
 
 private:
