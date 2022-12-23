@@ -3,6 +3,8 @@
 #include <type_traits>
 #include <limits>
 #include <string>
+#include <cmath>
+#include <cerrno>
 
 #include "Log.h"
 #include "Mathematics.h"
@@ -37,7 +39,7 @@ namespace eqx
 			x(x),
 			y(y)
 		{
-			static_assert(std::is_arithmetic<T>::value);
+			static_assert(std::is_arithmetic<T>::value, "eqx::Point must have an arithmetic type");
 		}
 
 		/**

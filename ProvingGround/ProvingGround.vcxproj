@@ -169,11 +169,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\LogTester.cpp" />
     <ClCompile Include="src\Main.cpp" />
     <ClCompile Include="src\Tester.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\LogTester.h" />
     <ClInclude Include="src\Tester.h" />
+    <ClInclude Include="src\UnitTest.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

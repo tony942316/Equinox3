@@ -2,16 +2,14 @@
 
 #include "EquinoxSTD.h"
 
-#include "Tester.h"
+#include "LogTester.h"
 
 int main()
 {
 	std::cout << "Start" << std::endl;
 
-	eqx::Log::setLevel(eqx::Log::Level::warning);
-
-	Tester test;
-	//test.testAll();
+	LogTester logTests;
+	logTests.testAll();
 
 	std::cout << "End" << std::endl;
 	std::cin.get();

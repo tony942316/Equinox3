@@ -39,7 +39,7 @@ namespace eqx
 			w(w),
 			h(h)
 		{
-			static_assert(std::is_arithmetic<T>::value);
+			static_assert(std::is_arithmetic<T>::value, "eqx::Rectangle must have an arithmetic type");
 		}
 
 		/**
