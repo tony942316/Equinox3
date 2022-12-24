@@ -8,10 +8,8 @@ int main()
 {
 	std::cout << "Start" << std::endl;
 
-	eqx::Log::setLevel(eqx::Log::Level::warning);
-
-	Tester test;
-	//test.testAll();
+	Tester tests;
+	tests.testAll();
 
 	std::cout << "End" << std::endl;
 	std::cin.get();

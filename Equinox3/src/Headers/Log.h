@@ -14,7 +14,7 @@ namespace eqx
 	{
 	public:
 		Log(const Log& l) = delete;
-		void operator =(const Log& l) = delete;
+		void operator= (const Log& l) = delete;
 
 		/**
 		 * @brief Severity Of A Log

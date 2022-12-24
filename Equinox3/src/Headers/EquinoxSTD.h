@@ -1,7 +1,8 @@
 #pragma once
 
-#include "Random.h"
 #include "Log.h"
+#include "Random.h"
 #include "StopWatch.h"
-#include "Point.h"
 #include "Mathematics.h"
+#include "Point.h"
+#include "Rectangle.h"
