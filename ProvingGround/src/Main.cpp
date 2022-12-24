@@ -2,14 +2,14 @@
 
 #include "EquinoxSTD.h"
 
-#include "LogTester.h"
+#include "Tester.h"
 
 int main()
 {
 	std::cout << "Start" << std::endl;
 
-	LogTester logTests;
-	logTests.testAll();
+	Tester tests;
+	tests.testAll();
 
 	std::cout << "End" << std::endl;
 	std::cin.get();

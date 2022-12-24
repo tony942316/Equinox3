@@ -79,7 +79,7 @@ namespace eqx
 		 */
 		eqx::Point<T> getLocation() const
 		{
-			return eqx::Point<T>(x, y);
+			return getTopLeftPoint();
 		}
 
 		/**
