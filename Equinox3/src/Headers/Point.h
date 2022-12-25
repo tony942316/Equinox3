@@ -133,7 +133,7 @@ namespace eqx
 
 		/**
 		 * @brief This.x == Other.x, This.y == Other.y UNLESS FLOATING POINT
-		 * @brief If Floating Point Difference Must Be Less Than 0.001
+		 * @brief If Floating Point, Difference Must Be Less Than 0.001
 		 * 
 		 * @param other The Same Type Point We Compare Against
 		 * 
@@ -141,26 +141,12 @@ namespace eqx
 		 */
 		bool operator== (const Point<T>& other) const
 		{
-			if (std::is_integral<T>::value)
-			{
-				return (this->x == other.x) && (this->y == other.y);
-			}
-			else if (std::is_floating_point<T>::value)
-			{
-				return
-					std::fabs(this->x - other.x) < static_cast<T>(0.001) &&
-					std::fabs(this->y - other.y) < static_cast<T>(0.001);
-			}
-			else
-			{
-				eqx::Log::log(eqx::Log::Level::error, "This case should never be reached", eqx::Log::Type::unreachableCodeError);
-				return false;
-			}
+			return equals(*this, other);
 		}
 
 		/**
 		 * @brief This.x != Other.x, This.y != Other.y UNLESS FLOATING POINT
-		 * @brief If Floating Point Difference Must Be Greater Than Or Equal To 0.001
+		 * @brief If Floating Point, Difference Must Be Greater Than Or Equal To 0.001
 		 *
 		 * @param other The Same Type Point We Compare Against
 		 *
@@ -186,6 +172,36 @@ namespace eqx
 
 		T x, y;
 	};
+
+	/**
+	 * @brief point1.x == point2.x, point1.y == point2.y UNLESS FLOATING POINT
+	 * @brief If Floating Point, Difference Must Be Less Than error
+	 *
+	 * @param point1 First Point
+	 * @param point2 Second Point
+	 * @param error Amount Of Inaccuracy Permissible For Floating Point Types
+	 *
+	 * @returns True If Points Are Equivalent
+	 */
+	template <typename T>
+	bool equals(const Point<T>& point1, const Point<T>& point2, long double error = 0.001l)
+	{
+		if (std::is_integral<T>::value)
+		{
+			return (point1.x == point2.x) && (point1.y == point2.y);
+		}
+		else if (std::is_floating_point<T>::value)
+		{
+			return
+				std::fabs(point1.x - point2.x) < static_cast<T>(error) &&
+				std::fabs(point1.y - point2.y) < static_cast<T>(error);
+		}
+		else
+		{
+			eqx::Log::log(eqx::Log::Level::error, "This case should never be reached", eqx::Log::Type::unreachableCodeError);
+			return false;
+		}
+	}
 
 	/**
 	 * @brief Computes The Distance Between Two Points
