@@ -184,7 +184,7 @@ namespace eqx
 	 * @returns True If Points Are Equivalent
 	 */
 	template <typename T>
-	bool equals(const Point<T>& point1, const Point<T>& point2, long double error = 0.001l)
+	bool equals(const Point<T>& point1, const Point<T>& point2, double error = 0.001)
 	{
 		if (std::is_integral<T>::value)
 		{
@@ -215,9 +215,9 @@ namespace eqx
 	T distance(const Point<T>& point1, const Point<T>& point2)
 	{
 		errno = 0;
-		long double 
-			dx = static_cast<long double>(eqx::distance(point1.x, point2.x)),
-			dy = static_cast<long double>(eqx::distance(point1.y, point2.y)),
+		double 
+			dx = static_cast<double>(eqx::distance(point1.x, point2.x)),
+			dy = static_cast<double>(eqx::distance(point1.y, point2.y)),
 			result = std::hypot(dx, dy);
 		if (errno == ERANGE ||
 			result > std::numeric_limits<T>::max() ||
@@ -251,5 +251,26 @@ namespace eqx
 		result.x = eqx::distance(origin, point) == static_cast<T>(0) ? static_cast<T>(0) : point.x / distance(origin, point);
 		result.y = eqx::distance(origin, point) == static_cast<T>(0) ? static_cast<T>(0) : point.y / distance(origin, point);
 		return result;
+	}
+
+	/**
+	 * @brief Compute The Angle Of A Point In Degrees From The Origin (0, 0)
+	 * 
+	 * @param point Point The Angle Is Computed From
+	 * 
+	 * @returns Angle In Degrees
+	 */
+	template <typename T>
+	double angle(const Point<T>& point)
+	{
+		Point<T> normPoint = eqx::normalize(point);
+		std::pair<double, double> 
+			sinVals = eqx::arcsin(normPoint.y),
+			cosVals = eqx::arccos(normPoint.x);
+
+		return
+			(eqx::equals(sinVals.first, cosVals.first) ||
+			eqx::equals(sinVals.first, cosVals.second)) ?
+			sinVals.first : sinVals.second;
 	}
 }
