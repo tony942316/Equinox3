@@ -6,3 +6,4 @@
 #include "Mathematics.h"
 #include "Point.h"
 #include "Rectangle.h"
+#include "Benchmark.h"

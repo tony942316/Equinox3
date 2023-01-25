@@ -197,6 +197,7 @@ Xcopy /Y $(SolutionDir)bin\$(Platform)$(Configuration)\$(ProjectName)\$(ProjectN
     </CustomBuildStep>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\Headers\Benchmark.h" />
     <ClInclude Include="src\Headers\EquinoxSTD.h" />
     <ClInclude Include="src\Headers\Log.h" />
     <ClInclude Include="src\Headers\Mathematics.h" />
@@ -206,6 +207,7 @@ Xcopy /Y $(SolutionDir)bin\$(Platform)$(Configuration)\$(ProjectName)\$(ProjectN
     <ClInclude Include="src\Headers\StopWatch.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Benchmark.cpp" />
     <ClCompile Include="src\Log.cpp" />
     <ClCompile Include="src\Mathematics.cpp" />
     <ClCompile Include="src\Random.cpp" />

@@ -13,6 +13,12 @@ namespace eqx
 	long double constexpr pi = 3.141592653589793238462643383279502884L;
 
 	/**
+	 * @brief Type Accurate Zero
+	 */
+	template <typename T>
+	T zero = static_cast<T>(0);
+
+	/**
 	 * @brief x == y UNLESS FLOATING POINT
 	 * @brief If Floating Point, Difference Must Be Less Than error
 	 *
@@ -37,6 +43,28 @@ namespace eqx
 		else if (std::is_floating_point<T>::value)
 		{
 			return std::fabs(x - y) < static_cast<T>(error);
+		}
+	}
+
+	template <typename T>
+	int getSign(T val)
+	{
+		if (!std::is_arithmetic<T>::value)
+		{
+			eqx::Log::log(eqx::Log::Level::error, "Not defined for non arithmetic types", eqx::Log::Type::runtimeError);
+			return 0;
+		}
+		else if (val > eqx::zero<T>)
+		{
+			return 1;
+		}
+		else if (val < eqx::zero<T>)
+		{
+			return -1;
+		}
+		else
+		{
+			return 0;
 		}
 	}
 

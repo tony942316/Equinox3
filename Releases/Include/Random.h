@@ -11,7 +11,7 @@ namespace eqx
 	{
 	public:
 		Random(const Random& r) = delete;
-		void operator =(const Random& r) = delete;
+		void operator= (const Random& r) = delete;
 
 		/**
 		 * @brief Generate A Random Integer
