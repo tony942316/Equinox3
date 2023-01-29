@@ -205,6 +205,7 @@ Xcopy /Y $(SolutionDir)bin\$(Platform)$(Configuration)\$(ProjectName)\$(ProjectN
     <ClInclude Include="src\Headers\Random.h" />
     <ClInclude Include="src\Headers\Rectangle.h" />
     <ClInclude Include="src\Headers\StopWatch.h" />
+    <ClInclude Include="src\Headers\SuperEnum.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Benchmark.cpp" />
@@ -212,6 +213,7 @@ Xcopy /Y $(SolutionDir)bin\$(Platform)$(Configuration)\$(ProjectName)\$(ProjectN
     <ClCompile Include="src\Mathematics.cpp" />
     <ClCompile Include="src\Random.cpp" />
     <ClCompile Include="src\StopWatch.cpp" />
+    <ClCompile Include="src\SuperEnum.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

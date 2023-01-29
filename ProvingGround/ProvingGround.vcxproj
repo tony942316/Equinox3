@@ -177,6 +177,8 @@
     <ClCompile Include="src\Main.cpp" />
     <ClCompile Include="src\Tester.cpp" />
     <ClCompile Include="src\StopWatchTester.cpp" />
+    <ClCompile Include="src\Workbench.cpp" />
+    <ClCompile Include="src\SuperEnumTester.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Headers\RectangleTester.h" />
@@ -187,6 +189,8 @@
     <ClInclude Include="src\Headers\Tester.h" />
     <ClInclude Include="src\Headers\UnitTest.h" />
     <ClInclude Include="src\Headers\StopWatchTester.h" />
+    <ClInclude Include="src\Headers\Workbench.h" />
+    <ClInclude Include="src\Headers\SuperEnumTester.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

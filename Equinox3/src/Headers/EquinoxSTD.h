@@ -1,5 +1,6 @@
 #pragma once
 
+#include "SuperEnum.h"
 #include "Log.h"
 #include "Random.h"
 #include "StopWatch.h"

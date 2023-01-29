@@ -1,35 +1,27 @@
 #include <iostream>
+#include <sstream>
+#include <type_traits>
 
 #include "EquinoxSTD.h"
-#include "Benchmark.h"
 
+#include "UnitTest.h"
 #include "Tester.h"
+#include "SuperEnumTester.h"
 
-void test1()
-{
-	static constexpr size_t size = 100'000;
-	int* arr = new int[size];
-	for (int i = 0; i < size; i++)
-	{
-		arr[i] = i;
-	}
-	delete[] arr;
-}
+#include "Workbench.h"
+
+
 
 int main()
 {
-	std::cout << "Start" << std::endl;
+	std::cout << "Start\n" << std::endl;
 
-	eqx::Benchmark base(test1);
-	base.avgBench();
-	std::cout << base.toString(eqx::Benchmark::Time::microseconds) << std::endl;
+	//workbenchMain();
 
-	//Tester tests;
-	//tests.testAll();
+	SuperEnumTester::test();
+	LogTester::test();
 
-	//std::cout << eqx::getSign(-10.0) << std::endl;
-
-	std::cout << "End" << std::endl;
+	std::cout << "\nEnd" << std::endl;
 	std::cin.get();
 	return 0;
 }

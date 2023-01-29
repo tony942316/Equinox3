@@ -21,9 +21,9 @@ namespace eqx
 		Benchmark(std::function<void(void)> function);
 
 		void bench();
-		void avgBench(int runs = 100'000);
+		void avgBench(int runs = 1'000);
 
-		std::string toString(Time time) const;
+		std::string toString(Time time = Time::microseconds) const;
 
 	private:
 		std::function<void(void)> m_Function;
