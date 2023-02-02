@@ -1,5 +1,6 @@
 #pragma once
 
+#include "SuperEnumTester.h"
 #include "LogTester.h"
 #include "RandomTester.h"
 #include "StopWatchTester.h"
@@ -15,7 +16,6 @@ public:
 	void testAll();
 
 private:
-	RandomTester randTests;
 	StopWatchTester stopWatchTests;
 	MathematicsTester mathematicsTests;
 	PointTester pointTests;

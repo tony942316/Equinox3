@@ -4,18 +4,16 @@
 #include <unordered_map>
 #include <algorithm>
 
-#include "UnitTest.h"
-
-std::string LogTester::m_FileName{ "TestOutputFile.txt" };
-std::stringstream LogTester::m_SS;
-UnitTest<std::string, std::string> LogTester::m_StringTests;
-UnitTest<eqx::Log::Type, eqx::Log::Type> LogTester::m_TypeTests;
-std::source_location LogTester::m_Location;
+std::string LogTester::s_FileName{ "TestOutputFile.txt" };
+std::stringstream LogTester::s_SS;
+UnitTest<std::string, std::string> LogTester::s_StringTests;
+UnitTest<eqx::Log::Type, eqx::Log::Type> LogTester::s_TypeTests;
+std::source_location LogTester::s_Location;
 
 bool LogTester::test()
 {
-	eqx::Log::setOutputFile(m_FileName);
-	eqx::Log::setOutputStream(m_SS);
+	eqx::Log::setOutputFile(s_FileName);
+	eqx::Log::setOutputStream(s_SS);
 	eqx::Log::setLevel(eqx::Log::Level::all);
 
 	bool pass = false;
@@ -50,13 +48,13 @@ bool LogTester::testLog()
 
 	std::unordered_map<eqx::Log::Level, std::string> expectedStrings{
 		{ eqx::Log::Level::info, eqx::Log::getFormattedString(
-								 m_Location, eqx::Log::Level::info,
+								 s_Location, eqx::Log::Level::info,
 								 "Testing Logging Info") },
 		{ eqx::Log::Level::warning, eqx::Log::getFormattedString(
-									m_Location, eqx::Log::Level::warning,
+									s_Location, eqx::Log::Level::warning,
 									"Testing Logging Warning") },
 		{ eqx::Log::Level::error, eqx::Log::getFormattedString(
-								  m_Location, eqx::Log::Level::error,
+								  s_Location, eqx::Log::Level::error,
 								  "Testing Logging Error") }
 	};
 	std::unordered_map<eqx::Log::Level, std::string> logMsgStrings{
@@ -72,15 +70,16 @@ bool LogTester::testLog()
 		expected = expectedStrings[level];
 
 		eqx::Log::log(level, logMsgStrings[level], 
-			eqx::Log::Type::none, m_Location);
-		std::getline(m_SS, produced);
-		m_StringTests.addTest(produced, expected);
+			eqx::Log::Type::none, s_Location);
+		std::getline(s_SS, produced);
+		s_StringTests.addTest(std::make_tuple(produced, expected, 
+			EQ2<std::string, std::string>));
 
 		produced = "";
 		expected = "";
 	}
 
-	return m_StringTests.test();
+	return s_StringTests.test();
 }
 
 bool LogTester::testSetLevel()
@@ -101,11 +100,11 @@ bool LogTester::testSetLevel()
 	};
 	std::unordered_map<eqx::Log::Level, std::string> expectedStrings{
 		{ eqx::Log::Level::info,  eqx::Log::getFormattedString(
-									m_Location, eqx::Log::Level::info) },
+									s_Location, eqx::Log::Level::info) },
 		{ eqx::Log::Level::warning,  eqx::Log::getFormattedString(
-									m_Location, eqx::Log::Level::warning) },
+									s_Location, eqx::Log::Level::warning) },
 		{ eqx::Log::Level::error,  eqx::Log::getFormattedString(
-									m_Location, eqx::Log::Level::error) }
+									s_Location, eqx::Log::Level::error) }
 	};
 	std::string
 		produced = "",
@@ -127,13 +126,14 @@ bool LogTester::testSetLevel()
 			expected = logMsg == shouldStream ? 
 				expectedStrings[level] + logMsg : "";
 
-			eqx::Log::log(level, logMsg, eqx::Log::Type::none, m_Location);
-			if (m_SS.eof())
+			eqx::Log::log(level, logMsg, eqx::Log::Type::none, s_Location);
+			if (s_SS.eof())
 			{
-				m_SS.clear();
+				s_SS.clear();
 			}
-			std::getline(m_SS, produced);
-			m_StringTests.addTest(produced, expected);
+			std::getline(s_SS, produced);
+			s_StringTests.addTest(std::make_tuple(produced, expected,
+				EQ2<std::string, std::string>));
 
 			produced = "";
 			expected = "";
@@ -142,7 +142,7 @@ bool LogTester::testSetLevel()
 
 	eqx::Log::setLevel(eqx::Log::Level::all);
 
-	return m_StringTests.test();
+	return s_StringTests.test();
 }
 
 bool LogTester::testSetOutputStream()
@@ -151,13 +151,13 @@ bool LogTester::testSetOutputStream()
 
 	std::unordered_map<eqx::Log::Level, std::string> expectedStrings{
 		{ eqx::Log::Level::info, eqx::Log::getFormattedString(
-								 m_Location, eqx::Log::Level::info,
+								 s_Location, eqx::Log::Level::info,
 								 "Testing Output Stream") },
 		{ eqx::Log::Level::warning, eqx::Log::getFormattedString(
-									m_Location, eqx::Log::Level::warning,
+									s_Location, eqx::Log::Level::warning,
 									"Testing Output Stream") },
 		{ eqx::Log::Level::error, eqx::Log::getFormattedString(
-								  m_Location, eqx::Log::Level::error,
+								  s_Location, eqx::Log::Level::error,
 								  "Testing Output Stream") }
 	};
 	std::string
@@ -172,17 +172,18 @@ bool LogTester::testSetOutputStream()
 
 		ss = std::stringstream();
 		eqx::Log::setOutputStream(ss);
-		eqx::Log::log(level, logMsg, eqx::Log::Type::none, m_Location);
+		eqx::Log::log(level, logMsg, eqx::Log::Type::none, s_Location);
 		std::getline(ss, produced);
-		m_StringTests.addTest(produced, expected);
+		s_StringTests.addTest(std::make_tuple(produced, expected,
+			EQ2<std::string, std::string>));
 
 		produced = "";
 		expected = "";
 	}
 
-	eqx::Log::setOutputStream(m_SS);
+	eqx::Log::setOutputStream(s_SS);
 
-	return m_StringTests.test();
+	return s_StringTests.test();
 }
 
 bool LogTester::testSetOutputFile()
@@ -191,13 +192,13 @@ bool LogTester::testSetOutputFile()
 
 	std::unordered_map<eqx::Log::Level, std::string> expectedStrings{
 		{ eqx::Log::Level::info, eqx::Log::getFormattedString(
-								 m_Location, eqx::Log::Level::info,
+								 s_Location, eqx::Log::Level::info,
 								 "Testing Output File") },
 		{ eqx::Log::Level::warning, eqx::Log::getFormattedString(
-									m_Location, eqx::Log::Level::warning,
+									s_Location, eqx::Log::Level::warning,
 									"Testing Output File") },
 		{ eqx::Log::Level::error, eqx::Log::getFormattedString(
-								  m_Location, eqx::Log::Level::error,
+								  s_Location, eqx::Log::Level::error,
 								  "Testing Output File") }
 	};
 	std::string
@@ -209,18 +210,19 @@ bool LogTester::testSetOutputFile()
 	{
 		expected = expectedStrings[level];
 
-		eqx::Log::setOutputFile(m_FileName);
-		eqx::Log::log(level, logMsg, eqx::Log::Type::none, m_Location);
-		std::fstream file(m_FileName);
+		eqx::Log::setOutputFile(s_FileName);
+		eqx::Log::log(level, logMsg, eqx::Log::Type::none, s_Location);
+		std::fstream file(s_FileName);
 		std::getline(file, produced);
 		file.close();
-		m_StringTests.addTest(produced, expected);
+		s_StringTests.addTest(std::make_tuple(produced, expected,
+			EQ2<std::string, std::string>));
 
 		produced = "";
 		expected = "";
 	}
 
-	return m_StringTests.test();
+	return s_StringTests.test();
 }
 
 bool LogTester::testClear()
@@ -240,20 +242,28 @@ bool LogTester::testClear()
 	{
 		for (const eqx::Log::Type type : eqx::Log::TypeGetTypes())
 		{
-			eqx::Log::log(level, logMsg, type, m_Location);
+			eqx::Log::log(level, logMsg, type, s_Location);
 			producedString = eqx::Log::getLastLogMessage();
 			producedType = eqx::Log::getLastLogType();
 			expectedString = logMsg;
 			expectedType = type;
-			m_StringTests.addTest(producedString, expectedString);
-			m_TypeTests.addTest(producedType, expectedType);
+			s_StringTests.addTest(
+				std::make_tuple(producedString, expectedString,
+					EQ2<std::string, std::string>));
+			s_TypeTests.addTest(
+				std::make_tuple(producedType, expectedType,
+					EQ2<eqx::Log::Type, eqx::Log::Type>));
 			eqx::Log::clear();
 			producedString = eqx::Log::getLastLogMessage();
 			expectedString = "";
 			producedType = eqx::Log::getLastLogType();
 			expectedType = eqx::Log::Type::none;
-			m_StringTests.addTest(producedString, expectedString);
-			m_TypeTests.addTest(producedType, expectedType);
+			s_StringTests.addTest(
+				std::make_tuple(producedString, expectedString,
+					EQ2<std::string, std::string>));
+			s_TypeTests.addTest(
+				std::make_tuple(producedType, expectedType,
+					EQ2<eqx::Log::Type, eqx::Log::Type>));
 
 			producedString = "";
 			expectedString = "";
@@ -262,7 +272,7 @@ bool LogTester::testClear()
 		}
 	}
 
-	return m_StringTests.test() && m_TypeTests.test();
+	return s_StringTests.test() && s_TypeTests.test();
 }
 
 bool LogTester::testGetLastLogType()
@@ -279,16 +289,18 @@ bool LogTester::testGetLastLogType()
 	{
 		for (const eqx::Log::Type type : eqx::Log::TypeGetTypes())
 		{
-			eqx::Log::log(level, logMsg, type, m_Location);
+			eqx::Log::log(level, logMsg, type, s_Location);
 			producedType = eqx::Log::getLastLogType();
 			expectedType = type;
-			m_TypeTests.addTest(producedType, expectedType);
+			s_TypeTests.addTest(
+				std::make_tuple(producedType, expectedType,
+					EQ2<eqx::Log::Type, eqx::Log::Type>));
 			producedType = eqx::Log::Type::none;
 			expectedType = eqx::Log::Type::none;
 		}
 	}
 
-	return m_TypeTests.test();
+	return s_TypeTests.test();
 }
 
 bool LogTester::testGetLastLogMessage()
@@ -302,15 +314,17 @@ bool LogTester::testGetLastLogMessage()
 
 	for (const eqx::Log::Level level : eqx::Log::getLoggableLevels())
 	{
-		eqx::Log::log(level, logMsg, eqx::Log::Type::none, m_Location);
+		eqx::Log::log(level, logMsg, eqx::Log::Type::none, s_Location);
 		producedString = eqx::Log::getLastLogMessage();
 		expectedString = logMsg;
-		m_StringTests.addTest(producedString, expectedString);
+		s_StringTests.addTest(
+			std::make_tuple(producedString, expectedString,
+				EQ2<std::string, std::string>));
 		producedString = "";
 		expectedString = "";
 	}
 
-	return m_StringTests.test();
+	return s_StringTests.test();
 }
 
 bool LogTester::testGetFormattedString()
@@ -325,31 +339,33 @@ bool LogTester::testGetFormattedString()
 		logMsg = "Testing Get Formatted String";
 
 	expectedStringBase += "..\\LogTester.cpp(testGetFormattedString,";
-	expectedStringBase += std::to_string(m_Location.line());
+	expectedStringBase += std::to_string(s_Location.line());
 	expectedStringBase += ") [";
 
 	for (const eqx::Log::Level level : eqx::Log::getLoggableLevels())
 	{
 		producedString = 
-			eqx::Log::getFormattedString(m_Location, level, logMsg);
+			eqx::Log::getFormattedString(s_Location, level, logMsg);
 		tempString = eqx::Log::LevelToString(level);
 		std::transform(tempString.cbegin(), tempString.cend(), 
 			tempString.begin(), std::toupper);
 		expectedString = expectedStringBase + tempString;
 		expectedString += "]: " + logMsg;
-		m_StringTests.addTest(producedString, expectedString);
+		s_StringTests.addTest(
+			std::make_tuple(producedString, expectedString,
+				EQ2<std::string, std::string>));
 		producedString = "";
 		expectedString = "";
 	}
 
-	return m_StringTests.test();
+	return s_StringTests.test();
 }
 
 void LogTester::prep(const std::source_location& loc)
 {
 	eqx::Log::clear();
-	m_SS = std::stringstream();
-	m_Location = loc;
-	m_StringTests.clear();
-	m_TypeTests.clear();
+	s_SS = std::stringstream();
+	s_Location = loc;
+	s_StringTests.clear();
+	s_TypeTests.clear();
 }

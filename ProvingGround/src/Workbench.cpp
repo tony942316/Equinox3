@@ -1,6 +1,10 @@
 #include "Workbench.h"
 
 #include <fstream>
+#include <random>
+
+#include "Benchmark.h"
+#include "Random.h"
 
 foo::foo()
 	:
@@ -76,6 +80,8 @@ void foo::leak()
 	x = nullptr;
 }
 
+//foo who::f;
+
 void initContainer(std::vector<foo>& container, std::initializer_list<size_t>&& vals)
 {
 	std::cout << "Emplace Factory" << std::endl;
@@ -92,21 +98,20 @@ void initContainer(std::vector<foo>& container, std::initializer_list<foo>&& val
 	container.reserve(vals.size());
 	for (const foo& val : vals)
 	{
-		container.emplace_back(std::move(val));
+		container.emplace_back((foo&&)val);
 	}
 }
 
 void testFunc()
 {
-	static std::vector<foo> foos{
-		foo()
-	};
+	
 }
 
 void workbenchMain()
 {
-	testFunc();
-	testFunc();
-	testFunc();
+	std::mt19937_64 eng(0U);
+	std::uniform_real_distribution<double> dist(std::numeric_limits<double>::lowest(), std::nexttoward(0.0, std::numeric_limits<double>::max()));
+	std::cout << dist(eng) << std::endl;
+
 	std::cin.get();
 }

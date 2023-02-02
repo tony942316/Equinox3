@@ -33,24 +33,24 @@ bool SuperEnumTester::testGetTypes()
 	UnitTest<superEnumShell::FourPub, superEnumShell::FourPub> fourPubTests;
 	UnitTest<superEnumShell::SixPub, superEnumShell::SixPub> sixPubTests;
 
-	onePubTests.setExpectedValues({
+	onePubTests.addExpectedValues({
 		superEnumShell::OnePub::e1
 	});
-	onePubTests.setProducedValues({
+	onePubTests.addProducedValues({
 		superEnumShell::OnePubGetTypes()
 	});
 
-	fourPubTests.setExpectedValues({
+	fourPubTests.addExpectedValues({
 		superEnumShell::FourPub::e1,
 		superEnumShell::FourPub::e2,
 		superEnumShell::FourPub::e3,
 		superEnumShell::FourPub::e4
 	});
-	fourPubTests.setProducedValues({
+	fourPubTests.addProducedValues({
 		superEnumShell::FourPubGetTypes()
 	});
 
-	sixPubTests.setExpectedValues({
+	sixPubTests.addExpectedValues({
 		superEnumShell::SixPub::e1,
 		superEnumShell::SixPub::e2,
 		superEnumShell::SixPub::e3,
@@ -58,7 +58,7 @@ bool SuperEnumTester::testGetTypes()
 		superEnumShell::SixPub::e5,
 		superEnumShell::SixPub::e6
 	});
-	sixPubTests.setProducedValues({
+	sixPubTests.addProducedValues({
 		superEnumShell::SixPubGetTypes()
 	});
 
@@ -72,7 +72,7 @@ bool SuperEnumTester::testToString()
 {
 	UnitTest<std::string, std::string> tests;
 
-	tests.setExpectedValues({
+	tests.addExpectedValues({
 		"e1",
 		"e1",
 		"e2",
@@ -86,7 +86,7 @@ bool SuperEnumTester::testToString()
 		"e6"
 	});
 
-	tests.setProducedValues([&]() {
+	tests.addProducedValues([&]() {
 		std::vector<std::string> result;
 		for (superEnumShell::OnePub val : superEnumShell::OnePubGetTypes())
 		{
@@ -114,7 +114,7 @@ bool SuperEnumTester::testStream()
 
 	UnitTest<std::string, std::string> tests;
 
-	tests.setExpectedValues({
+	tests.addExpectedValues({
 		"e1",
 		"e1",
 		"e2",

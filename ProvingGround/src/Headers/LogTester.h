@@ -17,6 +17,7 @@ public:
 	LogTester(LogTester&&) = delete;
 	LogTester& operator= (const LogTester&) = delete;
 	LogTester& operator= (LogTester&&) = delete;
+	~LogTester() = delete;
 
 	static bool test();
 
@@ -32,9 +33,9 @@ private:
 	static void prep(const std::source_location& loc = 
 		std::source_location::current());
 
-	static std::string m_FileName;
-	static std::stringstream m_SS;
-	static UnitTest<std::string, std::string> m_StringTests;
-	static UnitTest<eqx::Log::Type, eqx::Log::Type> m_TypeTests;
-	static std::source_location m_Location;
+	static std::string s_FileName;
+	static std::stringstream s_SS;
+	static UnitTest<std::string, std::string> s_StringTests;
+	static UnitTest<eqx::Log::Type, eqx::Log::Type> s_TypeTests;
+	static std::source_location s_Location;
 };

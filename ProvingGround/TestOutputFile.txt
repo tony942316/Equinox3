@@ -1,40 +1,40 @@
-..\LogTester.cpp(testSetOutputFile,190) [ERROR]: Testing Output File
-..\LogTester.cpp(testClear,228) [INFO]: Testing Clear
-..\LogTester.cpp(testClear,228) [INFO]: Testing Clear
-..\LogTester.cpp(testClear,228) [INFO]: Testing Clear
-..\LogTester.cpp(testClear,228) [INFO]: Testing Clear
-..\LogTester.cpp(testClear,228) [INFO]: Testing Clear
-..\LogTester.cpp(testClear,228) [INFO]: Testing Clear
-..\LogTester.cpp(testClear,228) [WARNING]: Testing Clear
-..\LogTester.cpp(testClear,228) [WARNING]: Testing Clear
-..\LogTester.cpp(testClear,228) [WARNING]: Testing Clear
-..\LogTester.cpp(testClear,228) [WARNING]: Testing Clear
-..\LogTester.cpp(testClear,228) [WARNING]: Testing Clear
-..\LogTester.cpp(testClear,228) [WARNING]: Testing Clear
-..\LogTester.cpp(testClear,228) [ERROR]: Testing Clear
-..\LogTester.cpp(testClear,228) [ERROR]: Testing Clear
-..\LogTester.cpp(testClear,228) [ERROR]: Testing Clear
-..\LogTester.cpp(testClear,228) [ERROR]: Testing Clear
-..\LogTester.cpp(testClear,228) [ERROR]: Testing Clear
-..\LogTester.cpp(testClear,228) [ERROR]: Testing Clear
-..\LogTester.cpp(testGetLastLogType,270) [INFO]: Testing Get Last Log Type
-..\LogTester.cpp(testGetLastLogType,270) [INFO]: Testing Get Last Log Type
-..\LogTester.cpp(testGetLastLogType,270) [INFO]: Testing Get Last Log Type
-..\LogTester.cpp(testGetLastLogType,270) [INFO]: Testing Get Last Log Type
-..\LogTester.cpp(testGetLastLogType,270) [INFO]: Testing Get Last Log Type
-..\LogTester.cpp(testGetLastLogType,270) [INFO]: Testing Get Last Log Type
-..\LogTester.cpp(testGetLastLogType,270) [WARNING]: Testing Get Last Log Type
-..\LogTester.cpp(testGetLastLogType,270) [WARNING]: Testing Get Last Log Type
-..\LogTester.cpp(testGetLastLogType,270) [WARNING]: Testing Get Last Log Type
-..\LogTester.cpp(testGetLastLogType,270) [WARNING]: Testing Get Last Log Type
-..\LogTester.cpp(testGetLastLogType,270) [WARNING]: Testing Get Last Log Type
-..\LogTester.cpp(testGetLastLogType,270) [WARNING]: Testing Get Last Log Type
-..\LogTester.cpp(testGetLastLogType,270) [ERROR]: Testing Get Last Log Type
-..\LogTester.cpp(testGetLastLogType,270) [ERROR]: Testing Get Last Log Type
-..\LogTester.cpp(testGetLastLogType,270) [ERROR]: Testing Get Last Log Type
-..\LogTester.cpp(testGetLastLogType,270) [ERROR]: Testing Get Last Log Type
-..\LogTester.cpp(testGetLastLogType,270) [ERROR]: Testing Get Last Log Type
-..\LogTester.cpp(testGetLastLogType,270) [ERROR]: Testing Get Last Log Type
-..\LogTester.cpp(testGetLastLogMessage,296) [INFO]: Testing Get Last Message
-..\LogTester.cpp(testGetLastLogMessage,296) [WARNING]: Testing Get Last Message
-..\LogTester.cpp(testGetLastLogMessage,296) [ERROR]: Testing Get Last Message
+..\LogTester.cpp(testSetOutputFile,191) [ERROR]: Testing Output File
+..\LogTester.cpp(testClear,230) [INFO]: Testing Clear
+..\LogTester.cpp(testClear,230) [INFO]: Testing Clear
+..\LogTester.cpp(testClear,230) [INFO]: Testing Clear
+..\LogTester.cpp(testClear,230) [INFO]: Testing Clear
+..\LogTester.cpp(testClear,230) [INFO]: Testing Clear
+..\LogTester.cpp(testClear,230) [INFO]: Testing Clear
+..\LogTester.cpp(testClear,230) [WARNING]: Testing Clear
+..\LogTester.cpp(testClear,230) [WARNING]: Testing Clear
+..\LogTester.cpp(testClear,230) [WARNING]: Testing Clear
+..\LogTester.cpp(testClear,230) [WARNING]: Testing Clear
+..\LogTester.cpp(testClear,230) [WARNING]: Testing Clear
+..\LogTester.cpp(testClear,230) [WARNING]: Testing Clear
+..\LogTester.cpp(testClear,230) [ERROR]: Testing Clear
+..\LogTester.cpp(testClear,230) [ERROR]: Testing Clear
+..\LogTester.cpp(testClear,230) [ERROR]: Testing Clear
+..\LogTester.cpp(testClear,230) [ERROR]: Testing Clear
+..\LogTester.cpp(testClear,230) [ERROR]: Testing Clear
+..\LogTester.cpp(testClear,230) [ERROR]: Testing Clear
+..\LogTester.cpp(testGetLastLogType,280) [INFO]: Testing Get Last Log Type
+..\LogTester.cpp(testGetLastLogType,280) [INFO]: Testing Get Last Log Type
+..\LogTester.cpp(testGetLastLogType,280) [INFO]: Testing Get Last Log Type
+..\LogTester.cpp(testGetLastLogType,280) [INFO]: Testing Get Last Log Type
+..\LogTester.cpp(testGetLastLogType,280) [INFO]: Testing Get Last Log Type
+..\LogTester.cpp(testGetLastLogType,280) [INFO]: Testing Get Last Log Type
+..\LogTester.cpp(testGetLastLogType,280) [WARNING]: Testing Get Last Log Type
+..\LogTester.cpp(testGetLastLogType,280) [WARNING]: Testing Get Last Log Type
+..\LogTester.cpp(testGetLastLogType,280) [WARNING]: Testing Get Last Log Type
+..\LogTester.cpp(testGetLastLogType,280) [WARNING]: Testing Get Last Log Type
+..\LogTester.cpp(testGetLastLogType,280) [WARNING]: Testing Get Last Log Type
+..\LogTester.cpp(testGetLastLogType,280) [WARNING]: Testing Get Last Log Type
+..\LogTester.cpp(testGetLastLogType,280) [ERROR]: Testing Get Last Log Type
+..\LogTester.cpp(testGetLastLogType,280) [ERROR]: Testing Get Last Log Type
+..\LogTester.cpp(testGetLastLogType,280) [ERROR]: Testing Get Last Log Type
+..\LogTester.cpp(testGetLastLogType,280) [ERROR]: Testing Get Last Log Type
+..\LogTester.cpp(testGetLastLogType,280) [ERROR]: Testing Get Last Log Type
+..\LogTester.cpp(testGetLastLogType,280) [ERROR]: Testing Get Last Log Type
+..\LogTester.cpp(testGetLastLogMessage,308) [INFO]: Testing Get Last Message
+..\LogTester.cpp(testGetLastLogMessage,308) [WARNING]: Testing Get Last Message
+..\LogTester.cpp(testGetLastLogMessage,308) [ERROR]: Testing Get Last Message

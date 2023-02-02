@@ -2,11 +2,15 @@
 
 #include <functional>
 #include <vector>
+#include <tuple>
 #include <source_location>
 #include <string>
 #include <iostream>
 #include <iomanip>
 #include <type_traits>
+
+template <typename T, typename U>
+const std::function<bool(T, U)> EQ2 = [](T x, U y) { return x == y; };
 
 template <typename T, typename U>
 std::function<bool(T, U)> EQ()
@@ -46,7 +50,7 @@ std::function<bool(T, U)> LTE()
 
 template <typename T, typename U>
 bool TEST(T Produced, U Expected,
-		  std::function<bool(T, U)> func = EQ<T, U>(),
+		  std::function<bool(T, U)> func = EQ2<T, U>,
 		  const std::source_location& loc = std::source_location::current())
 {
 	if (!func(Produced, Expected))
@@ -74,7 +78,7 @@ bool TEST(T Produced, U Expected,
 
 template <typename T, typename U>
 bool TESTALL(const std::vector<std::pair<T, U>>& tests,
-			 std::function<bool(T, U)> func = EQ<T, U>(),
+			 std::function<bool(T, U)> func = EQ2<T, U>,
 			 const std::source_location& loc = std::source_location::current())
 {
 	bool pass = true;
@@ -85,13 +89,36 @@ bool TESTALL(const std::vector<std::pair<T, U>>& tests,
 	return pass;
 }
 
+template <typename T, typename U>
+bool TestAll2(
+	const std::vector<std::tuple<T, U, std::function<bool(T, U)>>>& tests,
+	const std::source_location& loc = std::source_location::current())
+{
+	bool pass = true;
+	for (const std::tuple<T, U, std::function<bool(T, U)>>& test : tests)
+	{
+		pass = pass &&
+			TEST(std::get<0>(test),
+				std::get<1>(test),
+				std::get<2>(test) ?
+				std::get<2>(test) :
+				EQ2<T, U>,
+				loc);
+	}
+	return pass;
+}
+
 template <class T, class U>
 class UnitTest
 {
 public:
 	UnitTest()
+		:
+		m_ProducedIndex(0ULL),
+		m_ExpectedIndex(0ULL),
+		m_FunctionIndex(0ULL)
 	{
-
+		m_Tests.reserve(1'000'000);
 	}
 
 	UnitTest(const UnitTest&) = delete;
@@ -101,59 +128,98 @@ public:
 
 	void addProducedValue(const T& val)
 	{
-		m_ProducedValues.emplace_back(val);
+		if (m_ProducedIndex >= m_Tests.size())
+		{
+			m_Tests.resize(m_Tests.size() + 100);
+		}
+		std::tuple<T, U, std::function<bool(T, U)>>& test = 
+			m_Tests[m_ProducedIndex];
+		std::get<0>(test) = val;
+		m_ProducedIndex++;
 	}
 
-	void setProducedValues(std::function<std::vector<T>()> func)
+	void addProducedValues(std::function<std::vector<T>()> func)
 	{
-		m_ProducedValues = func();
+		addProducedValues(func());
 	}
 
-	void setProducedValues(const std::vector<T>& vals)
+	void addProducedValues(const std::vector<T>& vals)
 	{
-		m_ProducedValues = vals;
+		for (const T& val : vals)
+		{
+			addProducedValue(val);
+		}
 	}
 
 	void addExpectedValue(const U& val)
 	{
-		m_ExpectedValues.emplace_back(val);
+		if (m_ExpectedIndex >= m_Tests.size())
+		{
+			m_Tests.resize(m_Tests.size() + 100);
+		}
+		std::tuple<T, U, std::function<bool(T, U)>>& test =
+			m_Tests[m_ExpectedIndex];
+		std::get<1>(test) = val;
+		m_ExpectedIndex++;
 	}
 
-	void setExpectedValues(std::function<std::vector<U>()> func)
+	void addExpectedValues(std::function<std::vector<U>()> func)
 	{
-		m_ExpectedValues = func();
+		addExpectedValues(func());
 	}
 
-	void setExpectedValues(const std::vector<U>& vals)
+	void addExpectedValues(const std::vector<U>& vals)
 	{
-		m_ExpectedValues = vals;
+		for (const T& val : vals)
+		{
+			addExpectedValue(val);
+		}
 	}
 
-	void addTest(const T& produced, const U& expected)
+	void addFunction(const std::function<bool(T, U)>& val)
 	{
-		addProducedValue(produced);
-		addExpectedValue(expected);
+		if (m_FunctionIndex >= m_Tests.size())
+		{
+			m_Tests.resize(m_Tests.size() + 100);
+		}
+		std::tuple<T, U, std::function<bool(T, U)>>& test =
+			m_Tests[m_FunctionIndex];
+		std::get<2>(test) = val;
+		m_FunctionIndex++;
+	}
+
+	void addFunctions(const std::vector<std::function<bool(T, U)>>& vals)
+	{
+		for (const std::function<bool(T, U)>& val : vals)
+		{
+			addFunction(val);
+		}
+	}
+
+	void addTest(const std::tuple<T, U, std::function<bool(T, U)>>& test)
+	{
+		m_Tests.emplace_back(test);
+		m_ProducedIndex++;
+		m_ExpectedIndex++;
+		m_FunctionIndex++;
 	}
 
 	void clear()
 	{
-		m_ProducedValues.clear();
-		m_ExpectedValues.clear();
+		m_Tests.clear();
+		m_ProducedIndex = 0ULL;
+		m_ExpectedIndex = 0ULL;
+		m_FunctionIndex = 0ULL;
 	}
 
-	bool test(const std::source_location& loc = 
+	bool test(
+		const std::source_location& loc = 
 		std::source_location::current()) const
 	{
-		std::vector<std::pair<T, U>> tests;
-		tests.reserve(m_ProducedValues.size());
-		for (std::size_t i = 0; i < m_ProducedValues.size(); i++)
-		{
-			tests.emplace_back(m_ProducedValues[i], m_ExpectedValues[i]);
-		}
-		return TESTALL<T, U>(tests, EQ<T, U>(), loc);
+		return TestAll2<T, U>(m_Tests, loc);
 	}
 
 private:
-	std::vector<T> m_ProducedValues;
-	std::vector<U> m_ExpectedValues;
+	std::vector<std::tuple<T, U, std::function<bool(T, U)>>> m_Tests;
+	std::size_t m_ProducedIndex, m_ExpectedIndex, m_FunctionIndex;
 };

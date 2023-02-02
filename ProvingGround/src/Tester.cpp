@@ -9,8 +9,9 @@ Tester::Tester()
 void Tester::testAll()
 {
 	std::cout << "\n*********************" << std::endl;
-	if (LogTester::test() &&
-		randTests.testAll() &&
+	if (SuperEnumTester::test() &&
+		LogTester::test() &&
+		RandomTester::test() &&
 		stopWatchTests.testAll() &&
 		mathematicsTests.testAll() &&
 		pointTests.testAll() &&

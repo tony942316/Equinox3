@@ -10,15 +10,20 @@ namespace eqx
 	class Random
 	{
 	public:
+		Random() = delete;
 		Random(const Random& r) = delete;
-		void operator= (const Random& r) = delete;
+		Random(Random&&) = delete;
+		void operator= (const Random&) = delete;
+		Random& operator= (Random&&) = delete;
+		~Random() = delete;
 
 		/**
 		 * @brief Generate A Random Integer
 		 * 
 		 * @param lowerBound Lowest Possible Value
 		 * @param upperBound Highest Possible Value
-		 * @returns Random Integer
+		 * 
+		 * @returns Random Integer In Range [lowerBound, upperBound]
 		 */
 		static int randInt(int lowerBound, int upperBound);
 
@@ -27,23 +32,26 @@ namespace eqx
 		 *
 		 * @param lowerBound Lowest Possible Value
 		 * @param upperBound Highest Possible Value
-		 * @returns Random Unsigned Integer
+		 * 
+		 * @returns Random Unsigned Integer In Range [lowerBound, upperBound]
 		 */
-		static unsigned int randUnsignedInt(unsigned int lowerBound, unsigned int upperBound);
+		static unsigned int randUnsignedInt(unsigned int lowerBound, 
+			unsigned int upperBound);
 
 		/**
 		 * @brief Generate A Random Double
 		 * 
 		 * @param lowerBound Lowest Possible Value
 		 * @param upperBound Highest Possible Value
-		 * @returns Random Double
+		 * 
+		 * @returns Random Double In Range [lowerBound, upperBound]
 		*/
 		static double randDouble(double lowerBound, double upperBound);
 
 		/**
 		 * @brief Simulate A Coin Flip
 		 * 
-		 * @returns 1 For Heads 0 For Tails
+		 * @returns Either 1 Or 0
 		 */
 		static int flipCoin();
 
@@ -51,25 +59,22 @@ namespace eqx
 		 * @brief Simulate A Dice Roll
 		 * 
 		 * @param sides Number Of Sides On The Dice
-		 * @returns The Number The Dice Lands On
+		 * 
+		 * @returns An Unsigned Int In Range [1, sides]
 		 */
 		static unsigned int rollDice(unsigned int sides = 6);
 
 		/**
-		 * @brief Generate A Random Seed From Current Time
+		 * @brief Generate A Random Seed
 		 * 
 		 * @returns Seed
 		*/
 		static unsigned int generateSeed();
 
 	private:
-		Random();
-
-		static Random& getInstance();
-
-		std::mt19937_64 engine;
-		std::uniform_int_distribution<int> uniInt;
-		std::uniform_int_distribution<unsigned int> uniUInt;
-		std::uniform_real_distribution<double> uniDouble;
+		static std::mt19937_64 s_Engine;
+		static std::uniform_int_distribution<int> s_UniInt;
+		static std::uniform_int_distribution<unsigned int> s_UniUInt;
+		static std::uniform_real_distribution<double> s_UniDouble;
 	};
 }

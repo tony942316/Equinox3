@@ -17,6 +17,11 @@ namespace eqx
 	{
 	public:
 		Log() = delete;
+		Log(const Log&) = delete;
+		Log(Log&&) = delete;
+		Log& operator= (const Log&) = delete;
+		Log& operator= (Log&&) = delete;
+		~Log() = delete;
 
 		/**
 		 * @brief Severity Of A Log
@@ -116,10 +121,10 @@ namespace eqx
 		static const std::vector<Level>& getLoggableLevels();
 
 	private:
-		static std::ofstream m_LogFile;
-		static std::ostream m_OutputStream;
-		static Level m_LogLevel;
-		static Type m_LastErrorType;
-		static std::string m_LastMessage;
+		static std::ofstream s_LogFile;
+		static std::ostream s_OutputStream;
+		static Level s_LogLevel;
+		static Type s_LastErrorType;
+		static std::string s_LastMessage;
 	};
 }
