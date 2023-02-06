@@ -51,64 +51,44 @@ namespace eqx
 
 	double Random::randDouble(double lowerBound, double upperBound)
 	{
-		if (lowerBound >= upperBound)
+		if (lowerBound > upperBound)
 		{
 			eqx::Log::log(Log::Level::error, 
 				"Lower Bound Larger Than Upper Bound!", 
 				eqx::Log::Type::runtimeError);
 			return 0.0;
 		}
-		else if (lowerBound <= 0.0 && upperBound <= 0.0 ||
-				 lowerBound >= 0.0 && upperBound >= 0.0)
+		else if (lowerBound >= 0.0 && upperBound >= 0.0)
 		{
-			double newBound = 0.0;
-			double generatedNumber = 0.0;
-			if (upperBound == std::numeric_limits<double>::max() &&
-				lowerBound == 0.0)
+			double decoyValue = std::nexttoward(lowerBound,
+				std::numeric_limits<double>::lowest());
+			s_UniDouble = std::uniform_real_distribution<double>(
+				decoyValue, upperBound);
+			double producedValue = s_UniDouble(s_Engine);
+			if (producedValue == decoyValue)
 			{
-				newBound = 
-					std::nexttoward(lowerBound, 
-						std::numeric_limits<double>::lowest());
-				s_UniDouble = 
-					std::uniform_real_distribution<double>(newBound, 
-						upperBound);
-				generatedNumber = s_UniDouble(s_Engine);
-				if (generatedNumber == newBound)
-				{
-					return std::numeric_limits<double>::max();
-				}
-				else
-				{
-					return generatedNumber;
-				}
-			}
-			else if (lowerBound == std::numeric_limits<double>::lowest() && 
-					 upperBound == 0.0)
-			{
-				return randDouble(lowerBound, 
-					std::nexttoward(upperBound, 
-						std::numeric_limits<double>::max()));
+				return upperBound;
 			}
 			else
 			{
-				newBound = 
-					std::nexttoward(upperBound, 
-						std::numeric_limits<double>::max());
-				s_UniDouble = 
-					std::uniform_real_distribution<double>(lowerBound, 
-						newBound);
-				generatedNumber = s_UniDouble(s_Engine);
-				return generatedNumber;
+				return producedValue;
 			}
 		}
-		else if (lowerBound <= 0.0 && upperBound >= 0.0)
+		else if (lowerBound <= 0.0 && upperBound <= 0.0)
 		{
-			double offset = (-lowerBound - upperBound) / 2.0;
-			double negVal = randDouble(lowerBound + offset, 0.0);
-			double posVal = 
-				randDouble(std::nexttoward(0.0, 
-					std::numeric_limits<double>::max()), upperBound + offset);
-			return (flipCoin() ? negVal : posVal) - offset;
+			return -randDouble(-upperBound, -lowerBound);
+		}
+		else if (lowerBound < 0.0 && upperBound > 0.0)
+		{
+			double offset = -upperBound - lowerBound;
+			if (flipCoin())
+			{
+				return randDouble(lowerBound + offset, 0.0) - offset;
+			}
+			else
+			{
+				return randDouble(0.0, upperBound + offset) - offset;
+			}
 		}
 		else
 		{

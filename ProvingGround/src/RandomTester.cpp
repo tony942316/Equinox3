@@ -110,10 +110,22 @@ bool RandomTester::testRandDouble()
 	testLambda(-1.0, 1.0);
 	testLambda(-10.0, 1.0);
 	testLambda(-1.0, 10.0);
+	testLambda(-10.0, -1.0);
+	testLambda(1.0, 10.0);
 	testLambda(0.0, std::numeric_limits<double>::max());
 	testLambda(std::numeric_limits<double>::lowest(), 0.0);
 	testLambda(std::numeric_limits<double>::lowest(),
 			   std::numeric_limits<double>::max());
+	testLambda(std::numeric_limits<double>::lowest(),
+			   std::nexttoward(0.0, std::numeric_limits<double>::max()));
+	testLambda(std::nexttoward(0.0, std::numeric_limits<double>::lowest()),
+			   std::numeric_limits<double>::max());
+	testLambda(std::numeric_limits<double>::lowest(),
+			   std::nextafter(0.0, std::numeric_limits<double>::max()));
+	testLambda(std::nextafter(0.0, std::numeric_limits<double>::lowest()),
+			   std::numeric_limits<double>::max());
+	testLambda(std::nexttoward(0.0, std::numeric_limits<double>::lowest()),
+			   std::nexttoward(0.0, std::numeric_limits<double>::max()));
 
 	return s_DoubleTests.test();
 }

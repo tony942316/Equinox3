@@ -17,10 +17,11 @@ int main()
 {
 	std::cout << "Start\n" << std::endl;
 
-	workbenchMain();
-
+	//workbenchMain();
+	eqx::Log::setLevel(eqx::Log::Level::all);
 	SuperEnumTester::test();
 	LogTester::test();
+	eqx::Log::setLevel(eqx::Log::Level::all);
 	RandomTester::test();
 
 	std::cout << "\nEnd" << std::endl;

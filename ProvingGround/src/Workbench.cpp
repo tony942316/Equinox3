@@ -109,9 +109,13 @@ void testFunc()
 
 void workbenchMain()
 {
-	std::mt19937_64 eng(0U);
-	std::uniform_real_distribution<double> dist(std::numeric_limits<double>::lowest(), std::nexttoward(0.0, std::numeric_limits<double>::max()));
-	std::cout << dist(eng) << std::endl;
+	std::cout << std::setprecision(100);
+	std::cout << std::boolalpha;
+	
+	for (int i = 0; i < 30; i++)
+	{
+		std::cout << eqx::Random::randDouble(-1.0, 1.0) << std::endl;
+	}
 
 	std::cin.get();
 }
