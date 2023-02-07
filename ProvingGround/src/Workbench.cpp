@@ -112,10 +112,23 @@ void workbenchMain()
 	std::cout << std::setprecision(100);
 	std::cout << std::boolalpha;
 	
-	for (int i = 0; i < 30; i++)
+	constexpr std::size_t dataSize = 500ULL;
+
+	eqx::StopWatch watch, timer;
+	timer.start();
+	for (int i = 0; i < 1; i++)
 	{
-		std::cout << eqx::Random::randDouble(-1.0, 1.0) << std::endl;
+		watch.start();
+		int* data = new int[dataSize];
+		std::for_each(data, data + dataSize, [](int& x) { x = 25; });
+		delete[] data;
+		watch.stop();
+		//std::cout << watch.getTimeMilli() << std::endl;
 	}
+
+	std::cout << timer.readTimeMicro() << std::endl;
+
+
 
 	std::cin.get();
 }

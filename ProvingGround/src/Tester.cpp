@@ -12,7 +12,7 @@ void Tester::testAll()
 	if (SuperEnumTester::test() &&
 		LogTester::test() &&
 		RandomTester::test() &&
-		stopWatchTests.testAll() &&
+		StopWatchTester::test() &&
 		mathematicsTests.testAll() &&
 		pointTests.testAll() &&
 		rectTests.testAll())

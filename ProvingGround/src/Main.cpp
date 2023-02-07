@@ -8,6 +8,7 @@
 #include "SuperEnumTester.h"
 #include "LogTester.h"
 #include "RandomTester.h"
+#include "StopWatchTester.h"
 
 #include "Workbench.h"
 
@@ -23,6 +24,7 @@ int main()
 	LogTester::test();
 	eqx::Log::setLevel(eqx::Log::Level::all);
 	RandomTester::test();
+	StopWatchTester::test();
 
 	std::cout << "\nEnd" << std::endl;
 	std::cin.get();

@@ -79,6 +79,7 @@ namespace eqx
 		long long getTimeNano() const;
 
 	private:
-		std::chrono::time_point<std::chrono::high_resolution_clock> m_StartTime, m_EndTime;
+		std::chrono::time_point<std::chrono::steady_clock> 
+			m_StartTime, m_EndTime;
 	};
 }

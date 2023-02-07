@@ -2,14 +2,13 @@
 
 #include <iostream>
 
-#include "EquinoxSTD.h"
-#include "UnitTest.h"
+std::chrono::time_point<std::chrono::steady_clock>
+	StopWatchTester::s_Start, StopWatchTester::s_End;
+long long StopWatchTester::s_Time = 0LL;
+eqx::StopWatch StopWatchTester::s_Watch;
+UnitTest<long long, long long> StopWatchTester::s_LongLongTests;
 
-StopWatchTester::StopWatchTester()
-{
-}
-
-bool StopWatchTester::testAll()
+bool StopWatchTester::test()
 {
 	if (testStartStop() &&
 		testReading() &&
@@ -27,70 +26,180 @@ bool StopWatchTester::testAll()
 
 bool StopWatchTester::testStartStop()
 {
-	eqx::StopWatch watch;
-	for (int i = 0; i < 100'000; i++)
+	prep();
+
+	for (int i = 0; i < 1'000; i++)
 	{
-		watch.start();
-		watch.stop();
-		std::chrono::system_clock::time_point start = std::chrono::system_clock::now();
-		std::chrono::system_clock::time_point end = start;
-		while (watch.getTimeNano() < 1)
+		s_Start = std::chrono::steady_clock::now();
+		s_End = s_Start;
+		s_Watch.start();
+
+		s_LongLongTests.addTest(std::make_tuple(
+			s_Watch.getTimeMicro(), 0ULL, EQ2<long long, long long>));
+		s_LongLongTests.addTest(std::make_tuple(
+			s_Watch.getTimeNano(), 0ULL, EQ2<long long, long long>));
+		s_LongLongTests.addTest(std::make_tuple(
+			s_Watch.getTimeMilli(), 0ULL, EQ2<long long, long long>));
+		s_LongLongTests.addTest(std::make_tuple(
+			s_Watch.getTimeSeconds(), 0ULL, EQ2<long long, long long>));
+
+		while (s_Watch.getTimeNano() < 1'000 || s_Time < 1)
 		{
-			watch.stop();
-			if (watch.getTimeNano() > 0 ||
-				std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count() > 50)
-			{
-				break;
-			}
-			end = std::chrono::system_clock::now();
+			doWork();
+			s_Watch.stop();
+			s_End = std::chrono::steady_clock::now();
+			s_Time = std::chrono::duration_cast<std::chrono::milliseconds>(
+				s_End - s_Start).count();
 		}
 
-		if (!TEST(watch.getTimeNano(), 1LL, GTE<long long, long long>()))
-		{
-			return false;
-		}
+		s_Watch.stop();
+
+		s_LongLongTests.addTest(std::make_tuple(
+			s_Watch.getTimeMicro(), 1LL, GTE<long long, long long>()));
+		s_LongLongTests.addTest(std::make_tuple(
+			s_Watch.getTimeNano(), 1LL, GTE<long long, long long>()));
+
 	}
 
-	return true;
+	for (int i = 0; i < 200; i++)
+	{
+		s_Start = std::chrono::steady_clock::now();
+		s_End = s_Start;
+		s_Watch.start();
+
+		while (s_Watch.getTimeMilli() < 1 || s_Time < 5)
+		{
+			doWork();
+			s_Watch.stop();
+			s_End = std::chrono::steady_clock::now();
+			s_Time = std::chrono::duration_cast<std::chrono::milliseconds>(
+				s_End - s_Start).count();
+		}
+
+		s_Watch.stop();
+
+		s_LongLongTests.addTest(std::make_tuple(
+			s_Watch.getTimeMilli(), 1LL, GTE<long long, long long>()));
+
+	}
+
+	for (int i = 0; i < 3; i++)
+	{
+		s_Start = std::chrono::steady_clock::now();
+		s_End = s_Start;
+		s_Watch.start();
+
+		while (s_Watch.getTimeSeconds() < 1 || s_Time < 3)
+		{
+			doWork();
+			s_Watch.stop();
+			s_End = std::chrono::steady_clock::now();
+			s_Time = std::chrono::duration_cast<std::chrono::seconds>(
+				s_End - s_Start).count();
+		}
+
+		s_Watch.stop();
+
+		s_LongLongTests.addTest(std::make_tuple(
+			s_Watch.getTimeSeconds(), 1LL, GTE<long long, long long>()));
+	}
+
+	return s_LongLongTests.test();
 }
 
 bool StopWatchTester::testReading()
 {
-	eqx::StopWatch watch;
-	for (int i = 0; i < 100'000; i++)
+	prep();
+
+	for (int i = 0; i < 1'000; i++)
 	{
-		watch.start();
-		std::chrono::system_clock::time_point start = std::chrono::system_clock::now();
-		std::chrono::system_clock::time_point end = start;
-		while (watch.readTimeNano() < 1)
+		s_Start = std::chrono::steady_clock::now();
+		s_End = s_Start;
+		s_Watch.start();
+
+		s_LongLongTests.addTest(std::make_tuple(
+			s_Watch.getTimeMicro(), 0ULL, EQ2<long long, long long>));
+		s_LongLongTests.addTest(std::make_tuple(
+			s_Watch.getTimeNano(), 0ULL, EQ2<long long, long long>));
+		s_LongLongTests.addTest(std::make_tuple(
+			s_Watch.getTimeMilli(), 0ULL, EQ2<long long, long long>));
+		s_LongLongTests.addTest(std::make_tuple(
+			s_Watch.getTimeSeconds(), 0ULL, EQ2<long long, long long>));
+
+		while (s_Watch.readTimeNano() < 1'000 || s_Time < 1)
 		{
-			if (watch.readTimeNano() > 0 ||
-				std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count() > 50)
-			{
-				break;
-			}
-			end = std::chrono::system_clock::now();
+			doWork();
+			s_End = std::chrono::steady_clock::now();
+			s_Time = std::chrono::duration_cast<std::chrono::milliseconds>(
+				s_End - s_Start).count();
 		}
 
-		if (!TEST(watch.getTimeNano(), 1LL, GTE<long long, long long>()))
-		{
-			return false;
-		}
+		s_LongLongTests.addTest(std::make_tuple(
+			s_Watch.readTimeMicro(), 1LL, GTE<long long, long long>()));
+		s_LongLongTests.addTest(std::make_tuple(
+			s_Watch.readTimeNano(), 1LL, GTE<long long, long long>()));
+
 	}
 
-	return true;
+	for (int i = 0; i < 200; i++)
+	{
+		s_Start = std::chrono::steady_clock::now();
+		s_End = s_Start;
+		s_Watch.start();
+
+		while (s_Watch.readTimeMilli() < 1 || s_Time < 5)
+		{
+			doWork();
+			s_End = std::chrono::steady_clock::now();
+			s_Time = std::chrono::duration_cast<std::chrono::milliseconds>(
+				s_End - s_Start).count();
+		}
+
+		s_LongLongTests.addTest(std::make_tuple(
+			s_Watch.readTimeMilli(), 1LL, GTE<long long, long long>()));
+
+	}
+
+	for (int i = 0; i < 3; i++)
+	{
+		s_Start = std::chrono::steady_clock::now();
+		s_End = s_Start;
+		s_Watch.start();
+
+		while (s_Watch.readTimeSeconds() < 1 || s_Time < 3)
+		{
+			doWork();
+			s_End = std::chrono::steady_clock::now();
+			s_Time = std::chrono::duration_cast<std::chrono::seconds>(
+				s_End - s_Start).count();
+		}
+
+		s_LongLongTests.addTest(std::make_tuple(
+			s_Watch.readTimeSeconds(), 1LL, GTE<long long, long long>()));
+	}
+
+	return s_LongLongTests.test();
 }
 
 bool StopWatchTester::testGetting()
 {
-	eqx::StopWatch watch;
-	for (int i = 0; i < 100'000; i++)
-	{
-		if (!TEST(watch.getTimeNano(), 0LL))
-		{
-			return false;
-		}
-	}
+	return testStartStop();
+}
 
-	return true;
+void StopWatchTester::prep()
+{
+	s_Watch = eqx::StopWatch();
+	s_Start = std::chrono::steady_clock::now();
+	s_End = s_Start;
+	s_Time = 0LL;
+}
+
+void StopWatchTester::doWork()
+{
+	constexpr std::size_t dataSize = 500ULL;
+	int* data = new int[dataSize];
+
+	std::for_each(data, data + dataSize, [](int& x) { x = 25; });
+
+	delete[] data;
 }

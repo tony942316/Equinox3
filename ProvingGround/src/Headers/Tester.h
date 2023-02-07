@@ -16,7 +16,6 @@ public:
 	void testAll();
 
 private:
-	StopWatchTester stopWatchTests;
 	MathematicsTester mathematicsTests;
 	PointTester pointTests;
 	RectangleTester rectTests;

@@ -9,22 +9,18 @@
 
 bool SuperEnumTester::test()
 {
-	bool pass = false;
-
 	if (testGetTypes() &&
 		testToString() &&
 		testStream())
 	{
 		std::cout << "SuperEnum Tests Passed" << std::endl;
-		pass = true;
+		return true;
 	}
 	else
 	{
 		std::cout << "SuperEnum Tests Failed!" << std::endl;
-		pass = false;
+		return false;
 	}
-
-	return pass;
 }
 
 bool SuperEnumTester::testGetTypes()
