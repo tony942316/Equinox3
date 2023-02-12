@@ -13,7 +13,7 @@ void Tester::testAll()
 		LogTester::test() &&
 		RandomTester::test() &&
 		StopWatchTester::test() &&
-		mathematicsTests.testAll() &&
+		MathematicsTester::test() &&
 		pointTests.testAll() &&
 		rectTests.testAll())
 	{

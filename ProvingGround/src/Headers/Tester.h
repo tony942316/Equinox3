@@ -16,7 +16,6 @@ public:
 	void testAll();
 
 private:
-	MathematicsTester mathematicsTests;
 	PointTester pointTests;
 	RectangleTester rectTests;
 };

@@ -4,23 +4,27 @@
 #include <vector>
 #include <unordered_map>
 #include <iostream>
+#include <algorithm>
 
 #define EQX_SUPER_ENUM_TO_STRING(name)\
-	static const std::string& name##ToString(name value)\
+	static const std::string& name##ToString(name value) noexcept\
 	{ return name##Strings.at(value); }
 
 #define EQX_SUPER_ENUM_GET_ENUMS(name)\
 	static const std::vector<name>& name##GetTypes()\
 	{\
-		static std::vector<name> result;\
-		if (result.empty())\
-		{\
-			for (const std::pair<const name, std::string>&\
-				link : name##Strings)\
-			{\
-				result.emplace_back(link.first);\
-			}\
-		}\
+		static std::vector<name> result = std::invoke(\
+        []()\
+        {\
+            std::vector<name> temp;\
+            temp.reserve(name##Strings.size());\
+            std::for_each(name##Strings.begin(), name##Strings.end(),\
+            [&temp](const std::pair<const name, std::string>& link)\
+            {\
+                temp.emplace_back(link.first);\
+            });\
+            return temp;\
+        });\
 		return result;\
 	}
 

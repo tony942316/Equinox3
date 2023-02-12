@@ -9,6 +9,7 @@
 #include "LogTester.h"
 #include "RandomTester.h"
 #include "StopWatchTester.h"
+#include "MathematicsTester.h"
 
 #include "Workbench.h"
 
@@ -18,13 +19,14 @@ int main()
 {
 	std::cout << "Start\n" << std::endl;
 
-	//workbenchMain();
+	workbenchMain();
 	eqx::Log::setLevel(eqx::Log::Level::all);
 	SuperEnumTester::test();
 	LogTester::test();
 	eqx::Log::setLevel(eqx::Log::Level::all);
 	RandomTester::test();
 	StopWatchTester::test();
+	MathematicsTester::test();
 
 	std::cout << "\nEnd" << std::endl;
 	std::cin.get();

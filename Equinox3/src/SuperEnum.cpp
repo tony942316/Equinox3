@@ -1,14 +1,5 @@
 #include "SuperEnum.h"
 
-#define EQX_SUPER_ENUM_3(name, e1, e2, e3)\
-	enum class name { e1, e2, e3 };\
-    static inline const std::unordered_map<name, std::string> name##Strings{\
-    { name::e1, #e1 },\
-	{ name::e2, #e2 },\
-	{ name::e3, #e3 }\
-    };\
-	EQX_SUPER_ENUM_FULL_IMPLEMENTATION(name)
-
 std::string enumMacroDeclaration(std::size_t num)
 {
 	std::string result = "#define EQX_SUPER_ENUM_" + std::to_string(num);

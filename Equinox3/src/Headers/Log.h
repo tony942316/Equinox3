@@ -16,6 +16,9 @@ namespace eqx
 	class Log
 	{
 	public:
+		/**
+		 * Pure Static Class Is Not Ment To Be Constructed Or Copied
+		 */
 		Log() = delete;
 		Log(const Log&) = delete;
 		Log(Log&&) = delete;
@@ -60,18 +63,18 @@ namespace eqx
 
 		/**
 		 * @brief Set Level Of Logs To Be Output i.e.
-		 * @brief warning Will Output warnings And errors But Not info
+		 * warning Will Output warnings And errors But Not info
 		 * 
-		 * @param level Cutoff i.e. none -> error -> warning -> info -> all
+		 * @param level Cutoff i.e. all -> info -> warning -> error -> none
 		 */
-		static void setLevel(Level level);
+		static void setLevel(Level level) noexcept;
 
 		/**
 		 * @brief Set The Stream Logs Are Written To
 		 * 
 		 * @param stream The New Output Stream
 		*/
-		static void setOutputStream(const std::ostream& stream);
+		static void setOutputStream(std::ostream& stream) noexcept;
 
 		/**
 		 * @brief Set The File Logs Are Written To
@@ -83,28 +86,29 @@ namespace eqx
 		/**
 		 * @brief Clears The Last Error Message And Type
 		 */
-		static void clear();
+		static void clear() noexcept;
 
 		/**
 		 * @brief Get Type Of Last Log
 		 * 
 		 * @returns Last Log Type
 		 */
-		static Type getLastLogType();
+		static Type getLastLogType() noexcept;
 
 		/**
 		 * @brief Get Message Of Last Log
 		 * 
 		 * @returns Last Message String
 		 */
-		static const std::string& getLastLogMessage();
+		static const std::string& getLastLogMessage() noexcept;
 
 		/**
-		 * @brief Build String With eqx::Log Formatting i.e. 
-		 * @brief "{SourceLocation}[{Log::Level}]: "
+		 * @brief Build String With eqx::Log Formatting i.e.
+		 * "{SourceLocation}[{Log::Level}]: {Message}"
 		 * 
 		 * @param loc Location Of The Log
 		 * @param level Level Of The Log
+		 * @param msg Message Of The Log
 		 * 
 		 * @returns Formatted String
 		 */
@@ -114,7 +118,7 @@ namespace eqx
 
 		/**
 		 * @brief Get Log Levels That Log Properly i.e.
-		 * @brief eqx::Log::all Is Not Meant To Be Logged
+		 * eqx::Log::all Is Not Meant To Be Logged
 		 * 
 		 * @returns std::vector Of Loggable Levels
 		 */
@@ -122,7 +126,7 @@ namespace eqx
 
 	private:
 		static std::ofstream s_LogFile;
-		static std::ostream s_OutputStream;
+		static std::ostream* s_OutputStream;
 		static Level s_LogLevel;
 		static Type s_LastErrorType;
 		static std::string s_LastMessage;

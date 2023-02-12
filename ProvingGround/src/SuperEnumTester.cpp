@@ -58,10 +58,9 @@ bool SuperEnumTester::testGetTypes()
 		superEnumShell::SixPubGetTypes()
 	});
 
-	return 
-		onePubTests.test() &&
-		fourPubTests.test() &&
-		sixPubTests.test();
+	return onePubTests.test() &&
+		   fourPubTests.test() &&
+		   sixPubTests.test();
 }
 
 bool SuperEnumTester::testToString()

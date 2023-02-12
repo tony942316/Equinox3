@@ -106,12 +106,11 @@ bool LogTester::testSetLevel()
 		{ eqx::Log::Level::error,  eqx::Log::getFormattedString(
 									s_Location, eqx::Log::Level::error) }
 	};
-	std::string
-		produced = "",
-		expected = "",
-		logMsg = "",
-		shouldStream = "Should Stream",
-		shouldNotStream = "Shouldn't Stream";
+	std::string produced = "",
+				expected = "",
+				logMsg = "",
+				shouldStream = "Should Stream",
+				shouldNotStream = "Shouldn't Stream";
 
 	for (const std::pair<const eqx::Log::Level, std::vector<eqx::Log::Level>>& 
 		link :
@@ -127,11 +126,8 @@ bool LogTester::testSetLevel()
 				expectedStrings[level] + logMsg : "";
 
 			eqx::Log::log(level, logMsg, eqx::Log::Type::none, s_Location);
-			if (s_SS.eof())
-			{
-				s_SS.clear();
-			}
 			std::getline(s_SS, produced);
+			s_SS = std::stringstream();
 			s_StringTests.addTest(std::make_tuple(produced, expected,
 				EQ2<std::string, std::string>));
 

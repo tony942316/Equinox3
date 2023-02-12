@@ -10,6 +10,9 @@ namespace eqx
 	class Random
 	{
 	public:
+		/**
+		 * Pure Static Class Is Not Ment To Be Constructed Or Copied
+		 */
 		Random() = delete;
 		Random(const Random& r) = delete;
 		Random(Random&&) = delete;

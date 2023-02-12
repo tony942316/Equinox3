@@ -201,6 +201,7 @@ Xcopy /Y $(SolutionDir)bin\$(Platform)$(Configuration)\$(ProjectName)\$(ProjectN
     <ClInclude Include="src\Headers\EquinoxSTD.h" />
     <ClInclude Include="src\Headers\Log.h" />
     <ClInclude Include="src\Headers\Mathematics.h" />
+    <ClInclude Include="src\Headers\Misc.hpp" />
     <ClInclude Include="src\Headers\Point.h" />
     <ClInclude Include="src\Headers\Random.h" />
     <ClInclude Include="src\Headers\Rectangle.h" />
@@ -211,6 +212,7 @@ Xcopy /Y $(SolutionDir)bin\$(Platform)$(Configuration)\$(ProjectName)\$(ProjectN
     <ClCompile Include="src\Benchmark.cpp" />
     <ClCompile Include="src\Log.cpp" />
     <ClCompile Include="src\Mathematics.cpp" />
+    <ClCompile Include="src\Misc.cpp" />
     <ClCompile Include="src\Random.cpp" />
     <ClCompile Include="src\StopWatch.cpp" />
     <ClCompile Include="src\SuperEnum.cpp" />

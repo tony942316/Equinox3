@@ -1,33 +1,26 @@
 #include "Random.h"
 
+#include <cassert>
+
 #include "Log.h"
 #include "Mathematics.h"
 
 namespace eqx
 {
-	std::mt19937_64 Random::s_Engine{ generateSeed() };
+	std::mt19937_64 Random::s_Engine(generateSeed());
 	std::uniform_int_distribution<int> Random::s_UniInt;
 	std::uniform_int_distribution<unsigned int> Random::s_UniUInt;
 	std::uniform_real_distribution<double> Random::s_UniDouble;
 
 	int Random::randInt(int lowerBound, int upperBound)
 	{
-		if (lowerBound >= upperBound)
+		assert(upperBound >= lowerBound);
+		if (lowerBound != s_UniInt.min() || upperBound != s_UniInt.max())
 		{
-			eqx::Log::log(Log::Level::error, 
-				"Lower Bound Larger Than Upper Bound!", 
-				eqx::Log::Type::runtimeError);
-			return 0;
+			s_UniInt = 
+				std::uniform_int_distribution<int>(lowerBound, upperBound);
 		}
-		else
-		{
-			if (lowerBound != s_UniInt.min() || upperBound != s_UniInt.max())
-			{
-				s_UniInt = 
-					std::uniform_int_distribution<int>(lowerBound, upperBound);
-			}
-			return s_UniInt(s_Engine);
-		}
+		return s_UniInt(s_Engine);
 	}
 
 	unsigned int Random::randUnsignedInt(unsigned int lowerBound, 

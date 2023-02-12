@@ -1,10 +1,22 @@
 #pragma once
+
+#include "UnitTest.h"
+
 class MathematicsTester
 {
 public:
-	MathematicsTester();
+	MathematicsTester() = delete;
+	MathematicsTester(const MathematicsTester&) = delete;
+	MathematicsTester(MathematicsTester&&) = delete;
+	MathematicsTester& operator= (const MathematicsTester&) = delete;
+	MathematicsTester& operator= (MathematicsTester&&) = delete;
+	~MathematicsTester() = delete;
 
-	bool testAll();
-	bool testWillOverflowAddition();
-	bool testDistanceGeneric();
+	static bool test();
+
+private:
+	static bool testEquals();
+	static void prep();
+
+	static UnitTest<bool, bool> s_BoolTests;
 };
