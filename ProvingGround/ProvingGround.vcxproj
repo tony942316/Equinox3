@@ -181,16 +181,16 @@
     <ClCompile Include="src\SuperEnumTester.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\Headers\RectangleTester.h" />
-    <ClInclude Include="src\Headers\PointTester.h" />
-    <ClInclude Include="src\Headers\MathematicsTester.h" />
-    <ClInclude Include="src\Headers\RandomTester.h" />
-    <ClInclude Include="src\Headers\LogTester.h" />
-    <ClInclude Include="src\Headers\Tester.h" />
-    <ClInclude Include="src\Headers\UnitTest.h" />
-    <ClInclude Include="src\Headers\StopWatchTester.h" />
-    <ClInclude Include="src\Headers\Workbench.h" />
-    <ClInclude Include="src\Headers\SuperEnumTester.h" />
+    <ClInclude Include="src\Headers\RectangleTester.hpp" />
+    <ClInclude Include="src\Headers\PointTester.hpp" />
+    <ClInclude Include="src\Headers\MathematicsTester.hpp" />
+    <ClInclude Include="src\Headers\RandomTester.hpp" />
+    <ClInclude Include="src\Headers\LogTester.hpp" />
+    <ClInclude Include="src\Headers\Tester.hpp" />
+    <ClInclude Include="src\Headers\UnitTest.hpp" />
+    <ClInclude Include="src\Headers\StopWatchTester.hpp" />
+    <ClInclude Include="src\Headers\Workbench.hpp" />
+    <ClInclude Include="src\Headers\SuperEnumTester.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

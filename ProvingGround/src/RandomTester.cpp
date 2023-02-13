@@ -1,9 +1,9 @@
-#include "RandomTester.h"
+#include "RandomTester.hpp"
 
 #include <iostream>
 #include <unordered_map>
 
-#include "EquinoxSTD.h"
+#include "EquinoxSTD.hpp"
 
 UnitTest<int, int> RandomTester::s_IntTests;
 UnitTest<unsigned int, unsigned int> RandomTester::s_UIntTests;

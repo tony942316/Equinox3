@@ -1,9 +1,9 @@
-#include "MathematicsTester.h"
+#include "MathematicsTester.hpp"
 
 #include <iostream>
 
-#include "EquinoxSTD.h"
-#include "UnitTest.h"
+#include "EquinoxSTD.hpp"
+#include "UnitTest.hpp"
 
 UnitTest<bool, bool> MathematicsTester::s_BoolTests;
 

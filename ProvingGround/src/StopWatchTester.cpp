@@ -1,4 +1,4 @@
-#include "StopWatchTester.h"
+#include "StopWatchTester.hpp"
 
 #include <iostream>
 

@@ -1,9 +1,9 @@
-#include "RectangleTester.h"
+#include "RectangleTester.hpp"
 
 #include <iostream>
 
-#include "EquinoxSTD.h"
-#include "UnitTest.h"
+#include "EquinoxSTD.hpp"
+#include "UnitTest.hpp"
 
 RectangleTester::RectangleTester()
 {

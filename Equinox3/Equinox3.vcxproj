@@ -197,16 +197,16 @@ Xcopy /Y $(SolutionDir)bin\$(Platform)$(Configuration)\$(ProjectName)\$(ProjectN
     </CustomBuildStep>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="src\Headers\Benchmark.h" />
-    <ClInclude Include="src\Headers\EquinoxSTD.h" />
-    <ClInclude Include="src\Headers\Log.h" />
-    <ClInclude Include="src\Headers\Mathematics.h" />
+    <ClInclude Include="src\Headers\Benchmark.hpp" />
+    <ClInclude Include="src\Headers\EquinoxSTD.hpp" />
+    <ClInclude Include="src\Headers\Log.hpp" />
+    <ClInclude Include="src\Headers\Mathematics.hpp" />
     <ClInclude Include="src\Headers\Misc.hpp" />
-    <ClInclude Include="src\Headers\Point.h" />
-    <ClInclude Include="src\Headers\Random.h" />
-    <ClInclude Include="src\Headers\Rectangle.h" />
-    <ClInclude Include="src\Headers\StopWatch.h" />
-    <ClInclude Include="src\Headers\SuperEnum.h" />
+    <ClInclude Include="src\Headers\Point.hpp" />
+    <ClInclude Include="src\Headers\Random.hpp" />
+    <ClInclude Include="src\Headers\Rectangle.hpp" />
+    <ClInclude Include="src\Headers\StopWatch.hpp" />
+    <ClInclude Include="src\Headers\SuperEnum.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Benchmark.cpp" />

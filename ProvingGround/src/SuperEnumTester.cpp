@@ -1,11 +1,11 @@
-#include "SuperEnumTester.h"
+#include "SuperEnumTester.hpp"
 
 #include <string>
 #include <vector>
 #include <sstream>
 #include <iostream>
 
-#include "UnitTest.h"
+#include "UnitTest.hpp"
 
 bool SuperEnumTester::test()
 {

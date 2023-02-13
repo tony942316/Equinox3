@@ -15,31 +15,31 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\Headers\EquinoxSTD.h">
+    <ClInclude Include="src\Headers\EquinoxSTD.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Headers\Random.h">
+    <ClInclude Include="src\Headers\Random.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Headers\Log.h">
+    <ClInclude Include="src\Headers\Log.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Headers\StopWatch.h">
+    <ClInclude Include="src\Headers\StopWatch.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Headers\Point.h">
+    <ClInclude Include="src\Headers\Point.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Headers\Mathematics.h">
+    <ClInclude Include="src\Headers\Mathematics.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Headers\Rectangle.h">
+    <ClInclude Include="src\Headers\Rectangle.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Headers\Benchmark.h">
+    <ClInclude Include="src\Headers\Benchmark.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Headers\SuperEnum.h">
+    <ClInclude Include="src\Headers\SuperEnum.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Headers\Misc.hpp">

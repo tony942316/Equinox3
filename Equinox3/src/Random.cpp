@@ -1,9 +1,9 @@
-#include "Random.h"
+#include "Random.hpp"
 
 #include <cassert>
 
-#include "Log.h"
-#include "Mathematics.h"
+#include "Log.hpp"
+#include "Mathematics.hpp"
 
 namespace eqx
 {

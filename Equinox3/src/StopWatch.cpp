@@ -1,4 +1,4 @@
-#include "StopWatch.h"
+#include "StopWatch.hpp"
 
 namespace eqx
 {

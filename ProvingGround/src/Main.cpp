@@ -2,16 +2,16 @@
 #include <sstream>
 #include <type_traits>
 
-#include "EquinoxSTD.h"
+#include "EquinoxSTD.hpp"
 
-#include "UnitTest.h"
-#include "SuperEnumTester.h"
-#include "LogTester.h"
-#include "RandomTester.h"
-#include "StopWatchTester.h"
-#include "MathematicsTester.h"
+#include "UnitTest.hpp"
+#include "SuperEnumTester.hpp"
+#include "LogTester.hpp"
+#include "RandomTester.hpp"
+#include "StopWatchTester.hpp"
+#include "MathematicsTester.hpp"
 
-#include "Workbench.h"
+#include "Workbench.hpp"
 
 
 

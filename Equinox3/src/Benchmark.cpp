@@ -1,4 +1,4 @@
-#include "Benchmark.h"
+#include "Benchmark.hpp"
 
 #include <vector>
 #include <numeric>

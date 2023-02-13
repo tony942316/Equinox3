@@ -1,4 +1,4 @@
-#include "LogTester.h"
+#include "LogTester.hpp"
 
 #include <iostream>
 #include <unordered_map>

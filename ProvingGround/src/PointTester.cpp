@@ -1,9 +1,9 @@
-#include "PointTester.h"
+#include "PointTester.hpp"
 
 #include <iostream>
 
-#include "EquinoxSTD.h"
-#include "UnitTest.h"
+#include "EquinoxSTD.hpp"
+#include "UnitTest.hpp"
 
 PointTester::PointTester()
 {

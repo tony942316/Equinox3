@@ -1,4 +1,4 @@
-#include "Mathematics.h"
+#include "Mathematics.hpp"
 
 namespace eqx
 {

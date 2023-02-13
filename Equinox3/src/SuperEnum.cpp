@@ -1,4 +1,4 @@
-#include "SuperEnum.h"
+#include "SuperEnum.hpp"
 
 std::string enumMacroDeclaration(std::size_t num)
 {
