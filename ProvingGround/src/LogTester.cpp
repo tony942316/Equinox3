@@ -4,7 +4,7 @@
 #include <unordered_map>
 #include <algorithm>
 
-std::string LogTester::s_FileName{ "TestOutputFile.txt" };
+std::string LogTester::s_FileName("TestOutputFile.txt");
 std::stringstream LogTester::s_SS;
 UnitTest<std::string, std::string> LogTester::s_StringTests;
 UnitTest<eqx::Log::Type, eqx::Log::Type> LogTester::s_TypeTests;
@@ -36,7 +36,7 @@ bool LogTester::test()
 	}
 
 	eqx::Log::setOutputFile("Log.txt");
-	eqx::Log::setOutputStream(std::cout);
+	eqx::Log::setOutputStream(std::clog);
 	eqx::Log::setLevel(eqx::Log::Level::none);
 
 	return pass;

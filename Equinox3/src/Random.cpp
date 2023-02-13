@@ -1,9 +1,6 @@
 #include "Random.hpp"
 
-#include <cassert>
-
-#include "Log.hpp"
-#include "Mathematics.hpp"
+#include "Misc.hpp"
 
 namespace eqx
 {
@@ -14,7 +11,9 @@ namespace eqx
 
 	int Random::randInt(int lowerBound, int upperBound)
 	{
-		assert(upperBound >= lowerBound);
+		eqx_dynamic_assert(upperBound >= lowerBound, 
+			"Lower Bound Is Larger Than UpperBound!");
+
 		if (lowerBound != s_UniInt.min() || upperBound != s_UniInt.max())
 		{
 			s_UniInt = 
@@ -26,32 +25,23 @@ namespace eqx
 	unsigned int Random::randUnsignedInt(unsigned int lowerBound, 
 		unsigned int upperBound)
 	{
-		if (lowerBound >= upperBound)
+		eqx_dynamic_assert(upperBound >= lowerBound,
+			"Lower Bound Larger Than Upper Bound!");
+
+		if (lowerBound != s_UniUInt.min() || upperBound != s_UniUInt.max())
 		{
-			eqx::Log::log(Log::Level::error, 
-				"Lower Bound Larger Than Upper Bound!", 
-				eqx::Log::Type::runtimeError);
-			return 0U;
+			s_UniUInt = std::uniform_int_distribution<unsigned int>(
+				lowerBound, upperBound);
 		}
-		else
-		{
-			s_UniUInt = 
-				std::uniform_int_distribution<unsigned int>(
-					lowerBound, upperBound);
-			return s_UniUInt(s_Engine);
-		}
+		return s_UniUInt(s_Engine);
 	}
 
 	double Random::randDouble(double lowerBound, double upperBound)
 	{
-		if (lowerBound > upperBound)
-		{
-			eqx::Log::log(Log::Level::error, 
-				"Lower Bound Larger Than Upper Bound!", 
-				eqx::Log::Type::runtimeError);
-			return 0.0;
-		}
-		else if (lowerBound >= 0.0 && upperBound >= 0.0)
+		eqx_dynamic_assert(upperBound >= lowerBound,
+			"Lower Bound Is Larger Than UpperBound!");
+
+		if (lowerBound >= 0.0 && upperBound >= 0.0)
 		{
 			double decoyValue = std::nexttoward(lowerBound,
 				std::numeric_limits<double>::lowest());
@@ -85,9 +75,7 @@ namespace eqx
 		}
 		else
 		{
-			eqx::Log::log(eqx::Log::Level::error, 
-				"randDouble should not reach this condition", 
-				eqx::Log::Type::unreachableCodeError);
+			eqx_dynamic_assert(false, "Code Should Never Reach This!");
 			return 0.0;
 		}
 	}
@@ -99,18 +87,10 @@ namespace eqx
 
 	unsigned int Random::rollDice(unsigned int sides)
 	{
-		if (sides < 2U)
-		{
-			eqx::Log::log(eqx::Log::Level::warning, 
-				"Dice should have at least two side", 
-				eqx::Log::Type::runtimeWarning);
-			return 0U;
-		}
-		else
-		{
-			return randUnsignedInt(1U, sides);
-		}
-		
+		eqx_dynamic_assert(sides >= 2U,
+			"A Dice Should Have At Least Two Sides!");
+
+		return randUnsignedInt(1U, sides);
 	}
 
 	unsigned int Random::generateSeed()

@@ -3,15 +3,20 @@
 #include <type_traits>
 #include <limits>
 
-#include "Log.hpp"
+#include "Misc.hpp"
 
 namespace eqx
 {
 	/**
 	 * @brief Pi Accurate To 36 Decimal Points
 	 */
-	template <typename T>
-	T constexpr pi = static_cast<T>(3.141592653589793238462643383279502884L);
+	template <typename T = double>
+	T constexpr pi_t = static_cast<T>(3.141592653589793238462643383279502884L);
+
+	/**
+	 * @brief Pi Accurate To Double Precision
+	 */
+	double constexpr pi = pi_t<double>;
 
 	/**
 	 * @brief Type Accurate Zero
@@ -21,6 +26,7 @@ namespace eqx
 
 	/**
 	 * @brief std::fabs(x - y) < error
+	 * @brief T Must Be A Floating Point Type
 	 *
 	 * @param x, y Values Must Be Floating Point
 	 * @param error Amount Of Inaccuracy Permissible
@@ -38,15 +44,19 @@ namespace eqx
 
 	/**
 	 * @brief Checks The Sign Of A Given Value
+	 * @brief T Must Be An Arithmetic Type
 	 * 
-	 * @param val Value To Be Checked
+	 * @param val Must Be Arithmetic
 	 * 
 	 * @returns 1, 0, And -1 For Positive, Zero, And Negative
 	 *		Values Respectively
 	 */
 	template <typename T>
-	int getSign(T val)
+	int constexpr getSign(T val) noexcept
 	{
+		static_assert(std::is_arithmetic_v<T>,
+			"eqx::getSign(T val) : T Must Be An Arithmetic Type!");
+
 		if (val > eqx::zero<T>)
 		{
 			return 1;
@@ -70,7 +80,7 @@ namespace eqx
 	 * @returns true If The Value Is Positive
 	 */
 	template <typename T>
-	bool isPositive(T val)
+	bool constexpr isPositive(T val) noexcept
 	{
 		if (getSign(val) == 1)
 		{
@@ -91,7 +101,7 @@ namespace eqx
 	 * @returns true If The Value Is Negative
 	 */
 	template <typename T>
-	bool isNegative(T val)
+	bool constexpr isNegative(T val) noexcept
 	{
 		if (getSign(val) == -1)
 		{
@@ -105,23 +115,19 @@ namespace eqx
 
 	/**
 	 * @brief Check If Two Aritmetic Types Will Overflow
+	 * @brief T Must Be An Arithmetic Type
 	 *
-	 * @param x Value To Be Checked
-	 * @param y Other Value To Be Checked
+	 * @param x, y Values Must Be Arithmetic
 	 *
 	 * @returns true If Overflow Would Occur
 	 */
 	template<typename T>
-	bool willOverflowAddition(T x, T y)
+	bool constexpr willOverflowAddition(T x, T y) noexcept
 	{
-		if (!std::is_arithmetic_v<T>)
-		{
-			eqx::Log::log(eqx::Log::Level::error, 
-				"Not defined for non arithmetic types", 
-				eqx::Log::Type::runtimeError);
-			return true;
-		}
-		else if (x == eqx::zero<T> || y == eqx::zero<T>)
+		static_assert(std::is_arithmetic_v<T>, 
+			"T Must Be An Arithmetic Type!");
+		
+		if (x == eqx::zero<T> || y == eqx::zero<T>)
 		{
 			return false;
 		}
@@ -155,96 +161,75 @@ namespace eqx
 
 	/**
 	 * @brief Compute The Distance Between Two One Dimensional Points
-	 * @brief Must Be Arithmetic Types
+	 * @brief T Must Be An Arithmetic Type
 	 * 
-	 * @param x1 First Point
-	 * @param x2 Second Point
+	 * @param x1, x2 Values Must Be Arithmetic
 	 *
 	 * @returns Distance Between Two One Dimensional Points
 	 */
 	template<typename T>
-	T distance(T x1, T x2)
+	T distance(T x1, T x2) noexcept
 	{
-		if (!std::is_arithmetic_v<T>)
-		{
-			eqx::Log::log(eqx::Log::Level::error, 
-				"Not defined for non arithmetic types", 
-				eqx::Log::Type::runtimeError);
-			return eqx::zero<T>;
-		}
-		else if (willOverflowAddition(x1, -x2) ||
-				 (std::is_integral_v<T> && 
-				 (x1 - x2) == std::numeric_limits<T>::lowest()))
-		{
-			eqx::Log::log(eqx::Log::Level::error, 
-				"Arithmetic Overflow", 
-				eqx::Log::Type::overflowError);
-			return eqx::zero<T>;
-		}
-		else if (std::is_integral_v<T>)
-		{
-			return std::abs(x1 - x2);
-		}
-		else if (std::is_floating_point_v<T>)
-		{
-			return std::fabs(x1 - x2);
-		}
-		else
-		{
-			eqx::Log::log(eqx::Log::Level::error, 
-				"Unknown Case", 
-				eqx::Log::Type::runtimeError);
-			return static_cast<T>(0);
-		}
+		static_assert(std::is_arithmetic_v<T>,
+			"eqx::distance(T x1, T x2) : T Must Be An Arithmetic Type!");
+
+		eqx_dynamic_assert(willOverflowAddition(x1, -x2) ||
+						  (std::is_integral_v<T> &&
+						  (x1 - x2) == std::numeric_limits<T>::lowest()),
+						  "Arithmetic Overflow!");
+
+		return static_cast<T>(std::fabs(x1 - x2));
 	}
 
 	/**
 	 * @brief Convert Degrees To Radians
+	 * @brief T Must Be An Arithmetic Type
 	 * 
 	 * @param degrees Degrees To Be Converted
 	 * 
-	 * @returns Radian Equivalent Of The Input
+	 * @returns double Equal To The Radian Equivalent Of The Input
 	 */
 	template <typename T>
-	double degreesToRadians(T degrees)
+	double constexpr degreesToRadians(T degrees) noexcept
 	{
-		return static_cast<double>(degrees) * (eqx::pi<double> / 180.0);
+		static_assert(std::is_arithmetic_v<T>,
+			"T Must Be An Arithmetic Type!");
+
+		return static_cast<double>(degrees) * (eqx::pi / 180.0);
 	}
 
 	/**
 	 * @brief Convert Radians To Degrees
+	 * @brief T Must Be An Arithmetic Type
 	 *
 	 * @param radians Radians To Be Converted
 	 *
-	 * @returns Degree Equivalent Of The Input
+	 * @returns double Equal To The Degree Equivalent Of The Input
 	 */
 	template <typename T>
-	double radiansToDegrees(T radians)
+	double constexpr radiansToDegrees(T radians) noexcept
 	{
-		return static_cast<double>(radians) * (180.0 / eqx::pi<double>);
+		static_assert(std::is_arithmetic_v<T>,
+			"T Must Be An Arithmetic Type!");
+
+		return static_cast<double>(radians) * (180.0 / eqx::pi);
 	}
 
 	/**
 	 * @brief Compute Both Arcsine Values
+	 * @brief T Must Be An Arithmetic Type
 	 * @brief Value Must Be In Interval [-1.0, 1.0]
 	 * 
 	 * @param value Value To Be Computed
 	 * 
-	 * @returns A Pair Of Both Values In Degrees
+	 * @returns std::pair<double, double>, Values Are In Degrees
 	 */
 	template <typename T>
-	std::pair<double, double> arcsin(T value)
+	std::pair<double, double> arcsin(T value) noexcept
 	{
-		if (value > 1.0 || value < -1.0)
-		{
-			eqx::Log::log(eqx::Log::Level::error, "Domain Error: [-1.0, 1.0]", eqx::Log::Type::runtimeError);
-			return std::make_pair(0.0, 0.0);
-		}
-		else if (!std::is_arithmetic<T>::value)
-		{
-			eqx::Log::log(eqx::Log::Level::error, "Not defined for non arithmetic types", eqx::Log::Type::runtimeError);
-			return std::make_pair(0.0, 0.0);
-		}
+		static_assert(std::is_arithmetic_v<T>,
+			"T Must Be An Arithmetic Type!");
+		eqx_dynamic_assert(value <= 1.0 || value >= -1.0, "Domain Error!");
 
 		std::pair<double, double> result;
 		result.first = eqx::radiansToDegrees(std::asin(value));
@@ -256,25 +241,19 @@ namespace eqx
 
 	/**
 	 * @brief Compute Both Arccosine Values
+	 * @brief T Must Be An Arithmetic Type
 	 * @brief Value Must Be In Interval [-1.0, 1.0]
 	 *
 	 * @param value Value To Be Computed
 	 *
-	 * @returns A Pair Of Both Values In Degrees
+	 * @returns std::pair<double, double>, Values Are In Degrees
 	 */
 	template <typename T>
-	std::pair<double, double> arccos(T value)
+	std::pair<double, double> arccos(T value) noexcept
 	{
-		if (value > 1.0 || value < -1.0)
-		{
-			eqx::Log::log(eqx::Log::Level::error, "Domain Error: [-1.0, 1.0]", eqx::Log::Type::runtimeError);
-			return std::make_pair(0.0, 0.0);
-		}
-		else if (!std::is_arithmetic<T>::value)
-		{
-			eqx::Log::log(eqx::Log::Level::error, "Not defined for non arithmetic types", eqx::Log::Type::runtimeError);
-			return std::make_pair(0.0, 0.0);
-		}
+		static_assert(std::is_arithmetic_v<T>,
+			"T Must Be An Arithmetic Type!");
+		eqx_dynamic_assert(value <= 1.0 || value >= -1.0, "Domain Error!");
 
 		std::pair<double, double> result;
 		result.first = eqx::radiansToDegrees(std::acos(value));

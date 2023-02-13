@@ -5,17 +5,14 @@
 #include <cmath>
 #include <cassert>
 
-#include "Benchmark.hpp"
-#include "Random.hpp"
-#include "Mathematics.hpp"
-#include "Misc.hpp"
+#include "EquinoxSTD.hpp"
 
 void workbenchMain()
 {
 	std::cout << std::setprecision(100);
 	std::cout << std::boolalpha;
 
-
+	eqx::pi;
 
 	std::cout << "End Workbench" << std::endl;
 	std::cin.get();

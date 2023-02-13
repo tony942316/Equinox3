@@ -48,7 +48,7 @@ namespace eqx
 		 * @param upperBound Highest Possible Value
 		 * 
 		 * @returns Random Double In Range [lowerBound, upperBound]
-		*/
+		 */
 		static double randDouble(double lowerBound, double upperBound);
 
 		/**
@@ -71,7 +71,7 @@ namespace eqx
 		 * @brief Generate A Random Seed
 		 * 
 		 * @returns Seed
-		*/
+		 */
 		static unsigned int generateSeed();
 
 	private:

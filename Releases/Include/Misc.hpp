@@ -7,6 +7,6 @@
 #define eqx_dynamic_assert(expr, message) 0;
 #else
 
-void eqx_dynamic_assert(bool expr, const std::string& msg = "");
+void eqx_dynamic_assert(bool expr, const std::string& msg = "") noexcept;
 
 #endif
