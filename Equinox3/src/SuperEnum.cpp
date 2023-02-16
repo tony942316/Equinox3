@@ -1,41 +1,49 @@
 #include "SuperEnum.hpp"
 
+#include <string>
+#include <cassert>
+
 std::string enumMacroDeclaration(std::size_t num)
 {
-	std::string result = "#define EQX_SUPER_ENUM_" + std::to_string(num);
+	std::string result = "";
+	result += "#define EQX_SUPER_ENUM_" + std::to_string(num);
 	result += "(name";
 	for (std::size_t i = 0; i < num; i++)
 	{
 		result += ", e" + std::to_string(i);
 	}
-	result += ")";
+	result += ")\\\n";
 	return result;
 }
 
 std::string enumClassDefinition(std::size_t num)
 {
-	std::string result = "enum class name { e0";
+	std::string result = "";
+	result += "    enum class name : std::size_t\\\n";
+	result += "        { e0";
 	for (std::size_t i = 1; i < num; i++)
 	{
 		result += ", e" + std::to_string(i);
 	}
-	result += " };";
+	result += " };\\\n";
 	return result;
 }
 
-std::string enumClassMapDefinition(std::size_t num)
+std::string enumClassArrayDefinition(std::size_t num)
 {
-	std::string result =
-		"static inline const std::unordered_map<name, std::string> ";
-	result += "name##Strings{\\\n";
-	for (std::size_t i = 0; i < num - 1; i++)
+	std::string result = "";
+	result += "    static inline constexpr std::array<EnumPair<name>, ";
+	result += std::to_string(num) + "ULL> \\\n";
+	result += "        name##Collection = \\\n";
+	result += "        {\\\n";
+	for (std::size_t i = 0; i < num; i++)
 	{
-		result += "    { name::e" + std::to_string(i);
-		result += ", #e" + std::to_string(i) + " },\\\n";
+		result += "            EnumPair(name::e" + std::to_string(i);
+		result += ", #e" + std::to_string(i) + "),\\\n";
 	}
-	result += "    { name::e" + std::to_string(num - 1);
-	result += ", #e" + std::to_string(num - 1) + " }\\\n";
-	result += "    };";
+	result.erase(result.end() - 3);
+	result += "        };\\\n";
+	
 	return result;
 }
 
@@ -43,11 +51,13 @@ namespace eqx
 {
 	std::string superEnumMacroFactory(std::size_t num)
 	{
-		std::string result = enumMacroDeclaration(num) + "\\\n";
-		result += "    " + enumClassDefinition(num) + "\\\n";
-		result += "    " + enumClassMapDefinition(num) + "\\\n";
+		assert(num > 0ULL);
+		std::string result = "";
+		result += enumMacroDeclaration(num);
+		result += enumClassDefinition(num);
+		result += enumClassArrayDefinition(num);
 		result += "    " + 
-			std::string("EQX_SUPER_ENUM_FULL_IMPLEMENTATION(name)\n");
+			std::string("__EQX_SUPER_ENUM_FULL_IMPLEMENTATION(name)\n");
 
 		return result;
 	}

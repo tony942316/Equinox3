@@ -1,5 +1,7 @@
 #include "Misc.hpp"
 
+#include <iostream>
+
 #ifndef NDEBUG
 void eqx_dynamic_assert(bool expr, const std::string& msg) noexcept
 {

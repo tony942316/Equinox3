@@ -8,64 +8,100 @@
 #include <iostream>
 #include <iomanip>
 #include <type_traits>
+#include <cassert>
+#include <algorithm>
 
-template <typename T, typename U>
-const std::function<bool(T, U)> EQ2 = [](T x, U y) { return x == y; };
-
-template <typename T, typename U>
-std::function<bool(T, U)> EQ()
+template <class T, class U>
+class UnitTestFunction
 {
-	return [](T x, U y) { return x == y; };
-}
+public:
+	UnitTestFunction(const std::function<bool(T, U)>& func,
+		const std::string& string)
+		:
+		m_Function(func),
+		m_String(string)
+	{
+
+	}
+
+	UnitTestFunction(const UnitTestFunction&) = default;
+	UnitTestFunction(UnitTestFunction&&) = default;
+	UnitTestFunction& operator= (const UnitTestFunction&) = default;
+	UnitTestFunction& operator= (UnitTestFunction&&) = default;
+	~UnitTestFunction() = default;
+
+	const std::function<bool(T, U)>& getFunction() const noexcept
+	{
+		return m_Function;
+	}
+
+	const std::string& getString() const noexcept
+	{
+		return m_String;
+	}
+
+private:
+	std::function<bool(T, U)> m_Function;
+	std::string m_String;
+};
 
 template <typename T, typename U>
-std::function<bool(T, U)> NEQ()
-{
-	return [](T x, U y) { return x != y; };
-}
+const UnitTestFunction EQ = UnitTestFunction(
+	std::function([](T x, U y) { return x == y; }), 
+	" == ");
 
 template <typename T, typename U>
-std::function<bool(T, U)> GT()
-{
-	return [](T x, U y) { return x > y; };
-}
+const UnitTestFunction NEQ = UnitTestFunction(
+	std::function([](T x, U y) { return x != y; }),
+	" != ");
 
 template <typename T, typename U>
-std::function<bool(T, U)> GTE()
-{
-	return [](T x, U y) { return x >= y; };
-}
+const UnitTestFunction GT = UnitTestFunction(
+	std::function([](T x, U y) { return x > y; }),
+	" > ");
 
 template <typename T, typename U>
-std::function<bool(T, U)> LT()
-{
-	return [](T x, U y) { return x < y; };
-}
+const UnitTestFunction GTE = UnitTestFunction(
+	std::function([](T x, U y) { return x >= y; }),
+	" >= ");
 
 template <typename T, typename U>
-std::function<bool(T, U)> LTE()
-{
-	return [](T x, U y) { return x <= y; };
-}
+const UnitTestFunction LT = UnitTestFunction(
+	std::function([](T x, U y) { return x < y; }),
+	" < ");
+
+template <typename T, typename U>
+const UnitTestFunction LTE = UnitTestFunction(
+	std::function([](T x, U y) { return x <= y; }),
+	" <= ");
 
 template <typename T, typename U>
 bool TEST(T Produced, U Expected,
-		  std::function<bool(T, U)> func = EQ2<T, U>,
+		  const UnitTestFunction<T, U>& func = EQ<T, U>,
+		  const std::string& additionInfo = "",
 		  const std::source_location& loc = std::source_location::current())
 {
-	if (!func(Produced, Expected))
+	if (!func.getFunction()(Produced, Expected))
 	{
 		std::cout << std::setprecision(20);
 		std::cout << std::boolalpha;
-		std::string
-			fileName = loc.file_name(),
-			functionName = loc.function_name();
+
+		std::string fileName(loc.file_name()),
+					functionName(loc.function_name());
+
 		fileName.erase(fileName.begin(), 
 			fileName.begin() + fileName.rfind('\\') + 1);
 		fileName.erase(fileName.begin() + fileName.rfind('.'), fileName.end());
-		std::cout << fileName << " -> " << functionName << 
-			" Failure!\nExpected: " << Expected << "\n" <<
-			"Produced: " << Produced << std::endl;
+
+		std::cout << fileName + " -> " + functionName + " Failure!\n";
+		std::cout << "Evaluated To False: " <<
+			Produced << func.getString() << Expected << std::endl;
+
+		if (additionInfo != "")
+		{
+			std::cout << additionInfo << std::endl;
+		}
+
 		std::cout << std::noboolalpha;
 		std::cout << std::setprecision(6);
 		return false;
@@ -76,150 +112,123 @@ bool TEST(T Produced, U Expected,
 	}
 }
 
-template <typename T, typename U>
-bool TESTALL(const std::vector<std::pair<T, U>>& tests,
-			 std::function<bool(T, U)> func = EQ2<T, U>,
-			 const std::source_location& loc = std::source_location::current())
+class UnitTestBase
 {
-	bool pass = true;
-	for (const std::pair<T, U>& test : tests)
-	{
-		pass = TEST(test.first, test.second, func, loc) && pass;
-	}
-	return pass;
-}
+public:
+	virtual bool test(const std::source_location& loc =
+		std::source_location::current()) const = 0;
 
-template <typename T, typename U>
-bool TestAll2(
-	const std::vector<std::tuple<T, U, std::function<bool(T, U)>>>& tests,
-	const std::source_location& loc = std::source_location::current())
-{
-	bool pass = true;
-	for (const std::tuple<T, U, std::function<bool(T, U)>>& test : tests)
-	{
-		pass = pass &&
-			TEST(std::get<0>(test),
-				std::get<1>(test),
-				std::get<2>(test) ?
-				std::get<2>(test) :
-				EQ2<T, U>,
-				loc);
-	}
-	return pass;
-}
+	virtual void clear() = 0;
+};
 
 template <class T, class U>
-class UnitTest
+class UnitTest : public UnitTestBase
 {
 public:
 	UnitTest()
-		:
-		m_ProducedIndex(0ULL),
-		m_ExpectedIndex(0ULL),
-		m_FunctionIndex(0ULL)
 	{
 		m_Tests.reserve(1'000'000);
 	}
+
+	~UnitTest() = default;
 
 	UnitTest(const UnitTest&) = delete;
 	UnitTest(UnitTest&&) = delete;
 	UnitTest& operator= (const UnitTest&) = delete;
 	UnitTest& operator= (UnitTest&&) = delete;
 
-	void addProducedValue(const T& val)
-	{
-		if (m_ProducedIndex >= m_Tests.size())
-		{
-			m_Tests.resize(m_Tests.size() + 100);
-		}
-		std::tuple<T, U, std::function<bool(T, U)>>& test = 
-			m_Tests[m_ProducedIndex];
-		std::get<0>(test) = val;
-		m_ProducedIndex++;
-	}
-
-	void addProducedValues(std::function<std::vector<T>()> func)
-	{
-		addProducedValues(func());
-	}
-
-	void addProducedValues(const std::vector<T>& vals)
-	{
-		for (const T& val : vals)
-		{
-			addProducedValue(val);
-		}
-	}
-
-	void addExpectedValue(const U& val)
-	{
-		if (m_ExpectedIndex >= m_Tests.size())
-		{
-			m_Tests.resize(m_Tests.size() + 100);
-		}
-		std::tuple<T, U, std::function<bool(T, U)>>& test =
-			m_Tests[m_ExpectedIndex];
-		std::get<1>(test) = val;
-		m_ExpectedIndex++;
-	}
-
-	void addExpectedValues(std::function<std::vector<U>()> func)
-	{
-		addExpectedValues(func());
-	}
-
-	void addExpectedValues(const std::vector<U>& vals)
-	{
-		for (const T& val : vals)
-		{
-			addExpectedValue(val);
-		}
-	}
-
-	void addFunction(const std::function<bool(T, U)>& val)
-	{
-		if (m_FunctionIndex >= m_Tests.size())
-		{
-			m_Tests.resize(m_Tests.size() + 100);
-		}
-		std::tuple<T, U, std::function<bool(T, U)>>& test =
-			m_Tests[m_FunctionIndex];
-		std::get<2>(test) = val;
-		m_FunctionIndex++;
-	}
-
-	void addFunctions(const std::vector<std::function<bool(T, U)>>& vals)
-	{
-		for (const std::function<bool(T, U)>& val : vals)
-		{
-			addFunction(val);
-		}
-	}
-
-	void addTest(const std::tuple<T, U, std::function<bool(T, U)>>& test)
+	void addTest(
+		const std::tuple<T, U, UnitTestFunction<T, U>, std::string>& test)
 	{
 		m_Tests.emplace_back(test);
-		m_ProducedIndex++;
-		m_ExpectedIndex++;
-		m_FunctionIndex++;
 	}
 
-	void clear()
+	void addTest(const T& val1, const U& val2,
+		const std::string& info = "",
+		const UnitTestFunction<T, U>& func = EQ<T, U>)
+	{
+		addTest(std::make_tuple(val1, val2, func, info));
+	}
+
+	void clear() override
 	{
 		m_Tests.clear();
-		m_ProducedIndex = 0ULL;
-		m_ExpectedIndex = 0ULL;
-		m_FunctionIndex = 0ULL;
 	}
 
-	bool test(
-		const std::source_location& loc = 
-		std::source_location::current()) const
+	bool test(const std::source_location& loc = 
+		std::source_location::current()) const override
 	{
-		return TestAll2<T, U>(m_Tests, loc);
+		bool pass = true;
+		for (const std::tuple<T, U, UnitTestFunction<T, U>, std::string>& 
+				test : m_Tests)
+		{
+			pass = pass &&
+				TEST(std::get<0>(test),
+					 std::get<1>(test),
+					 std::get<2>(test),
+					 std::get<3>(test),
+					 loc);
+		}
+		return pass;
 	}
 
 private:
-	std::vector<std::tuple<T, U, std::function<bool(T, U)>>> m_Tests;
-	std::size_t m_ProducedIndex, m_ExpectedIndex, m_FunctionIndex;
+	std::vector<std::tuple<T, U, UnitTestFunction<T, U>, std::string>> m_Tests;
+};
+
+class UniversalTester
+{
+public:
+	template <typename T, typename U>
+	void addTest(const T& val1, const U& val2,
+				 const std::string& info = "",
+				 const UnitTestFunction<T, U>& func = EQ<T, U>)
+	{
+		static UnitTest<T, U> tests;
+		if (std::find(m_UnitTests.begin(), m_UnitTests.end(), &tests) ==
+			m_UnitTests.end())
+		{
+			m_UnitTests.push_back(&tests);
+		}
+		tests.addTest(val1, val2, info, func);
+	}
+
+	template<typename C1, typename C2, 
+			 typename T = C1::value_type, typename U = C2::value_type>
+	void addBulkTests(const C1& expectedVals, const C2& producedVals,
+					  const std::vector<std::string>& infoVals =
+						  std::vector<std::string>(),
+					  const std::vector<UnitTestFunction<T, U>>& functions =
+							std::vector<UnitTestFunction<T, U>>())
+	{
+		assert(expectedVals.size() == producedVals.size());
+		assert((void*)(&expectedVals) != (void*)(&producedVals));
+
+		std::string info("");
+		UnitTestFunction<T, U> func(EQ<T, U>);
+
+		for (std::size_t i = 0ULL; i < producedVals.size(); i++)
+		{
+			info = infoVals.size() == 0ULL ? "" : infoVals.at(i);
+			func = functions.size() == 0ULL ? 
+				UnitTestFunction<T, U>(EQ<T, U>) : functions.at(i);
+			addTest(expectedVals.at(i), producedVals.at(i), info, func);
+		}
+	}
+
+	bool test(const std::source_location& loc =
+		std::source_location::current())
+	{
+		bool pass = true;
+		std::for_each(m_UnitTests.begin(), m_UnitTests.end(),
+			[&pass, &loc](UnitTestBase* unitTest)
+			{
+				pass = pass && unitTest->test(loc);
+				unitTest->clear();
+			});
+		return pass;
+	}
+
+private:
+	std::vector<UnitTestBase*> m_UnitTests;
 };

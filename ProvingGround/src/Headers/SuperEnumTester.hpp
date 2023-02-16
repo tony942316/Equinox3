@@ -2,6 +2,8 @@
 
 #include "SuperEnum.hpp"
 
+#include "UnitTest.hpp"
+
 class SuperEnumTester
 {
 public:
@@ -29,11 +31,12 @@ private:
 			e5, 
 			e6
 		)
-
-	private:
 	};
 
-	static bool testGetTypes();
+	static bool testGetEnums();
+	static bool testGetStrings();
 	static bool testToString();
 	static bool testStream();
+
+	static UniversalTester s_Tests;
 };
