@@ -60,11 +60,12 @@ struct EnumPair
 	__EQX_SUPER_ENUM_TO_STRING(name)\
 	__EQX_SUPER_ENUM_GET_ENUMS(name)\
     __EQX_SUPER_ENUM_GET_STRINGS(name)\
-	__EQX_SUPER_ENUM_OSTREAM(name)
+	__EQX_SUPER_ENUM_OSTREAM(name)\
+    ;
 
 #define EQX_SUPER_ENUM_1(name, e0)\
     enum class name : std::size_t\
-        { e0 };\
+        { e0 = 0ULL };\
     static inline constexpr std::array<EnumPair<name>, 1ULL> \
         name##Collection = \
         {\
@@ -72,9 +73,20 @@ struct EnumPair
         };\
     __EQX_SUPER_ENUM_FULL_IMPLEMENTATION(name)
 
+#define EQX_SUPER_ENUM_2(name, e0, e1)\
+    enum class name : std::size_t\
+        { e0 = 0ULL, e1 };\
+    static inline constexpr std::array<EnumPair<name>, 2ULL> \
+        name##Collection = \
+        {\
+            EnumPair(name::e0, #e0),\
+            EnumPair(name::e1, #e1)\
+        };\
+    __EQX_SUPER_ENUM_FULL_IMPLEMENTATION(name)
+
 #define EQX_SUPER_ENUM_3(name, e0, e1, e2)\
     enum class name : std::size_t\
-        { e0, e1, e2 };\
+        { e0 = 0ULL, e1, e2 };\
     static inline constexpr std::array<EnumPair<name>, 3ULL> \
         name##Collection = \
         {\
@@ -86,7 +98,7 @@ struct EnumPair
 
 #define EQX_SUPER_ENUM_4(name, e0, e1, e2, e3)\
     enum class name : std::size_t\
-        { e0, e1, e2, e3 };\
+        { e0 = 0ULL, e1, e2, e3 };\
     static inline constexpr std::array<EnumPair<name>, 4ULL> \
         name##Collection = \
         {\
@@ -99,7 +111,7 @@ struct EnumPair
 
 #define EQX_SUPER_ENUM_5(name, e0, e1, e2, e3, e4)\
     enum class name : std::size_t\
-        { e0, e1, e2, e3, e4 };\
+        { e0 = 0ULL, e1, e2, e3, e4 };\
     static inline constexpr std::array<EnumPair<name>, 5ULL> \
         name##Collection = \
         {\
@@ -113,7 +125,7 @@ struct EnumPair
 
 #define EQX_SUPER_ENUM_6(name, e0, e1, e2, e3, e4, e5)\
     enum class name : std::size_t\
-        { e0, e1, e2, e3, e4, e5 };\
+        { e0 = 0ULL, e1, e2, e3, e4, e5 };\
     static inline constexpr std::array<EnumPair<name>, 6ULL> \
         name##Collection = \
         {\
@@ -123,6 +135,76 @@ struct EnumPair
             EnumPair(name::e3, #e3),\
             EnumPair(name::e4, #e4),\
             EnumPair(name::e5, #e5)\
+        };\
+    __EQX_SUPER_ENUM_FULL_IMPLEMENTATION(name)
+
+#define EQX_SUPER_ENUM_7(name, e0, e1, e2, e3, e4, e5, e6)\
+    enum class name : std::size_t\
+        { e0 = 0ULL, e1, e2, e3, e4, e5, e6 };\
+    static inline constexpr std::array<EnumPair<name>, 7ULL> \
+        name##Collection = \
+        {\
+            EnumPair(name::e0, #e0),\
+            EnumPair(name::e1, #e1),\
+            EnumPair(name::e2, #e2),\
+            EnumPair(name::e3, #e3),\
+            EnumPair(name::e4, #e4),\
+            EnumPair(name::e5, #e5),\
+            EnumPair(name::e6, #e6)\
+        };\
+    __EQX_SUPER_ENUM_FULL_IMPLEMENTATION(name)
+
+#define EQX_SUPER_ENUM_8(name, e0, e1, e2, e3, e4, e5, e6, e7)\
+    enum class name : std::size_t\
+        { e0 = 0ULL, e1, e2, e3, e4, e5, e6, e7 };\
+    static inline constexpr std::array<EnumPair<name>, 8ULL> \
+        name##Collection = \
+        {\
+            EnumPair(name::e0, #e0),\
+            EnumPair(name::e1, #e1),\
+            EnumPair(name::e2, #e2),\
+            EnumPair(name::e3, #e3),\
+            EnumPair(name::e4, #e4),\
+            EnumPair(name::e5, #e5),\
+            EnumPair(name::e6, #e6),\
+            EnumPair(name::e7, #e7)\
+        };\
+    __EQX_SUPER_ENUM_FULL_IMPLEMENTATION(name)
+
+#define EQX_SUPER_ENUM_9(name, e0, e1, e2, e3, e4, e5, e6, e7, e8)\
+    enum class name : std::size_t\
+        { e0 = 0ULL, e1, e2, e3, e4, e5, e6, e7, e8 };\
+    static inline constexpr std::array<EnumPair<name>, 9ULL> \
+        name##Collection = \
+        {\
+            EnumPair(name::e0, #e0),\
+            EnumPair(name::e1, #e1),\
+            EnumPair(name::e2, #e2),\
+            EnumPair(name::e3, #e3),\
+            EnumPair(name::e4, #e4),\
+            EnumPair(name::e5, #e5),\
+            EnumPair(name::e6, #e6),\
+            EnumPair(name::e7, #e7),\
+            EnumPair(name::e8, #e8)\
+        };\
+    __EQX_SUPER_ENUM_FULL_IMPLEMENTATION(name)
+
+#define EQX_SUPER_ENUM_10(name, e0, e1, e2, e3, e4, e5, e6, e7, e8, e9)\
+    enum class name : std::size_t\
+        { e0 = 0ULL, e1, e2, e3, e4, e5, e6, e7, e8, e9 };\
+    static inline constexpr std::array<EnumPair<name>, 10ULL> \
+        name##Collection = \
+        {\
+            EnumPair(name::e0, #e0),\
+            EnumPair(name::e1, #e1),\
+            EnumPair(name::e2, #e2),\
+            EnumPair(name::e3, #e3),\
+            EnumPair(name::e4, #e4),\
+            EnumPair(name::e5, #e5),\
+            EnumPair(name::e6, #e6),\
+            EnumPair(name::e7, #e7),\
+            EnumPair(name::e8, #e8),\
+            EnumPair(name::e9, #e9)\
         };\
     __EQX_SUPER_ENUM_FULL_IMPLEMENTATION(name)
 

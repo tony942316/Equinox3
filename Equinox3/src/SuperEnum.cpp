@@ -20,7 +20,7 @@ std::string enumClassDefinition(std::size_t num)
 {
 	std::string result = "";
 	result += "    enum class name : std::size_t\\\n";
-	result += "        { e0";
+	result += "        { e0 = 0ULL";
 	for (std::size_t i = 1; i < num; i++)
 	{
 		result += ", e" + std::to_string(i);
