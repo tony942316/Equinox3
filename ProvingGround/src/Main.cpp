@@ -2,6 +2,7 @@
 
 #include "UnitTest.hpp"
 #include "MiscTester.hpp"
+#include "UtilityMacrosTester.hpp"
 
 #include "Workbench.hpp"
 
@@ -12,6 +13,7 @@ int main()
 	workbenchMain();
 
 	MiscTester::test();
+	UtilityMacrosTester::test();
 	UnitTester::printStatus();
 
 	std::cout << "\nEnd" << std::endl;

@@ -29,7 +29,7 @@ namespace eqx
 		/**
 		 * @brief Severity Of A Log
 		 */
-		EQX_SUPER_ENUM_5(Level, 
+		EQX_SUPER_ENUM(Level, 
 			all, 
 			info, 
 			warning, 
@@ -40,7 +40,7 @@ namespace eqx
 		/**
 		 * @brief Type Of A Log
 		 */
-		EQX_SUPER_ENUM_6(Type,
+		EQX_SUPER_ENUM(Type,
 			none,
 			info,
 			runtimeWarning,

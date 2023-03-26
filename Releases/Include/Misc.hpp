@@ -214,7 +214,7 @@ namespace eqx
 		auto yIter = std::ranges::cbegin(y);
 		for (; xIter != std::ranges::cend(x); xIter++, yIter++)
 		{
-			zippedRange.push_back(std::make_pair(*xIter, *yIter));
+			zippedRange.emplace_back(*xIter, *yIter);
 		}
 
 		return zippedRange;

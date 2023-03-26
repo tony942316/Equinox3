@@ -1,7 +1,5 @@
 #pragma once
 
-#include "HolyMacros.hpp"
-
 #define CONCEPT_CTG(c) \
 template <typename... Types> \
 consteval bool c##CTG(bool es) \

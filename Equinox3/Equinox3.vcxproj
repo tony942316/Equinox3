@@ -211,6 +211,7 @@ Xcopy /Y $(SolutionDir)bin\$(Platform)$(Configuration)\$(ProjectName)\$(ProjectN
     <ClInclude Include="src\Headers\Rectangle.hpp" />
     <ClInclude Include="src\Headers\StopWatch.hpp" />
     <ClInclude Include="src\Headers\SuperEnum.hpp" />
+    <ClInclude Include="src\Headers\UtilityMacros.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Benchmark.cpp" />
