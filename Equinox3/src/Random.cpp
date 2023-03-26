@@ -11,7 +11,7 @@ namespace eqx
 
 	int Random::randInt(int lowerBound, int upperBound)
 	{
-		eqx_dynamic_assert(upperBound >= lowerBound, 
+		eqx::runtimeAssert(upperBound >= lowerBound, 
 			"Lower Bound Is Larger Than UpperBound!");
 
 		if (lowerBound != s_UniInt.min() || upperBound != s_UniInt.max())
@@ -25,7 +25,7 @@ namespace eqx
 	unsigned int Random::randUnsignedInt(unsigned int lowerBound, 
 		unsigned int upperBound)
 	{
-		eqx_dynamic_assert(upperBound >= lowerBound,
+		eqx::runtimeAssert(upperBound >= lowerBound,
 			"Lower Bound Larger Than Upper Bound!");
 
 		if (lowerBound != s_UniUInt.min() || upperBound != s_UniUInt.max())
@@ -38,7 +38,7 @@ namespace eqx
 
 	double Random::randDouble(double lowerBound, double upperBound)
 	{
-		eqx_dynamic_assert(upperBound >= lowerBound,
+		eqx::runtimeAssert(upperBound >= lowerBound,
 			"Lower Bound Is Larger Than UpperBound!");
 
 		if (lowerBound >= 0.0 && upperBound >= 0.0)
@@ -75,7 +75,7 @@ namespace eqx
 		}
 		else
 		{
-			eqx_dynamic_assert(false, "Code Should Never Reach This!");
+			eqx::runtimeAssert(false, "Code Should Never Reach This!");
 			return 0.0;
 		}
 	}
@@ -87,7 +87,7 @@ namespace eqx
 
 	unsigned int Random::rollDice(unsigned int sides)
 	{
-		eqx_dynamic_assert(sides >= 2U,
+		eqx::runtimeAssert(sides >= 2U,
 			"A Dice Should Have At Least Two Sides!");
 
 		return randUnsignedInt(1U, sides);

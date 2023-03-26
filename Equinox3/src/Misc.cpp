@@ -3,7 +3,7 @@
 #include <iostream>
 
 #ifndef NDEBUG
-void eqx_dynamic_assert(bool expr, const std::string& msg) noexcept
+void eqx_debugOnly_runtimeAssert(bool expr, std::string_view msg) noexcept
 {
 	if (!expr)
 	{
@@ -12,3 +12,20 @@ void eqx_dynamic_assert(bool expr, const std::string& msg) noexcept
 	}
 }
 #endif
+
+namespace eqx
+{
+	void runtimeAssert(bool expr, std::string_view msg) noexcept
+	{
+		if (!expr)
+		{
+			std::cerr << msg << std::endl;
+			std::abort();
+		}
+	}
+
+	std::string toString(const char* cstring)
+	{
+		return std::string(cstring);
+	}
+}

@@ -12,7 +12,6 @@ struct EnumPair
         m_Enum(e),
         m_String(s)
     {
-
     }
 
     T m_Enum;

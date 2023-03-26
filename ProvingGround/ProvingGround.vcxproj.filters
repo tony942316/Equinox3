@@ -21,7 +21,10 @@
     <ClCompile Include="src\Workbench.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\SuperEnumTester.cpp">
+    <ClCompile Include="src\MiscTester.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\UnitTest.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -32,7 +35,13 @@
     <ClInclude Include="src\Headers\Workbench.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Headers\SuperEnumTester.hpp">
+    <ClInclude Include="src\Headers\MiscTester.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Headers\HolyMacros.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Headers\AuxMacros.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

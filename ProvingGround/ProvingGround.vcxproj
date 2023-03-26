@@ -96,6 +96,8 @@
       <LanguageStandard>stdcpp20</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
       <EnableModules>false</EnableModules>
+      <FloatingPointModel>Precise</FloatingPointModel>
+      <UseStandardPreprocessor>true</UseStandardPreprocessor>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -117,6 +119,8 @@
       <LanguageStandard_C>stdc17</LanguageStandard_C>
       <EnableModules>false</EnableModules>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
+      <FloatingPointModel>Precise</FloatingPointModel>
+      <UseStandardPreprocessor>true</UseStandardPreprocessor>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -137,6 +141,8 @@
       <LanguageStandard>stdcpp20</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
       <EnableModules>false</EnableModules>
+      <FloatingPointModel>Precise</FloatingPointModel>
+      <UseStandardPreprocessor>true</UseStandardPreprocessor>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -158,6 +164,8 @@
       <LanguageStandard_C>stdc17</LanguageStandard_C>
       <EnableModules>false</EnableModules>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
+      <FloatingPointModel>Precise</FloatingPointModel>
+      <UseStandardPreprocessor>true</UseStandardPreprocessor>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -170,11 +178,14 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\Main.cpp" />
-    <ClCompile Include="src\SuperEnumTester.cpp" />
+    <ClCompile Include="src\MiscTester.cpp" />
+    <ClCompile Include="src\UnitTest.cpp" />
     <ClCompile Include="src\Workbench.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\Headers\SuperEnumTester.hpp" />
+    <ClInclude Include="src\Headers\AuxMacros.hpp" />
+    <ClInclude Include="src\Headers\HolyMacros.hpp" />
+    <ClInclude Include="src\Headers\MiscTester.hpp" />
     <ClInclude Include="src\Headers\UnitTest.hpp" />
     <ClInclude Include="src\Headers\Workbench.hpp" />
   </ItemGroup>

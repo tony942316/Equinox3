@@ -1,6 +1,7 @@
 #include <iostream>
 
-#include "SuperEnumTester.hpp"
+#include "UnitTest.hpp"
+#include "MiscTester.hpp"
 
 #include "Workbench.hpp"
 
@@ -10,7 +11,8 @@ int main()
 
 	workbenchMain();
 
-	SuperEnumTester::test();
+	MiscTester::test();
+	UnitTester::printStatus();
 
 	std::cout << "\nEnd" << std::endl;
 	std::cin.get();
