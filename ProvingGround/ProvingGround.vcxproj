@@ -177,6 +177,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\LogTester.cpp" />
     <ClCompile Include="src\Main.cpp" />
     <ClCompile Include="src\MiscTester.cpp" />
     <ClCompile Include="src\SuperEnumTester.cpp" />
@@ -187,6 +188,7 @@
   <ItemGroup>
     <ClInclude Include="src\Headers\AuxMacros.hpp" />
     <ClInclude Include="src\Headers\HolyMacros.hpp" />
+    <ClInclude Include="src\Headers\LogTester.hpp" />
     <ClInclude Include="src\Headers\MiscTester.hpp" />
     <ClInclude Include="src\Headers\SuperEnumTester.hpp" />
     <ClInclude Include="src\Headers\UnitTest.hpp" />

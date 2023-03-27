@@ -4,6 +4,7 @@
 #include "MiscTester.hpp"
 #include "UtilityMacrosTester.hpp"
 #include "SuperEnumTester.hpp"
+#include "LogTester.hpp"
 
 #include "Workbench.hpp"
 
@@ -16,7 +17,7 @@ int main()
 	MiscTester::test();
 	UtilityMacrosTester::test();
 	SuperEnumTester::test();
-	UnitTester::printStatus();
+	LogTester::test();
 
 	std::cout << "\nEnd" << std::endl;
 	std::cin.get();

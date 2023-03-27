@@ -18,6 +18,8 @@ namespace SuperEnumTester
 	{
 		std::cout << "Testing SuperEnum..." << std::endl;
 		testStreaming();
+		UnitTester::printStatus();
+		UnitTester::clear();
 	}
 }
 

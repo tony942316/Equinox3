@@ -8,14 +8,17 @@ namespace eqx
 	Log::Type Log::s_LastErrorType = Type::none;
 	std::string Log::s_LastMessage("");
 
-	void Log::log(Level level, const std::string& msg,
+	void Log::log(Level level, std::string_view msg, 
 		Type type,
 		const std::source_location& loc)
 	{
-		std::string logString(getFormattedString(loc, level, msg));
+		auto logString = getFormattedString(loc, level, msg);
 		if (level >= s_LogLevel)
 		{
-			*s_OutputStream << logString << std::endl;
+			if (s_OutputStream != nullptr)
+			{
+				*s_OutputStream << logString << std::endl;
+			}
 			s_LogFile << logString << std::endl;
 			s_LastErrorType = type;
 			s_LastMessage = msg;
@@ -32,13 +35,13 @@ namespace eqx
 		s_OutputStream = &stream;
 	}
 
-	void Log::setOutputFile(const std::string& file)
+	void Log::setOutputFile(std::string_view file)
 	{
 		if (s_LogFile.is_open())
 		{
 			s_LogFile.close();
 		}
-		s_LogFile.open(file, std::ios::out | std::ios::trunc);
+		s_LogFile.open(std::string(file), std::ios::out | std::ios::trunc);
 	}
 
 	void Log::clear() noexcept
@@ -47,64 +50,59 @@ namespace eqx
 		s_LastMessage = "";
 	}
 
+	Log::Level Log::getCurrentLogLevel() noexcept
+	{
+		return s_LogLevel;
+	}
+
 	Log::Type Log::getLastLogType() noexcept
 	{
 		return s_LastErrorType;
 	}
 
-	const std::string& Log::getLastLogMessage() noexcept
+	std::string_view Log::getLastLogMessage() noexcept
 	{
 		return s_LastMessage;
 	}
 
 	std::string Log::getFormattedString(
 		const std::source_location& loc, eqx::Log::Level level,
-		const std::string& msg)
+		std::string_view msg)
 	{
-		std::string preface(""),
-					fileName(loc.file_name()),
-					functionName(loc.function_name()),
-					lineNumber(std::to_string(loc.line()));
+		auto result = std::string("");
+		result.reserve(100);
 
-		fileName.erase(fileName.begin(),
-			fileName.begin() + fileName.rfind('\\'));
-		preface += ".." + fileName + "(" +
-			functionName + "," + lineNumber + ") ";
+		auto fileName = std::string_view(loc.file_name());
+		auto functionName = std::string(loc.function_name());
+		auto lineNumber = std::to_string(loc.line());
+
+		result += "..";
+		result += fileName.substr(fileName.rfind('\\'));
+		result += "(";
+		result += functionName;
+		result += ",";
+		result += lineNumber;
+		result += ") ";
 		switch (level)
 		{
 		case Level::info:
-			preface += "[INFO]: ";
+			result += "[INFO]: ";
 			break;
 
 		case Level::warning:
-			preface += "[WARNING]: ";
+			result += "[WARNING]: ";
 			break;
 
 		case Level::error:
-			preface += "[ERROR]: ";
+			result += "[ERROR]: ";
 			break;
 
 		default:
-			preface += "[UNKNOWN]: ";
+			result += "[UNKNOWN]: ";
 			break;
 		}
-		preface += msg;
+		result += msg;
 
-		return preface;
-	}
-
-	const std::vector<Log::Level>& Log::getLoggableLevels()
-	{
-		static std::vector<Level> loggable = std::invoke(
-		[]()
-		{
-			std::vector<Level> temp;
-			temp.reserve(3);
-			temp.emplace_back(Level::info);
-			temp.emplace_back(Level::warning);
-			temp.emplace_back(Level::error);
-			return temp;
-		});
-		return loggable;
+		return result;
 	}
 }

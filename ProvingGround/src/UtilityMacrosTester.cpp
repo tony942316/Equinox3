@@ -4,6 +4,7 @@
 
 #include <array>
 
+#include "UnitTest.hpp"
 #include "UtilityMacros.hpp"
 
 namespace UtilityMacrosTester
@@ -11,6 +12,8 @@ namespace UtilityMacrosTester
 	void test()
 	{
 		std::cout << "Testing UtilityMacros..." << std::endl;
+		UnitTester::printStatus();
+		UnitTester::clear();
 	}
 }
 

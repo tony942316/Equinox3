@@ -27,6 +27,8 @@ namespace MiscTester
 		testToString();
 		testPairPrint();
 		testZip();
+		UnitTester::printStatus();
+		UnitTester::clear();
 	}
 }
 

@@ -3,8 +3,10 @@
 #include <fstream>
 #include <iostream>
 #include <string>
-#include <vector>
+#include <string_view>
 #include <source_location>
+
+#include <array>
 
 #include "SuperEnum.hpp"
 
@@ -57,7 +59,7 @@ namespace eqx
 		 * @param type Type Of The Log
 		 * @param loc Current Location In Source
 		 */
-		static void log(Level level, const std::string& msg, 
+		static void log(Level level, std::string_view msg, 
 			Type type = Type::none, 
 			const std::source_location& loc = std::source_location::current());
 
@@ -79,14 +81,21 @@ namespace eqx
 		/**
 		 * @brief Set The File Logs Are Written To
 		 * 
-		 * @param file The New File
+		 * @param file The Path Of The New File
 		 */
-		static void setOutputFile(const std::string& file);
+		static void setOutputFile(std::string_view file);
 
 		/**
 		 * @brief Clears The Last Error Message And Type
 		 */
 		static void clear() noexcept;
+
+		/**
+		 * @brief Get Current Log Level
+		 * 
+		 * @returns Current Log Level
+		 */
+		static Level getCurrentLogLevel() noexcept;
 
 		/**
 		 * @brief Get Type Of Last Log
@@ -100,11 +109,11 @@ namespace eqx
 		 * 
 		 * @returns Last Message String
 		 */
-		static const std::string& getLastLogMessage() noexcept;
+		static std::string_view getLastLogMessage() noexcept;
 
 		/**
 		 * @brief Build String With eqx::Log Formatting i.e.
-		 * "{SourceLocation}[{Log::Level}]: {Message}"
+		 *		"{SourceLocation}[{Log::Level}]: {Message}"
 		 * 
 		 * @param loc Location Of The Log
 		 * @param level Level Of The Log
@@ -114,15 +123,21 @@ namespace eqx
 		 */
 		static std::string getFormattedString(
 			const std::source_location& loc, Level level,
-			const std::string& msg = "");
+			std::string_view msg = "");
 
 		/**
 		 * @brief Get Log Levels That Log Properly i.e.
-		 * eqx::Log::all Is Not Meant To Be Logged
+		 *		eqx::Log::all Is Not Meant To Be Logged
 		 * 
 		 * @returns std::vector Of Loggable Levels
 		 */
-		static const std::vector<Level>& getLoggableLevels();
+		static inline consteval std::array<eqx::Log::Level, 3ULL> 
+			getLoggableLevels()
+		{
+			return { eqx::Log::Level::info,
+				eqx::Log::Level::warning,
+				eqx::Log::Level::error };
+		}
 
 	private:
 		static std::ofstream s_LogFile;
