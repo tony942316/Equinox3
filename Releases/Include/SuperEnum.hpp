@@ -1,12 +1,23 @@
 #pragma once
 
-#include <array>
 #include <string_view>
 #include <iostream>
+#include <type_traits>
+
+#include <array>
 
 #include "UtilityMacros.hpp"
 
-template <class T>
+namespace eqx
+{
+    /**
+     * @brief Constrain T To Be An Enum Type
+     */
+    template <typename T>
+    concept enumType = std::is_enum_v<T>;
+}
+
+template <eqx::enumType T>
 struct EnumPair
 {
     consteval EnumPair()
@@ -48,12 +59,31 @@ namespace eqx
     }
 }
 
+template <eqx::enumType T>
+constexpr bool operator== (EnumPair<T> lhs, EnumPair<T> rhs)
+{
+    return lhs.m_Enum == rhs.m_Enum;
+}
 
+template <eqx::enumType T>
+constexpr bool operator!= (EnumPair<T> lhs, EnumPair<T> rhs)
+{
+    return !(lhs == rhs);
+}
+
+/**
+ * @brief Macro For Use By Other Macros In The SuperEnum Header,
+ *		NOT FOR EXTERNAL USE!
+ **/
 #define __EQX_SUPER_ENUM_TO_STRING(name) \
-	[[nodiscard]]static constexpr \
+	[[nodiscard]] static constexpr \
         std::string_view name##ToString(name value) noexcept \
 	{ return name##Collection.at(static_cast<std::size_t>(value)).m_String; }
 
+/**
+ * @brief Macro For Use By Other Macros In The SuperEnum Header,
+ *		NOT FOR EXTERNAL USE!
+ **/
 #define __EQX_SUPER_ENUM_GET_ENUMS(name) \
 	[[nodiscard]] static consteval \
         std::array<name, name##Collection.size()> get##name##Enums() \
@@ -66,6 +96,10 @@ namespace eqx
         return result; \
     }
 
+/**
+ * @brief Macro For Use By Other Macros In The SuperEnum Header,
+ *		NOT FOR EXTERNAL USE!
+ **/
 #define __EQX_SUPER_ENUM_GET_STRINGS(name)\
     [[nodiscard]] static consteval \
         std::array<std::string_view, name##Collection.size()> \
@@ -79,6 +113,10 @@ namespace eqx
         return result; \
     }
 
+/**
+ * @brief Macro For Use By Other Macros In The SuperEnum Header,
+ *		NOT FOR EXTERNAL USE!
+ **/
 #define __EQX_SUPER_ENUM_OSTREAM(name) \
 	friend std::ostream& operator<< (std::ostream& oStream, name val) \
 	{ \
@@ -86,12 +124,54 @@ namespace eqx
 		return oStream; \
 	}
 
+/**
+ * @brief Macro For Use By Other Macros In The SuperEnum Header,
+ *		NOT FOR EXTERNAL USE!
+ **/
 #define __EQX_SUPER_ENUM_FULL_IMPLEMENTATION(name) \
 	__EQX_SUPER_ENUM_TO_STRING(name) \
 	__EQX_SUPER_ENUM_GET_ENUMS(name) \
     __EQX_SUPER_ENUM_GET_STRINGS(name) \
 	__EQX_SUPER_ENUM_OSTREAM(name)
 
+/**
+ * @brief Create An enum class With Provided Values And A 
+ *      std::array<EnumPair, sizeof...(...)> name##Collection For Value
+ *      And std::string_view Access, Also Provides consteval Functions 
+ *      To Convert Enum Values To String, Get A Collection Of All Enum Values,
+ *      Get A Collection Of All Enum std::string_view, And Overloads
+ *      operator<< To Allow Streaming Of Enums. The Functions Are 
+ *      Respectivly As Follows:
+ *      
+ * @brief name##ToString(name val);
+ * @brief get##name##Enums();
+ * @brief get##name##Strings();
+ * @brief friend std::ostream& operator<< (std::ostream& oStream, name val);
+ * 
+ * @brief The EQX_SUPER_ENUM(name, ...) Macro Should Be Placed In A Class
+ *      As Such
+ * 
+ * @brief class SomeClass
+ * @brief {
+ * @brief public:
+ * @brief       class declartions/implementations...
+ * @brief       EQX_SUPER_ENUM(EnumName, Val1, Val2, etc...)
+ * @brief       class declartions/implementations...
+ * @brief private:
+ * @brief       class declartions/implementations...
+ * @brief       EQX_SUPER_ENUM(PrivateEnumName, Val1, Val2, etc...)
+ * @brief       class declartions/implementations...
+ * @brief };
+ *      
+ *
+ * @param name The Name Of The enum class
+ * @param ... The Values Of The enum class
+ *
+ * @returns An enum class Of std::size_t With All The Provided Values Aswell 
+ *      As A std::array<EnumPair, sizeof...(...)> Called name##Collection,
+ *      The Array Provides The Values Of The Enum With A std::string_view
+ *      Of The Enum Value
+ **/
 #define EQX_SUPER_ENUM(name, ...) \
     enum class name : std::size_t \
         { __VA_ARGS__ }; \

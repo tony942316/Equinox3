@@ -179,6 +179,7 @@
   <ItemGroup>
     <ClCompile Include="src\Main.cpp" />
     <ClCompile Include="src\MiscTester.cpp" />
+    <ClCompile Include="src\SuperEnumTester.cpp" />
     <ClCompile Include="src\UnitTest.cpp" />
     <ClCompile Include="src\UtilityMacrosTester.cpp" />
     <ClCompile Include="src\Workbench.cpp" />
@@ -187,6 +188,7 @@
     <ClInclude Include="src\Headers\AuxMacros.hpp" />
     <ClInclude Include="src\Headers\HolyMacros.hpp" />
     <ClInclude Include="src\Headers\MiscTester.hpp" />
+    <ClInclude Include="src\Headers\SuperEnumTester.hpp" />
     <ClInclude Include="src\Headers\UnitTest.hpp" />
     <ClInclude Include="src\Headers\UtilityMacrosTester.hpp" />
     <ClInclude Include="src\Headers\Workbench.hpp" />

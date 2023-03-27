@@ -4,6 +4,8 @@
 
 #include <array>
 
+#include "UtilityMacros.hpp"
+
 namespace UtilityMacrosTester
 {
 	void test()

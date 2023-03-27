@@ -1,117 +1,161 @@
 #include "SuperEnumTester.hpp"
 
-#include <string>
-#include <vector>
-#include <sstream>
 #include <iostream>
+#include <string>
+#include <string_view>
+#include <sstream>
+
+#include <array>
 
 #include "UnitTest.hpp"
+#include "SuperEnum.hpp"
 
-UniversalTester SuperEnumTester::s_Tests;
+void testStreaming();
 
-bool SuperEnumTester::test()
+namespace SuperEnumTester
 {
-	if (testGetEnums() &&
-		testGetStrings() &&
-		testToString() &&
-		testStream())
+	void test()
 	{
-		std::cout << "SuperEnum Tests Passed" << std::endl;
-		return true;
-	}
-	else
-	{
-		std::cout << "SuperEnum Tests Failed!" << std::endl;
-		return false;
+		std::cout << "Testing SuperEnum..." << std::endl;
+		testStreaming();
 	}
 }
 
-#define testGetEnums_M(name)\
-	constexpr std::array<superEnumShell::name,\
-						 superEnumShell::get##name##Enums().size()>\
-		produced##name(superEnumShell::get##name##Enums());\
-		s_Tests.addTest(s_Expected##name##Enums.size(), produced##name.size(),\
-			"Size Mismatch!");\
-		s_Tests.addBulkTests(s_Expected##name##Enums, produced##name);\
-
-bool SuperEnumTester::testGetEnums()
+class SuperEnumShell
 {
-	testGetEnums_M(OnePub)
-	testGetEnums_M(FourPub)
-	testGetEnums_M(SixPub)
-	testGetEnums_M(TenPub)
+public:
+	EQX_SUPER_ENUM(Pub3,
+		v1,
+		v2,
+		v3)
+	EQX_SUPER_ENUM(Pub5, v1, v2, v3, v4, v5)
+	EQX_SUPER_ENUM(Pub7, v1, v2, v3, v4, v5,
+		v6, v7)
+};
 
-	return s_Tests.test();
+consteval void testEnumCollection()
+{
+	using namespace std::string_view_literals;
+
+	constexpr auto expected3 = 
+		std::array<EnumPair<SuperEnumShell::Pub3>, 3ULL>({
+			{ SuperEnumShell::Pub3::v1, "v1"sv },
+			{ SuperEnumShell::Pub3::v2, "v2"sv },
+			{ SuperEnumShell::Pub3::v3, "v3"sv }
+		});
+	static_assert(expected3 == SuperEnumShell::Pub3Collection);
+
+	constexpr auto expected5 =
+		std::array<EnumPair<SuperEnumShell::Pub5>, 5ULL>({
+			{ SuperEnumShell::Pub5::v1, "v1"sv },
+			{ SuperEnumShell::Pub5::v2, "v2"sv },
+			{ SuperEnumShell::Pub5::v3, "v3"sv },
+			{ SuperEnumShell::Pub5::v4, "v4"sv },
+			{ SuperEnumShell::Pub5::v5, "v5"sv }
+		});
+	static_assert(expected5 == SuperEnumShell::Pub5Collection);
+
+	constexpr auto expected7 =
+		std::array<EnumPair<SuperEnumShell::Pub7>, 7ULL>({
+			{ SuperEnumShell::Pub7::v1, "v1"sv },
+			{ SuperEnumShell::Pub7::v2, "v2"sv },
+			{ SuperEnumShell::Pub7::v3, "v3"sv },
+			{ SuperEnumShell::Pub7::v4, "v4"sv },
+			{ SuperEnumShell::Pub7::v5, "v5"sv },
+			{ SuperEnumShell::Pub7::v6, "v6"sv },
+			{ SuperEnumShell::Pub7::v7, "v7"sv }
+		});
+	static_assert(expected7 == SuperEnumShell::Pub7Collection);
 }
 
-#define testGetStrings_M(name)\
-	constexpr std::array<std::string_view,\
-						 superEnumShell::get##name##Strings().size()>\
-		produced##name(superEnumShell::get##name##Strings());\
-	s_Tests.addTest(s_Expected##name##Strings.size(), produced##name.size(),\
-		"Size Mismatch!");\
-	s_Tests.addBulkTests(s_Expected##name##Strings, produced##name);
-
-bool SuperEnumTester::testGetStrings()
+consteval void testGetEnums()
 {
-	testGetStrings_M(OnePub)
-	testGetStrings_M(FourPub)
-	testGetStrings_M(SixPub)
-	testGetStrings_M(TenPub)
+	constexpr auto expected3 =
+		std::array<SuperEnumShell::Pub3, 3ULL>({
+			SuperEnumShell::Pub3::v1,
+			SuperEnumShell::Pub3::v2,
+			SuperEnumShell::Pub3::v3
+		});
+	static_assert(expected3 == SuperEnumShell::getPub3Enums());
 
-	return s_Tests.test();
+	constexpr auto expected5 =
+		std::array<SuperEnumShell::Pub5, 5ULL>({
+			SuperEnumShell::Pub5::v1,
+			SuperEnumShell::Pub5::v2,
+			SuperEnumShell::Pub5::v3,
+			SuperEnumShell::Pub5::v4,
+			SuperEnumShell::Pub5::v5
+		});
+	static_assert(expected5 == SuperEnumShell::getPub5Enums());
+
+	constexpr auto expected7 =
+		std::array<SuperEnumShell::Pub7, 7ULL>({
+			SuperEnumShell::Pub7::v1,
+			SuperEnumShell::Pub7::v2,
+			SuperEnumShell::Pub7::v3,
+			SuperEnumShell::Pub7::v4,
+			SuperEnumShell::Pub7::v5,
+			SuperEnumShell::Pub7::v6,
+			SuperEnumShell::Pub7::v7
+		});
+	static_assert(expected7 == SuperEnumShell::getPub7Enums());
 }
 
-#define testToString_M(name)\
-	constexpr std::array<superEnumShell::name,\
-						 superEnumShell::get##name##Enums().size()>\
-		raw##name(superEnumShell::get##name##Enums());\
-	std::array<std::string_view, superEnumShell::get##name##Enums().size()>\
-		produced##name;\
-	std::transform(raw##name.begin(), raw##name.end(), produced##name.begin(),\
-		[](superEnumShell::name val)\
-		{\
-			return superEnumShell::name##ToString(val);\
-		});\
-	s_Tests.addTest(s_Expected##name##Strings.size(), produced##name.size(),\
-		"Size Mismatch!");\
-	s_Tests.addBulkTests(s_Expected##name##Strings, produced##name);
-
-bool SuperEnumTester::testToString()
+consteval void testGetString()
 {
-	testToString_M(OnePub)
-	testToString_M(FourPub)
-	testToString_M(SixPub)
-	testToString_M(TenPub)
+	using namespace std::string_view_literals;
 
-	return s_Tests.test();
+	constexpr auto expected3 =
+		std::array<std::string_view, 3ULL>({
+			"v1"sv,
+			"v2"sv,
+			"v3"sv
+		});
+	static_assert(expected3 == SuperEnumShell::getPub3Strings());
+
+	constexpr auto expected5 =
+		std::array<std::string_view, 5ULL>({
+			"v1"sv,
+			"v2"sv,
+			"v3"sv,
+			"v4"sv,
+			"v5"sv
+		});
+	static_assert(expected5 == SuperEnumShell::getPub5Strings());
+
+	constexpr auto expected7 =
+		std::array<std::string_view, 7ULL>({
+			"v1"sv,
+			"v2"sv,
+			"v3"sv,
+			"v4"sv,
+			"v5"sv,
+			"v6"sv,
+			"v7"sv,
+		});
+	static_assert(expected7 == SuperEnumShell::getPub7Strings());
 }
 
-#define testStream_M(name)\
-	constexpr std::array<superEnumShell::name,\
-						 superEnumShell::get##name##Enums().size()>\
-		raw##name(superEnumShell::get##name##Enums());\
-	std::array<std::string, superEnumShell::get##name##Enums().size()>\
-		produced##name;\
-	std::transform(raw##name.begin(), raw##name.end(), produced##name.begin(),\
-		[](superEnumShell::name val)\
-		{\
-			std::stringstream ss;\
-			std::string line("");\
-			ss << val;\
-			std::getline(ss, line);\
-			return line;\
-		});\
-	s_Tests.addTest(s_Expected##name##Strings.size(), produced##name.size(),\
-		"Size Mismatch!");\
-	s_Tests.addBulkTests(s_Expected##name##Strings, produced##name);
-
-bool SuperEnumTester::testStream()
+void testStreaming()
 {
-	testStream_M(OnePub)
-	testStream_M(FourPub)
-	testStream_M(SixPub)
-	testStream_M(TenPub)
+	using namespace std::string_literals;
 
-	return s_Tests.test();
+	auto ss = std::stringstream();
+	ss << SuperEnumShell::Pub3::v1;
+	ss << SuperEnumShell::Pub3::v2;
+	ss << SuperEnumShell::Pub3::v3;
+	ss << SuperEnumShell::Pub5::v1;
+	ss << SuperEnumShell::Pub5::v2;
+	ss << SuperEnumShell::Pub5::v3;
+	ss << SuperEnumShell::Pub5::v4;
+	ss << SuperEnumShell::Pub5::v5;
+	ss << SuperEnumShell::Pub7::v1;
+	ss << SuperEnumShell::Pub7::v2;
+	ss << SuperEnumShell::Pub7::v3;
+	ss << SuperEnumShell::Pub7::v4;
+	ss << SuperEnumShell::Pub7::v5;
+	ss << SuperEnumShell::Pub7::v6;
+	ss << SuperEnumShell::Pub7::v7;
+
+	UnitTester::test(ss.str(), "v1v2v3v1v2v3v4v5v1v2v3v4v5v6v7"s);
 }

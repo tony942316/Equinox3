@@ -30,6 +30,9 @@
     <ClCompile Include="src\UtilityMacrosTester.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\SuperEnumTester.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Headers\UnitTest.hpp">
@@ -48,6 +51,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Headers\UtilityMacrosTester.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Headers\SuperEnumTester.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
