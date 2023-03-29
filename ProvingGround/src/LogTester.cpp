@@ -94,14 +94,14 @@ void testSetOutputStream()
 
 	eqx::Log::log(eqx::Log::Level::error, "testOutputStream"sv);
 	std::getline(ss, produced);
-	UnitTester::test(produced, ""s, ""sv, NEQ<std::string, std::string>);
+	UnitTester::test(produced, ""s, NEQ<std::string, std::string>);
 
 	auto ss2 = std::stringstream();
 	eqx::Log::setOutputStream(ss2);
 
 	eqx::Log::log(eqx::Log::Level::error, "testOutputStream"sv);
 	std::getline(ss2, produced);
-	UnitTester::test(produced, ""s, ""sv, NEQ<std::string, std::string>);
+	UnitTester::test(produced, ""s, NEQ<std::string, std::string>);
 
 	std::getline(ss, produced);
 	UnitTester::test(produced, ""s);

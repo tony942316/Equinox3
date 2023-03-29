@@ -4,48 +4,48 @@
  * @brief Macro For Use By Other Macros In The UtilityMacros Header, 
  *		NOT FOR EXTERNAL USE!
  **/
-#define __EQX_PARENS ()
+#define P_EQX_PARENS ()
 /**
  * @brief Macro For Use By Other Macros In The UtilityMacros Header,
  *		NOT FOR EXTERNAL USE!
  **/
-#define __EQX_COMMA ,
+#define P_EQX_COMMA ,
 
 /**
  * @brief Macro For Use By Other Macros In The UtilityMacros Header,
  *		NOT FOR EXTERNAL USE!
  **/
-#define __EQX_EXPAND1(...) __VA_ARGS__
+#define P_EQX_EXPAND1(...) __VA_ARGS__
 /**
  * @brief Macro For Use By Other Macros In The UtilityMacros Header,
  *		NOT FOR EXTERNAL USE!
  **/
-#define __EQX_EXPAND2(...) \
-	__EQX_EXPAND1(__EQX_EXPAND1(__EQX_EXPAND1(__EQX_EXPAND1(__VA_ARGS__))))
+#define P_EQX_EXPAND2(...) \
+	P_EQX_EXPAND1(P_EQX_EXPAND1(P_EQX_EXPAND1(P_EQX_EXPAND1(__VA_ARGS__))))
 /**
  * @brief Macro For Use By Other Macros In The UtilityMacros Header,
  *		NOT FOR EXTERNAL USE!
  **/
-#define __EQX_EXPAND3(...) \
-	__EQX_EXPAND2(__EQX_EXPAND2(__EQX_EXPAND2(__EQX_EXPAND2(__VA_ARGS__))))
+#define P_EQX_EXPAND3(...) \
+	P_EQX_EXPAND2(P_EQX_EXPAND2(P_EQX_EXPAND2(P_EQX_EXPAND2(__VA_ARGS__))))
 /**
  * @brief Macro For Use By Other Macros In The UtilityMacros Header,
  *		NOT FOR EXTERNAL USE!
  **/
-#define __EQX_EXPAND4(...) \
-	__EQX_EXPAND3(__EQX_EXPAND3(__EQX_EXPAND3(__EQX_EXPAND3(__VA_ARGS__))))
+#define P_EQX_EXPAND4(...) \
+	P_EQX_EXPAND3(P_EQX_EXPAND3(P_EQX_EXPAND3(P_EQX_EXPAND3(__VA_ARGS__))))
 /**
  * @brief Macro For Use By Other Macros In The UtilityMacros Header,
  *		NOT FOR EXTERNAL USE!
  **/
-#define __EQX_EXPAND5(...) \
-	__EQX_EXPAND4(__EQX_EXPAND4(__EQX_EXPAND4(__EQX_EXPAND4(__VA_ARGS__))))
+#define P_EQX_EXPAND5(...) \
+	P_EQX_EXPAND4(P_EQX_EXPAND4(P_EQX_EXPAND4(P_EQX_EXPAND4(__VA_ARGS__))))
 /**
  * @brief Macro For Use By Other Macros In The UtilityMacros Header,
  *		NOT FOR EXTERNAL USE!
  **/
-#define __EQX_EXPAND(...) \
-	__EQX_EXPAND5(__EQX_EXPAND5(__EQX_EXPAND5(__EQX_EXPAND5(__VA_ARGS__))))
+#define P_EQX_EXPAND(...) \
+	P_EQX_EXPAND5(P_EQX_EXPAND5(P_EQX_EXPAND5(P_EQX_EXPAND5(__VA_ARGS__))))
 
 /**
  * @brief Apply The First Argument To All Other Arguments
@@ -58,19 +58,19 @@
  * @returns The Result Of Applying macro To Each Argument Seperated By Spaces
  **/
 #define EQX_FOR_EACH(macro, ...) \
-	__VA_OPT__(__EQX_EXPAND(__EQX_FOR_EACH_HELPER(macro, __VA_ARGS__)))
+	__VA_OPT__(P_EQX_EXPAND(P_EQX_FOR_EACH_HELPER(macro, __VA_ARGS__)))
 /**
  * @brief Macro For Use By Other Macros In The UtilityMacros Header,
  *		NOT FOR EXTERNAL USE!
  **/
-#define __EQX_FOR_EACH_HELPER(macro, a1, ...) \
+#define P_EQX_FOR_EACH_HELPER(macro, a1, ...) \
 	macro(a1) \
-	__VA_OPT__(__EQX_FOR_EACH_AGAIN __EQX_PARENS (macro, __VA_ARGS__))
+	__VA_OPT__(P_EQX_FOR_EACH_AGAIN P_EQX_PARENS (macro, __VA_ARGS__))
 /**
  * @brief Macro For Use By Other Macros In The UtilityMacros Header,
  *		NOT FOR EXTERNAL USE!
  **/
-#define __EQX_FOR_EACH_AGAIN() __EQX_FOR_EACH_HELPER
+#define P_EQX_FOR_EACH_AGAIN() P_EQX_FOR_EACH_HELPER
 
 /**
  * @brief Apply The First Argument To All Other Arguments
@@ -84,26 +84,26 @@
  * @returns The Result Of Applying macro To Each Argument Seperated By Commas
  **/
 #define EQX_FOR_EACH_LIST(macro, ...) \
-	__VA_OPT__(__EQX_EXPAND(__EQX_FOR_EACH_LIST_HELPER(macro, __VA_ARGS__)))
+	__VA_OPT__(P_EQX_EXPAND(P_EQX_FOR_EACH_LIST_HELPER(macro, __VA_ARGS__)))
 /**
  * @brief Macro For Use By Other Macros In The UtilityMacros Header,
  *		NOT FOR EXTERNAL USE!
  **/
-#define __EQX_FOR_EACH_LIST_HELPER(macro, a1, ...) \
+#define P_EQX_FOR_EACH_LIST_HELPER(macro, a1, ...) \
 	macro(a1) \
-	__VA_OPT__(__EQX_COMMA __EQX_FOR_EACH_LIST_AGAIN __EQX_PARENS \
+	__VA_OPT__(P_EQX_COMMA P_EQX_FOR_EACH_LIST_AGAIN P_EQX_PARENS \
 	(macro, __VA_ARGS__))
 /**
  * @brief Macro For Use By Other Macros In The UtilityMacros Header,
  *		NOT FOR EXTERNAL USE!
  **/
-#define __EQX_FOR_EACH_LIST_AGAIN() __EQX_FOR_EACH_LIST_HELPER
+#define P_EQX_FOR_EACH_LIST_AGAIN() P_EQX_FOR_EACH_LIST_HELPER
 
 /**
  * @brief Macro For Use By Other Macros In The UtilityMacros Header,
  *		NOT FOR EXTERNAL USE!
  **/
-#define __EQX_COUNT_ARGS_HELPER(x) 1ULL+
+#define P_EQX_COUNT_ARGS_HELPER(x) 1ULL+
 /**
  * @brief Macro That Will Count The Number Of Arguments Provided
  *		i.e. EQX_COUNT_ARGS(a, b, c) Would Produce 1ULL + 1ULL + 1ULL + 0ULL
@@ -114,13 +114,13 @@
  *		1ULL
  */
 #define EQX_COUNT_ARGS(...) \
-    EQX_FOR_EACH(__EQX_COUNT_ARGS_HELPER, __VA_ARGS__) 0ULL
+    EQX_FOR_EACH(P_EQX_COUNT_ARGS_HELPER, __VA_ARGS__) 0ULL
 
 /**
  * @brief Macro For Use By Other Macros In The UtilityMacros Header,
  *		NOT FOR EXTERNAL USE!
  **/
-#define __EQX_STRING_ARGS_HELPER(x) #x
+#define P_EQX_STRING_ARGS_HELPER(x) #x
 /**
  * @breif Macro That Will Parrot Back A const char[n] Of Its Inputs
  *		i.e. EQX_STRING_ARGS(a, b, c) Would Produce "a", "b", "c"
@@ -132,4 +132,4 @@
  *		Of The Converted Arguments
  */
 #define EQX_STRING_ARGS(...) \
-    EQX_FOR_EACH_LIST(__EQX_STRING_ARGS_HELPER, __VA_ARGS__)
+    EQX_FOR_EACH_LIST(P_EQX_STRING_ARGS_HELPER, __VA_ARGS__)

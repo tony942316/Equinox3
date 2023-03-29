@@ -86,8 +86,8 @@ class UnitTester
 public:
 	template <typename T, typename U>
 	static void test(const T& val1, const U& val2, 
-		std::string_view info = "", 
 		const UnitTestFunction<T, U>& func = EQ<T, U>, 
+		std::string_view info = "", 
 		const std::source_location& loc = std::source_location::current())
 	{
 		if (!func(val1, val2))

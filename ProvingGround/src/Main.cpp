@@ -5,12 +5,14 @@
 #include "UtilityMacrosTester.hpp"
 #include "SuperEnumTester.hpp"
 #include "LogTester.hpp"
+#include "RandomTester.hpp"
 
 #include "Workbench.hpp"
 
 int main()
 {
-	std::cout << "Start\n" << std::endl;
+	std::cout << "Start" << std::endl;
+	std::cin.get();
 
 	workbenchMain();
 
@@ -18,6 +20,7 @@ int main()
 	UtilityMacrosTester::test();
 	SuperEnumTester::test();
 	LogTester::test();
+	RandomTester::test();
 
 	std::cout << "\nEnd" << std::endl;
 	std::cin.get();

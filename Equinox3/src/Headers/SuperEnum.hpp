@@ -44,7 +44,7 @@ namespace eqx
      * @brief Function For Use By EQX_SUPER_ENUM, NOT FOR EXTERNAL USE!
      **/
     template <std::size_t N, typename EnumType, typename... Types>
-    consteval std::array<EnumPair<EnumType>, N> __makeArr(Types... args)
+    consteval std::array<EnumPair<EnumType>, N> P_makeArr(Types... args)
     {
         std::array<EnumPair<EnumType>, N> arr;
         std::array<std::string_view, N> arr2 = { args... };
@@ -75,7 +75,7 @@ constexpr bool operator!= (EnumPair<T> lhs, EnumPair<T> rhs)
  * @brief Macro For Use By Other Macros In The SuperEnum Header,
  *		NOT FOR EXTERNAL USE!
  **/
-#define __EQX_SUPER_ENUM_TO_STRING(name) \
+#define P_EQX_SUPER_ENUM_TO_STRING(name) \
 	[[nodiscard]] static constexpr \
         std::string_view name##ToString(name value) noexcept \
 	{ return name##Collection.at(static_cast<std::size_t>(value)).m_String; }
@@ -84,7 +84,7 @@ constexpr bool operator!= (EnumPair<T> lhs, EnumPair<T> rhs)
  * @brief Macro For Use By Other Macros In The SuperEnum Header,
  *		NOT FOR EXTERNAL USE!
  **/
-#define __EQX_SUPER_ENUM_GET_ENUMS(name) \
+#define P_EQX_SUPER_ENUM_GET_ENUMS(name) \
 	[[nodiscard]] static consteval \
         std::array<name, name##Collection.size()> get##name##Enums() \
 	{ \
@@ -100,7 +100,7 @@ constexpr bool operator!= (EnumPair<T> lhs, EnumPair<T> rhs)
  * @brief Macro For Use By Other Macros In The SuperEnum Header,
  *		NOT FOR EXTERNAL USE!
  **/
-#define __EQX_SUPER_ENUM_GET_STRINGS(name)\
+#define P_EQX_SUPER_ENUM_GET_STRINGS(name)\
     [[nodiscard]] static consteval \
         std::array<std::string_view, name##Collection.size()> \
         get##name##Strings() \
@@ -117,7 +117,7 @@ constexpr bool operator!= (EnumPair<T> lhs, EnumPair<T> rhs)
  * @brief Macro For Use By Other Macros In The SuperEnum Header,
  *		NOT FOR EXTERNAL USE!
  **/
-#define __EQX_SUPER_ENUM_OSTREAM(name) \
+#define P_EQX_SUPER_ENUM_OSTREAM(name) \
 	friend std::ostream& operator<< (std::ostream& oStream, name val) \
 	{ \
 		oStream << name##ToString(val); \
@@ -128,11 +128,11 @@ constexpr bool operator!= (EnumPair<T> lhs, EnumPair<T> rhs)
  * @brief Macro For Use By Other Macros In The SuperEnum Header,
  *		NOT FOR EXTERNAL USE!
  **/
-#define __EQX_SUPER_ENUM_FULL_IMPLEMENTATION(name) \
-	__EQX_SUPER_ENUM_TO_STRING(name) \
-	__EQX_SUPER_ENUM_GET_ENUMS(name) \
-    __EQX_SUPER_ENUM_GET_STRINGS(name) \
-	__EQX_SUPER_ENUM_OSTREAM(name)
+#define P_EQX_SUPER_ENUM_FULL_IMPLEMENTATION(name) \
+	P_EQX_SUPER_ENUM_TO_STRING(name) \
+	P_EQX_SUPER_ENUM_GET_ENUMS(name) \
+    P_EQX_SUPER_ENUM_GET_STRINGS(name) \
+	P_EQX_SUPER_ENUM_OSTREAM(name)
 
 /**
  * @brief Create An enum class With Provided Values And A 
@@ -176,6 +176,6 @@ constexpr bool operator!= (EnumPair<T> lhs, EnumPair<T> rhs)
     enum class name : std::size_t \
         { __VA_ARGS__ }; \
     static inline constexpr auto name##Collection = \
-        eqx::__makeArr<EQX_COUNT_ARGS(__VA_ARGS__), name> \
+        eqx::P_makeArr<EQX_COUNT_ARGS(__VA_ARGS__), name> \
         (EQX_STRING_ARGS(__VA_ARGS__)); \
-    __EQX_SUPER_ENUM_FULL_IMPLEMENTATION(name)
+    P_EQX_SUPER_ENUM_FULL_IMPLEMENTATION(name)

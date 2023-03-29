@@ -1,288 +1,201 @@
 #include "RandomTester.hpp"
 
 #include <iostream>
+#include <algorithm>
+
 #include <unordered_map>
 
-#include "EquinoxSTD.hpp"
+#include "UnitTest.hpp"
+#include "Random.hpp"
 
-UnitTest<int, int> RandomTester::s_IntTests;
-UnitTest<unsigned int, unsigned int> RandomTester::s_UIntTests;
-UnitTest<double, double> RandomTester::s_DoubleTests;
+void testRandomNumber();
+void testFlipCoin();
+void testRollDice();
+void testGenerateSeed();
 
-bool RandomTester::test()
+namespace RandomTester
 {
-	if (testRandInt() &&
-		testRandUnsignedInt() &&
-		testRandDouble() &&
-		testIntDistribution() &&
-		testFlipCoin() &&
-		testRollDice() &&
-		testGenerateSeed())
+	void test()
 	{
-		std::cout << "Random Tests Passed" << std::endl;
-		return true;
-	}
-	else
-	{
-		std::cout << "Random Tests Failed!" << std::endl;
-		return false;
+		std::cout << "Testing Random..." << std::endl;
+		testRandomNumber();
+		testFlipCoin();
+		testRollDice();
+		testGenerateSeed();
+		UnitTester::printStatus();
+		UnitTester::clear();
 	}
 }
 
-bool RandomTester::testRandInt()
+void testRandomNumber()
 {
-	prep();
-
-	int runs = 100'000;
-
-	std::function<void(int, int)> testLambda([&](int lb, int ub) {
-		int producedValue = 0;
-		for (int i = 0; i < runs; i++)
-		{
-			producedValue = eqx::Random::randInt(lb, ub);
-			s_IntTests.addTest(std::make_tuple(
-				producedValue, ub, LTE<int, int>()));
-			s_IntTests.addTest(std::make_tuple(
-				producedValue, lb, GTE<int, int>()));
-		}
-	});
-
-	testLambda(0, 2);
-	testLambda(-1, 0);
-	testLambda(0, 100);
-	testLambda(-100, 0);
-	testLambda(-100, 100);
-	testLambda(50, 100);
-	testLambda(-100, -50);
-	testLambda(27, 159);
-	testLambda(-10'456, 7'964);
-
-	return s_IntTests.test();
-}
-
-bool RandomTester::testRandUnsignedInt()
-{
-	prep();
-
-	int runs = 100'000;
-
-	std::function<void(unsigned int, unsigned int)> testLambda(
-		[&](unsigned int lb, unsigned int ub) {
-		unsigned int producedValue = 0;
-		for (int i = 0; i < runs; i++)
-		{
-			producedValue = eqx::Random::randUnsignedInt(lb, ub);
-			s_UIntTests.addTest(std::make_tuple(
-				producedValue, ub, LTE<unsigned int, unsigned int>()));
-			s_UIntTests.addTest(std::make_tuple(
-				producedValue, lb, GTE<unsigned int, unsigned int>()));
-		}
-	});
-
-	testLambda(0U, 100U);
-	testLambda(50U, 100U);
-	testLambda(27U, 159U);
-	testLambda(10'456U, 13'964U);
-
-	return s_UIntTests.test();
-}
-
-bool RandomTester::testRandDouble()
-{
-	prep();
-
-	int runs = 100'000;
-
-	std::function<void(double, double)> testLambda([&](double lb, double ub) {
-		double producedValue = 0.0;
-		for (int i = 0; i < runs; i++)
-		{
-			producedValue = eqx::Random::randDouble(lb, ub);
-			s_DoubleTests.addTest(std::make_tuple(
-				producedValue, ub, LTE<double, double>()));
-			s_DoubleTests.addTest(std::make_tuple(
-				producedValue, lb, GTE<double, double>()));
-		}
-	});
-
-	testLambda(0.0, 1.0);
-	testLambda(-1.0, 0.0);
-	testLambda(-1.0, 1.0);
-	testLambda(-10.0, 1.0);
-	testLambda(-1.0, 10.0);
-	testLambda(-10.0, -1.0);
-	testLambda(1.0, 10.0);
-	testLambda(0.0, std::numeric_limits<double>::max());
-	testLambda(std::numeric_limits<double>::lowest(), 0.0);
-	testLambda(std::numeric_limits<double>::lowest(),
-			   std::numeric_limits<double>::max());
-	testLambda(std::numeric_limits<double>::lowest(),
-			   std::nexttoward(0.0, std::numeric_limits<double>::max()));
-	testLambda(std::nexttoward(0.0, std::numeric_limits<double>::lowest()),
-			   std::numeric_limits<double>::max());
-	testLambda(std::numeric_limits<double>::lowest(),
-			   std::nextafter(0.0, std::numeric_limits<double>::max()));
-	testLambda(std::nextafter(0.0, std::numeric_limits<double>::lowest()),
-			   std::numeric_limits<double>::max());
-	testLambda(std::nexttoward(0.0, std::numeric_limits<double>::lowest()),
-			   std::nexttoward(0.0, std::numeric_limits<double>::max()));
-
-	return s_DoubleTests.test();
-}
-
-bool RandomTester::testIntDistribution()
-{
-	prep();
-
-	int runs = 100'000;
-
-	std::function<void(int, int)> testLambda([&](int lb, int ub) {
-		std::unordered_map<int, int> dist;
+	auto runs = 1'000'000;
+	auto randNum = 0;
+	auto randNumDouble = 0.0;
+	auto distInit = [](int lb, int ub)
+	{
+		auto dist = std::unordered_map<int, std::size_t>();
 		for (int i = lb; i <= ub; i++)
 		{
-			dist[lb] = 0;
+			dist[i] = 0ULL;
 		}
+		return dist;
+	};
+	auto testDist = [runs](const std::unordered_map<int, std::size_t>& dist)
+	{
+		std::ranges::for_each(dist,
+			[&dist, runs](const auto& x)
+			{
+				auto exp = (static_cast<double>(runs) / dist.size());
+				auto deviation = x.second / exp;
+				UnitTester::test(deviation, 0.9, GTE<double, double>);
+				UnitTester::test(deviation, 1.1, LTE<double, double>);
+			});
+	};
 
-		for (int i = 0; i < runs; i++)
-		{
-			dist[eqx::Random::randInt(lb, ub)]++;
-		}
+	auto dist = distInit(0, 100);
+	auto dist2 = distInit(-100, 0);
+	auto dist3 = distInit(-100, 100);
 
-		int n = ub - lb + 1,
-			expectedCount = static_cast<int>(static_cast<double>(runs) / n),
-			delta = static_cast<int>(expectedCount * 0.3) + 8;
-		for (const std::pair<const int, int>& link : dist)
-		{
-			s_IntTests.addTest(std::make_tuple(
-				link.second, expectedCount + delta, LTE<int, int>()));
-			s_IntTests.addTest(std::make_tuple(
-				link.second, expectedCount - delta, GTE<int, int>()));
-		}
-	});
-
-	testLambda(1, 100'000);
-	testLambda(-100, 100);
-	testLambda(-100'000, 100'000);
-	testLambda(-1'000'000, 1'000'000);
-	testLambda(0, 1'000'000);
-	testLambda(-1'000'000, 0);
-	testLambda(10, 20);
-	testLambda(-20, 10);
-	testLambda(17, 33);
-	testLambda(0, 2);
-	testLambda(-1, 0);
-
-	return s_IntTests.test();
-}
-
-bool RandomTester::testFlipCoin()
-{
-	prep();
-
-	int runs = 1'000'000,
-		producedValue = 0,
-		heads = 0,
-		tails = 0,
-		expectedCount = static_cast<int>(runs / 2.0),
-		delta = static_cast<int>(expectedCount * 0.3) + 8;
 	for (int i = 0; i < runs; i++)
 	{
-		producedValue = eqx::Random::flipCoin();
-		s_IntTests.addTest(std::make_tuple(
-			producedValue, 1, LTE<int, int>()));
-		s_IntTests.addTest(std::make_tuple(
-			producedValue, 0, GTE<int, int>()));
-		if (producedValue == 0)
-		{
-			heads++;
-		}
-		else if (producedValue == 1)
-		{
-			tails++;
-		}
+		randNum = eqx::Random::randomNumber(0, 100);
+		dist.at(randNum)++;
+		UnitTester::test(randNum, 0, GTE<int, int>);
+		UnitTester::test(randNum, 100, LTE<int, int>);
+
+		randNum = eqx::Random::randomNumber(-100, 0);
+		dist2.at(randNum)++;
+		UnitTester::test(randNum, -100, GTE<int, int>);
+		UnitTester::test(randNum, 0, LTE<int, int>);
+
+		randNum = eqx::Random::randomNumber(-100, 100);
+		dist3.at(randNum)++;
+		UnitTester::test(randNum, -100, GTE<int, int>);
+		UnitTester::test(randNum, 100, LTE<int, int>);
+
+		randNumDouble = eqx::Random::randomNumber(0.0, 1.0);
+		UnitTester::test(randNumDouble, 0.0, GTE<double, double>);
+		UnitTester::test(randNumDouble, 1.0, LTE<double, double>);
+
+		randNumDouble = eqx::Random::randomNumber(-1.0, 0.0);
+		UnitTester::test(randNumDouble, -1.0, GTE<double, double>);
+		UnitTester::test(randNumDouble, 0.0, LTE<double, double>);
+
+		randNumDouble = eqx::Random::randomNumber(-1.0, 1.0);
+		UnitTester::test(randNumDouble, -1.0, GTE<double, double>);
+		UnitTester::test(randNumDouble, 1.0, LTE<double, double>);
+
+		randNumDouble = eqx::Random::randomNumber(0.0,
+			std::numeric_limits<double>::max());
+		UnitTester::test(randNumDouble, 0.0, GTE<double, double>);
+		UnitTester::test(randNumDouble, std::numeric_limits<double>::max(), 
+			LTE<double, double>);
+
+		randNumDouble = eqx::Random::randomNumber(
+			std::numeric_limits<double>::lowest(), 0.0);
+		UnitTester::test(randNumDouble, std::numeric_limits<double>::lowest(),
+			GTE<double, double>);
+		UnitTester::test(randNumDouble, 0.0, LTE<double, double>);
+
+		randNumDouble = eqx::Random::randomNumber(
+			std::numeric_limits<double>::lowest(), 
+			std::numeric_limits<double>::max());
+		UnitTester::test(randNumDouble, std::numeric_limits<double>::lowest(),
+			GTE<double, double>);
+		UnitTester::test(randNumDouble, std::numeric_limits<double>::max(), 
+			LTE<double, double>);
 	}
-	s_IntTests.addTest(std::make_tuple(
-		heads, expectedCount + delta, LTE<int, int>()));
-	s_IntTests.addTest(std::make_tuple(
-		heads, expectedCount - delta, GTE<int, int>()));
-	s_IntTests.addTest(std::make_tuple(
-		tails, expectedCount + delta, LTE<int, int>()));
-	s_IntTests.addTest(std::make_tuple(
-		tails, expectedCount - delta, GTE<int, int>()));
 
-	return s_IntTests.test();
+	testDist(dist);
+	testDist(dist2);
+	testDist(dist3);
 }
 
-bool RandomTester::testRollDice()
+void testFlipCoin()
 {
-	prep();
+	auto runs = 1'000'000;
+	auto randCoin = 0U;
+	auto heads = 0U;
+	auto tails = 0U;
 
-	int runs = 100'000;
-
-	std::function<void(unsigned int)> testLambda([&](unsigned int sides) {
-		std::unordered_map<unsigned int, int> dist;
-		for (unsigned int i = 1U; i <= sides; i++)
-		{
-			dist[i] = 0;
-		}
-
-		unsigned int producedValue = 0U;
-		for (int i = 0; i < runs; i++)
-		{
-			producedValue = eqx::Random::rollDice(sides);
-			s_UIntTests.addTest(std::make_tuple(
-				producedValue, 1U, GTE<unsigned int, unsigned int>()));
-			s_UIntTests.addTest(std::make_tuple(
-				producedValue, sides, LTE<unsigned int, unsigned int>()));
-			dist[i]++;
-		}
-
-		int n = sides,
-			expectedCount = static_cast<int>(static_cast<double>(runs) / n),
-			delta = static_cast<int>(expectedCount * 0.3) + 8;
-		for (const std::pair<const unsigned int, int>& link : dist)
-		{
-			s_IntTests.addTest(std::make_tuple(
-				link.second, expectedCount + delta, LTE<int, int>()));
-			s_IntTests.addTest(std::make_tuple(
-				link.second, expectedCount - delta, GTE<int, int>()));
-		}
-	});
-
-	testLambda(2U);
-	testLambda(10U);
-	testLambda(100U);
-	testLambda(60U);
-
-	return s_UIntTests.test();
-}
-
-bool RandomTester::testGenerateSeed()
-{
-	prep();
-
-	int runs = 1'000'000;
-
-	std::unordered_map<unsigned int, int> seeds;
-	unsigned int producedValue = 0U;
 	for (int i = 0; i < runs; i++)
 	{
-		producedValue = eqx::Random::generateSeed();
-		seeds[producedValue]++;
+		randCoin = eqx::Random::flipCoin();
+		randCoin == 1U ? heads++ : tails++;
+		UnitTester::test(randCoin, 0U, GTE<unsigned int, unsigned int>);
+		UnitTester::test(randCoin, 1U, LTE<unsigned int, unsigned int>);
 	}
 
-	for (const std::pair<const unsigned int, int>& link : seeds)
-	{
-		s_IntTests.addTest(std::make_tuple(
-			link.second, 2, LTE<int, int>()));
-	}
-
-	return s_IntTests.test();
+	auto expected = runs / 2.0;
+	auto deviation = heads / expected;
+	UnitTester::test(deviation, 0.9, GTE<double, double>);
+	UnitTester::test(deviation, 1.1, LTE<double, double>);
+	deviation = tails / expected;
+	UnitTester::test(deviation, 0.9, GTE<double, double>);
+	UnitTester::test(deviation, 1.1, LTE<double, double>);
 }
 
-void RandomTester::prep()
+void testRollDice()
 {
-	s_IntTests.clear();
-	s_UIntTests.clear();
-	s_DoubleTests.clear();
+	auto runs = 1'000'000;
+	auto randNum = 0U;
+
+	for (int i = 0; i < runs; i++)
+	{
+		randNum = eqx::Random::rollDice();
+		UnitTester::test(randNum, 1U, GTE<unsigned int, unsigned int>);
+		UnitTester::test(randNum, 6U, LTE<unsigned int, unsigned int>);
+
+		randNum = eqx::Random::rollDice(20U);
+		UnitTester::test(randNum, 1U, GTE<unsigned int, unsigned int>);
+		UnitTester::test(randNum, 20U, LTE<unsigned int, unsigned int>);
+
+		randNum = eqx::Random::rollDice(50U);
+		UnitTester::test(randNum, 1U, GTE<unsigned int, unsigned int>);
+		UnitTester::test(randNum, 50U, LTE<unsigned int, unsigned int>);
+
+		randNum = eqx::Random::rollDice(100U);
+		UnitTester::test(randNum, 1U, GTE<unsigned int, unsigned int>);
+		UnitTester::test(randNum, 100U, LTE<unsigned int, unsigned int>);
+	}
+}
+
+void testGenerateSeed()
+{
+	auto runs = 1'000'000;
+	auto seed = 0U;
+	auto dist = std::unordered_map<unsigned int, std::size_t>();
+
+	for (int i = 0; i < runs; i++)
+	{
+		seed = eqx::Random::generateSeed();
+		try
+		{
+			dist.at(seed)++;
+		}
+		catch (const std::out_of_range&)
+		{
+			dist[seed] = static_cast<std::size_t>(1);
+		}
+	}
+
+	auto collisions = 0ULL;
+	auto expectedVariance = 1ULL;
+	std::ranges::for_each(dist,
+		[expectedVariance, &collisions](const auto& x)
+		{
+			if (x.second > static_cast<std::size_t>(1))
+			{
+				auto count = x.second - static_cast<std::size_t>(1);
+				collisions += static_cast<unsigned long long>(count);
+				auto deviation = 
+					static_cast<unsigned long long>(count - expectedVariance);
+				UnitTester::test(deviation, 3ULL,
+					LTE<unsigned long long, unsigned long long>);
+			}
+		});
+
+	auto totalVariance = collisions / static_cast<double>(runs);
+	UnitTester::test(totalVariance, 0.001, LTE<double, double>);
 }

@@ -13,8 +13,8 @@
 #include <fstream>
 
 #include "UnitTest.hpp"
-
 #include "EquinoxSTD.hpp"
+
 
 
 void workbenchMain()
@@ -22,7 +22,7 @@ void workbenchMain()
 	std::cout << std::setprecision(100);
 	std::cout << std::boolalpha;
 
-
+	
 	
 	std::cout << "End Workbench" << std::endl;
 	std::cin.get();
