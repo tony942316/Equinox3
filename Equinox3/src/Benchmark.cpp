@@ -17,11 +17,11 @@ namespace eqx
 		m_Timer.start();
 		m_Function();
 		m_Timer.stop();
-
+		/*
 		m_Benchmarks[Time::nanoseconds] = m_Timer.getTimeNano();
 		m_Benchmarks[Time::microseconds] = m_Timer.getTimeMicro();
 		m_Benchmarks[Time::milliseconds] = m_Timer.getTimeMilli();
-		m_Benchmarks[Time::seconds] = m_Timer.getTimeSeconds();
+		m_Benchmarks[Time::seconds] = m_Timer.getTimeSeconds();*/
 	}
 
 	void Benchmark::avgBench(int runs)

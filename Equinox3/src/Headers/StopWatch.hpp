@@ -4,6 +4,21 @@
 
 namespace eqx
 {
+	namespace shortTimeUnits
+	{
+		using tu_ns = std::chrono::nanoseconds;
+		using tu_us = std::chrono::microseconds;
+		using tu_ms = std::chrono::milliseconds;
+		using tu_s = std::chrono::seconds;
+	}
+
+	template <typename T>
+	concept timeUnit =
+		std::is_same_v<T, std::chrono::nanoseconds> ||
+		std::is_same_v<T, std::chrono::microseconds> ||
+		std::is_same_v<T, std::chrono::milliseconds> ||
+		std::is_same_v<T, std::chrono::seconds>;
+
 	class StopWatch
 	{
 	public:
@@ -32,60 +47,33 @@ namespace eqx
 		void stop() noexcept;
 
 		/**
-		 * @brief Stops And Gives Past Time In Seconds
-		 * 
-		 * @returns Past Time In Seconds
-		 */
-		long long readTimeSeconds() noexcept;
-
-		/**
-		 * @brief Stops And Gives Past Time In MilliSeconds
+		 * @brief Gives The Time Between The Last this->start() Call And
+		 *		this->stop() Call In Milliseconds (Or T If Defined)
 		 *
-		 * @returns Past Time In MilliSeconds
+		 * @returns long long Representing The Milliseconds (Or T) Past Between
+		 *		The Last this->start() Call And this->stop() Call 
 		 */
-		long long readTimeMilli() noexcept;
+		template <timeUnit T = std::chrono::milliseconds>
+		long long getTime() noexcept
+		{
+			return std::chrono::duration_cast<T>(
+				m_EndTime - m_StartTime).count();
+		}
 
 		/**
-		 * @brief Stops And Gives Past Time In MicroSeconds
+		 * @brief Gives The Time Between The Last this->start() Call And
+		 *		The Current Time In Milliseconds (Or T If Defined), Note That
+		 *		this->stop() Is Called
 		 *
-		 * @returns Past Time In MicroSeconds
+		 * @returns long long Representing The Milliseconds (Or T) Past Between
+		 *		The Last this->start() Call The Current Time
 		 */
-		long long readTimeMicro() noexcept;
-
-		/**
-		 * @brief Stops And Gives Past Time In NanoSeconds
-		 *
-		 * @returns Past Time In NanoSeconds
-		 */
-		long long readTimeNano() noexcept;
-
-		/**
-		 * @brief Gives Past Time From Last Stop In Seconds
-		 * 
-		 * @returns Past Time In Seconds
-		 */
-		long long getTimeSeconds() const noexcept;
-
-		/**
-		 * @brief Gives Past Time From Last Stop In MilliSeconds
-		 *
-		 * @returns Past Time In MilliSeconds
-		 */
-		long long getTimeMilli() const noexcept;
-
-		/**
-		 * @brief Gives Past Time From Last Stop In MicroSeconds
-		 *
-		 * @returns Past Time In MicroSeconds
-		 */
-		long long getTimeMicro() const noexcept;
-
-		/**
-		 * @brief Gives Past Time In NanoSeconds
-		 *
-		 * @returns Past Time In NanoSeconds
-		 */
-		long long getTimeNano() const noexcept;
+		template <timeUnit T = std::chrono::milliseconds>
+		long long readTime() noexcept
+		{
+			stop();
+			return getTime<T>();
+		}
 
 	private:
 		std::chrono::time_point<std::chrono::steady_clock> 

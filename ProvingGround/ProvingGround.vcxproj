@@ -182,6 +182,7 @@
     <ClCompile Include="src\MathematicsTester.cpp" />
     <ClCompile Include="src\MiscTester.cpp" />
     <ClCompile Include="src\RandomTester.cpp" />
+    <ClCompile Include="src\StopWatchTester.cpp" />
     <ClCompile Include="src\SuperEnumTester.cpp" />
     <ClCompile Include="src\UnitTest.cpp" />
     <ClCompile Include="src\UtilityMacrosTester.cpp" />
@@ -194,6 +195,7 @@
     <ClInclude Include="src\Headers\MathematicsTester.hpp" />
     <ClInclude Include="src\Headers\MiscTester.hpp" />
     <ClInclude Include="src\Headers\RandomTester.hpp" />
+    <ClInclude Include="src\Headers\StopWatchTester.hpp" />
     <ClInclude Include="src\Headers\SuperEnumTester.hpp" />
     <ClInclude Include="src\Headers\UnitTest.hpp" />
     <ClInclude Include="src\Headers\UtilityMacrosTester.hpp" />
