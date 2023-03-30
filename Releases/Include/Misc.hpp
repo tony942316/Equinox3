@@ -28,6 +28,56 @@ void eqx_debugOnly_runtimeAssert(bool expr,
 namespace eqx
 {
 	/**
+	 * @brief Constrain T To Be A signed Integer Type, Note Unlike
+	 *		std::is_integeral The bool And char Types Are Not Included
+	 */
+	template <typename T>
+	concept signedInteger =
+		std::is_same_v<std::remove_cv_t<T>, signed short> ||
+		std::is_same_v<std::remove_cv_t<T>, signed int> ||
+		std::is_same_v<std::remove_cv_t<T>, signed long> ||
+		std::is_same_v<std::remove_cv_t<T>, signed long long>;
+
+	/**
+	 * @brief Constrain T To Be An unsigned Integer Type, Note Unlike
+	 *		std::is_integeral The bool And char Types Are Not Included
+	 */
+	template <typename T>
+	concept unsignedInteger =
+		std::is_same_v<std::remove_cv_t<T>, unsigned short> ||
+		std::is_same_v<std::remove_cv_t<T>, unsigned int> ||
+		std::is_same_v<std::remove_cv_t<T>, unsigned long> ||
+		std::is_same_v<std::remove_cv_t<T>, unsigned long long>;
+
+	/**
+	 * @brief Constrain T To Be An Integer Type, Note Unlike std::is_integeral
+	 *		The bool And char Types Are Not Included
+	 */
+	template <typename T>
+	concept integer = signedInteger<T> || unsignedInteger<T>;
+
+	/**
+	 * brief Constrain T To Be A signed Arithmetic Type, Note Unlike
+	 *		std::is_arithmetic The bool And char Types Are Not Included
+	 */
+	template <typename T>
+	concept signedArithmetic = signedInteger<T> || std::floating_point<T>;
+
+	/**
+	 * brief Constrain T To Be An unsigned Arithmetic Type, Note Unlike
+	 *		std::is_arithmetic The bool And char Types Are Not Included
+	 */
+	template <typename T>
+	concept unsignedArithmetic = unsignedInteger<T> || std::floating_point<T>;
+
+	/**
+	 * @brief Constrain T To Be An Arithmetic Type, Note Unlike
+	 *		std::is_arithmetic The bool And char Types Are Not Included
+	 */
+	template <typename T>
+	concept arithmetic = signedArithmetic<T> || unsignedArithmetic<T>;
+
+	/**
 	 * @brief Constrain T To Be Convertable To A String
 	 */
 	template <typename T>
@@ -36,6 +86,9 @@ namespace eqx
 		std::to_string(t);
 	};
 
+	/**
+	 * @brief Constrain T To Be A String Type
+	 */
 	template <typename T>
 	concept stringType =
 		std::is_same<std::remove_cv_t<T>, std::string>::value ||

@@ -5,6 +5,7 @@
 #include "UtilityMacrosTester.hpp"
 #include "SuperEnumTester.hpp"
 #include "LogTester.hpp"
+#include "MathematicsTester.hpp"
 #include "RandomTester.hpp"
 
 #include "Workbench.hpp"
@@ -20,6 +21,7 @@ int main()
 	UtilityMacrosTester::test();
 	SuperEnumTester::test();
 	LogTester::test();
+	MathematicsTester::test();
 	RandomTester::test();
 
 	std::cout << "\nEnd" << std::endl;

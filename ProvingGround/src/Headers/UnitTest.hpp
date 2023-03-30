@@ -53,8 +53,27 @@ private:
 
 template <typename T, typename U>
 const UnitTestFunction EQ = UnitTestFunction(
-	std::function([](T x, U y) { return x == y; }),
+	std::function([](T x, U y) 
+	{ 
+		if constexpr (std::is_floating_point_v<T> ||
+			std::is_floating_point_v<U>)
+		{
+			return std::fabs(x - y) < 0.000001L;
+		}
+		else
+		{
+			return x == y; 
+		}
+	}),
 	" == ");
+
+template <typename T, typename U, typename V, typename W>
+const UnitTestFunction PEQ = UnitTestFunction(
+	std::function([](std::pair<T, U> p1, std::pair<V, W> p2)
+	{
+		return EQ<T, U>(p1.first, p2.first) && EQ<V, W>(p1.second, p2.second);
+	}),
+	" =p= ");
 
 template <typename T, typename U>
 const UnitTestFunction NEQ = UnitTestFunction(
@@ -112,8 +131,6 @@ public:
 
 	static void printStatus(int num = 3)
 	{
-		std::cout << std::setprecision(20);
-		std::cout << std::boolalpha;
 
 		if (isPassing())
 		{
@@ -134,9 +151,6 @@ public:
 				std::cout << i + 1 << ")...\n" << std::endl;
 			}
 		}
-
-		std::cout << std::noboolalpha;
-		std::cout << std::setprecision(6);
 	}
 
 	static void clear()
@@ -150,6 +164,8 @@ private:
 	static std::string toString(T x)
 	{
 		auto ss = std::stringstream();
+		ss << std::setprecision(100);
+		ss << std::boolalpha;
 		auto result = std::string("");
 		ss << x;
 		std::getline(ss, result);
@@ -205,7 +221,11 @@ private:
 		auto locationString = std::string("");
 		locationString += loc.file_name();
 		locationString.erase(0ULL, locationString.rfind('\\') + 1);
-		locationString += std::string(" -> ") + loc.function_name();
+		locationString += "(";
+		locationString += loc.function_name();
+		locationString += ",";
+		locationString += std::to_string(loc.line());
+		locationString += ")";
 
 		auto result = std::string("");
 		result += "Evaluated To False: ";
