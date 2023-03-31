@@ -54,7 +54,7 @@ namespace eqx
 		 *		The Last this->start() Call And this->stop() Call 
 		 */
 		template <timeUnit T = std::chrono::milliseconds>
-		long long getTime() noexcept
+		[[nodiscard]] long long getTime() noexcept
 		{
 			return std::chrono::duration_cast<T>(
 				m_EndTime - m_StartTime).count();
@@ -69,7 +69,7 @@ namespace eqx
 		 *		The Last this->start() Call The Current Time
 		 */
 		template <timeUnit T = std::chrono::milliseconds>
-		long long readTime() noexcept
+		[[nodiscard]] long long readTime() noexcept
 		{
 			stop();
 			return getTime<T>();

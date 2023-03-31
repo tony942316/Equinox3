@@ -5,11 +5,11 @@
 #include "UnitTest.hpp"
 #include "StopWatch.hpp"
 
-void testGetTime();
-void testReadTime();
-
 namespace StopWatchTester
 {
+	void testGetTime();
+	void testReadTime();
+
 	void test()
 	{
 		std::cout << "Testing StopWatch..." << std::endl;
@@ -18,14 +18,16 @@ namespace StopWatchTester
 		UnitTester::printStatus();
 		UnitTester::clear();
 	}
+
+	void wasteTime(std::chrono::microseconds ms);
 }
 
-void wasteTime(std::chrono::microseconds ms)
+void StopWatchTester::wasteTime(std::chrono::microseconds ms)
 {
 	std::this_thread::sleep_for(ms);
 }
 
-void testGetTime()
+void StopWatchTester::testGetTime()
 {
 	using namespace std::chrono_literals;
 	using namespace eqx::shortTimeUnits;
@@ -39,7 +41,7 @@ void testGetTime()
 		GTE<long long, long long>);
 }
 
-void testReadTime()
+void StopWatchTester::testReadTime()
 {
 	using namespace std::chrono_literals;
 	using namespace eqx::shortTimeUnits;

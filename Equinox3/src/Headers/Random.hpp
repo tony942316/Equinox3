@@ -74,8 +74,10 @@ namespace eqx::Random
 
 		if (lowerBound >= eqx::zero<T> && upperBound >= eqx::zero<T>)
 		{
+			auto prevErr = errno;
 			T decoyValue = std::nexttoward(lowerBound,
 				std::numeric_limits<T>::lowest());
+			errno = prevErr;
 			dist = std::uniform_real_distribution<T>(
 				decoyValue, upperBound);
 			double producedValue = dist(p_engine);

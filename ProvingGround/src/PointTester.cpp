@@ -2,284 +2,176 @@
 
 #include <iostream>
 
-#include "EquinoxSTD.hpp"
 #include "UnitTest.hpp"
+#include "Point.hpp"
 
-PointTester::PointTester()
+namespace PointTester
 {
+	void testEquals();
+	void testToString();
+	void testDistance();
+	void testNormalize();
+	void testAngle();
+
+	void test()
+	{
+		std::cout << "Testing Point..." << std::endl;
+		testEquals();
+		testToString();
+		testDistance();
+		testNormalize();
+		testAngle();
+		UnitTester::printStatus();
+		UnitTester::clear();
+	}
+
+	consteval void testConstruction();
+	consteval void testPlus();
+	consteval void testMinus();
 }
 
-bool PointTester::testAll()
+consteval void PointTester::testConstruction()
 {
-	if (testConstruction() &&
-		testOperators() &&
-		testFunctions())
-	{
-		std::cout << "Point Tests Passed" << std::endl;
-		return true;
-	}
-	else
-	{
-		std::cout << "Point Tests Failed!" << std::endl;
-		return false;
-	}
+	constexpr auto pointDefault = eqx::Point<double>();
+	static_assert(pointDefault.x == 0.0);
+	static_assert(pointDefault.y == 0.0);
+
+	constexpr auto pointParam = eqx::Point<double>(1.5, 3.9);
+	static_assert(pointParam.x == 1.5);
+	static_assert(pointParam.y == 3.9);
 }
 
-bool PointTester::testConstruction()
+consteval void PointTester::testPlus()
 {
-	eqx::Point<int> defaultConInt;
-	if (defaultConInt.x != 0 || defaultConInt.y != 0)
-	{
-		std::cout << "\nTestPointConstruction IntDefault Fail!" << std::endl;
-		return false;
-	}
+	constexpr auto point1 = eqx::Point<double>(1.0, 1.0);
+	constexpr auto point2 = eqx::Point<double>(-10.0, 10.0);
+	constexpr auto point3 = eqx::Point<double>(1.234, 7.654);
 
-	eqx::Point<double> defaultConDouble;
-	if (defaultConDouble.x != 0.0 || defaultConDouble.y != 0.0)
-	{
-		std::cout << "\nTestPointConstruction DoubleDefault Fail!" << std::endl;
-		return false;
-	}
-
-	int paramInt1, paramInt2;
-	double paramDouble1, paramDouble2;
-	std::stringstream ss;
-	eqx::Log::setOutputStream(ss);
-	eqx::Log::setOutputFile("TestOutputFile.txt");
-	eqx::Log::clear();
-	for (int i = 0; i < 100'000; i++)
-	{
-		paramInt1 = eqx::Random::randInt(-100'000, 100'000);
-		paramInt2 = eqx::Random::randInt(-100'000, 100'000);
-		eqx::Point<int> paramConInt(paramInt1, paramInt2);
-		if (paramConInt.x != paramInt1 || paramConInt.y != paramInt2)
+	constexpr auto cabs =
+		[](double x) constexpr
 		{
-			std::cout << "\nTestPointConstruction IntParam Fail!" << std::endl;
-			return false;
-		}
+			return x >= 0 ? x : -x;
+		};
 
-		paramDouble1 = eqx::Random::randDouble(-100'000.0, 100'000.0);
-		paramDouble2 = eqx::Random::randDouble(-100'000.0, 100'000.0);
-		eqx::Point<double> paramConDouble(paramDouble1, paramDouble2);
-		if (paramConDouble.x != paramDouble1 || paramConDouble.y != paramDouble2)
+	constexpr auto testLambda =
+		[](const eqx::Point<double>& point, double x, double y) constexpr
 		{
-			std::cout << "\nTestPointConstruction DoubleParam Fail!" << std::endl;
-			return false;
-		}
+			return cabs(point.x - x) < 0.001 && cabs(point.y - y) < 0.001;
+		};
 
-		eqx::Point<int> copyConInt(paramConDouble);
-		if (copyConInt.x != static_cast<int>(paramConDouble.x) || copyConInt.y != static_cast<int>(paramConDouble.y) ||
-			eqx::Log::getLastLogMessage() != "Lossy Conversion" || eqx::Log::getLastLogType() != eqx::Log::Type::runtimeWarning)
-		{
-			std::cout << "\nTestPointConstruction IntCopyDouble Fail!" << std::endl;
-			return false;
-		}
-		eqx::Log::clear();
-
-		eqx::Point<double> copyConDouble(paramConInt);
-		if (copyConDouble.x != static_cast<double>(paramConInt.x) || copyConDouble.y != static_cast<double>(paramConInt.y))
-		{
-			std::cout << "\nTestPointConstruction DoubleCopy Fail!" << std::endl;
-			return false;
-		}
-	}
-	eqx::Log::setOutputStream(std::cout);
-	eqx::Log::setOutputFile("Log.txt");
-	eqx::Log::clear();
-
-	return true;
+	static_assert(testLambda(point1 + point1, 2.0, 2.0));
+	static_assert(testLambda(point1 + point2, -9.0, 11.0));
+	static_assert(testLambda(point1 + point3, 2.234, 8.654));
+	static_assert(testLambda(point2 + point2, -20.0, 20.0));
+	static_assert(testLambda(point2 + point3, -8.766, 17.654));
+	static_assert(testLambda(point3 + point3, 2.468, 15.308));
 }
 
-bool PointTester::testOperators()
+consteval void PointTester::testMinus()
 {
-	int intParam1, intParam2;
-	eqx::Point<int> intPoint, intPlusPoint;
-	double doubleParam1, doubleParam2;
-	eqx::Point<double> doublePoint, doublePlusPoint;
-	std::stringstream ss;
-	eqx::Log::setOutputStream(ss);
-	eqx::Log::setOutputFile("TestOutputFile.txt");
-	eqx::Log::clear();
-	for (int i = 0; i < 100'000; i++)
-	{
-		intParam1 = eqx::Random::randInt(-100'000, 100'000);
-		intParam2 = eqx::Random::randInt(-100'000, 100'000);
-		intPoint = eqx::Point<int>(intParam1, intParam2);
-		if (intPoint.x != intParam1 || intPoint.y != intParam2)
+	constexpr auto point1 = eqx::Point<double>(1.0, 1.0);
+	constexpr auto point2 = eqx::Point<double>(-10.0, 10.0);
+	constexpr auto point3 = eqx::Point<double>(1.234, 7.654);
+
+	constexpr auto cabs =
+		[](double x) constexpr
 		{
-			std::cout << "\nTestPointOperator Int= Fail!" << std::endl;
-			return false;
-		}
+			return x >= 0 ? x : -x;
+		};
 
-		doubleParam1 = eqx::Random::randDouble(-100'000.0, 100'000.0);
-		doubleParam2 = eqx::Random::randDouble(-100'000.0, 100'000.0);
-		doublePoint = eqx::Point<double>(doubleParam1, doubleParam2);
-		if (doublePoint.x != doubleParam1 || doublePoint.y != doubleParam2)
+	constexpr auto testLambda =
+		[](const eqx::Point<double>& point, double x, double y) constexpr
 		{
-			std::cout << "\nTestPointOperator Double= Fail!" << std::endl;
-			return false;
-		}
+			return cabs(point.x - x) < 0.001 && cabs(point.y - y) < 0.001;
+		};
 
-		intPoint = doublePoint;
-		if (intPoint.x != static_cast<int>(doublePoint.x) || intPoint.y != static_cast<int>(doublePoint.y) ||
-			eqx::Log::getLastLogMessage() != "Lossy Conversion" || eqx::Log::getLastLogType() != eqx::Log::Type::runtimeWarning)
-		{
-			std::cout << "\nTestPointOperator Int==Double Fail" << std::endl;
-			return false;
-		}
-		eqx::Log::clear();
+	constexpr auto v = point2 - point3;
 
-		intPoint = eqx::Point<int>(intParam1, intParam2);
-		doublePoint = eqx::Point<double>(doubleParam1, doubleParam2);
-
-		intPlusPoint = intPoint + intPoint;
-		if (intPlusPoint.x != (2 * intPoint.x) || intPlusPoint.y != (2 * intPoint.y))
-		{
-			std::cout << "\nTestPointOperator Int+ Fail" << std::endl;
-			return false;
-		}
-
-		doublePlusPoint = doublePoint + doublePoint;
-		if (doublePlusPoint.x != (2.0 * doublePoint.x) || doublePlusPoint.y != (2.0 * doublePoint.y))
-		{
-			std::cout << "\nTestPointOperator Double+ Fail" << std::endl;
-			return false;
-		}
-
-		intPlusPoint = intPoint - intPoint;
-		if (intPlusPoint.x != 0 || intPlusPoint.y != 0)
-		{
-			std::cout << "\nTestPointOperator Int- Fail" << std::endl;
-			return false;
-		}
-
-		doublePlusPoint = doublePoint - doublePoint;
-		if (doublePlusPoint.x != 0.0 || doublePlusPoint.y != 0.0)
-		{
-			std::cout << "\nTestPointOperator Double- Fail" << std::endl;
-			return false;
-		}
-
-		intPlusPoint += intPoint;
-		if (intPlusPoint.x != intPoint.x || intPlusPoint.y != intPoint.y)
-		{
-			std::cout << "\nTestPointOperator Int+= Fail" << std::endl;
-			return false;
-		}
-
-		doublePlusPoint += doublePoint;
-		if (doublePlusPoint.x != doublePoint.x || doublePlusPoint.y != doublePoint.y)
-		{
-			std::cout << "\nTestPointOperator Double+= Fail" << std::endl;
-			return false;
-		}
-
-		intPlusPoint -= intPoint;
-		if (intPlusPoint.x != 0 || intPlusPoint.y != 0)
-		{
-			std::cout << "\nTestPointOperator Int-= Fail" << std::endl;
-			return false;
-		}
-
-		doublePlusPoint -= doublePoint;
-		if (doublePlusPoint.x != 0.0 || doublePlusPoint.y != 0.0)
-		{
-			std::cout << "\nTestPointOperator Double-= Fail" << std::endl;
-			return false;
-		}
-
-		intPlusPoint = intPoint + intPoint;
-		if (intPlusPoint == intPoint)
-		{
-			std::cout << "\nTestPointOperator Int== Fail" << std::endl;
-			return false;
-		}
-
-		doublePlusPoint = doublePoint + doublePoint;
-		if (doublePlusPoint == doublePoint)
-		{
-			std::cout << "\nTestPointOperator Double== Fail" << std::endl;
-		}
-
-		intPlusPoint = intPoint;
-		if (intPlusPoint != intPoint)
-		{
-			std::cout << "\nTestPointOperator Int!= Fail" << std::endl;
-			return false;
-		}
-
-		doublePlusPoint = doublePoint;
-		if (doublePlusPoint != doublePoint)
-		{
-			std::cout << "\nTestPointOperator Double!= Fail" << std::endl;
-			return false;
-		}
-	}
-
-	eqx::Log::setOutputStream(std::cout);
-	eqx::Log::setOutputFile("Log.txt");
-	eqx::Log::clear();
-
-	return true;
+	static_assert(testLambda(point1 - point1, 0.0, 0.0));
+	static_assert(testLambda(point1 - point2, 11.0, -9.0));
+	static_assert(testLambda(point1 - point3, -0.234, -6.654));
+	static_assert(testLambda(point2 - point2, 0.0, 0.0));
+	static_assert(testLambda(point2 - point3, -11.234, 2.346));
+	static_assert(testLambda(point3 - point3, 0.0, 0.0));
 }
 
-bool PointTester::testFunctions()
+void PointTester::testEquals()
 {
-	eqx::Point<int> intPoint;
-	eqx::Point<double> doublePoint;
-	std::string ans = "";
-	for (int i = 0; i < 100'000; i++)
-	{
-		intPoint = { eqx::Random::randInt(-100'000, 100'000), eqx::Random::randInt(-100'000, 100'000) };
-		ans = std::string("(") + std::to_string(intPoint.x) + std::string(", ") + std::to_string(intPoint.y) + std::string(")");
-		if (intPoint.toString() != ans)
-		{
-			std::cout << "\nTestPointFunction toStringInt Fail" << std::endl;
-			return false;
-		}
+	constexpr auto point1 = eqx::Point<double>(1.0, 1.0);
+	constexpr auto point2 = eqx::Point<double>(-10.0, 10.0);
+	constexpr auto point3 = eqx::Point<double>(1.234, 7.654);
+	constexpr auto point4 = eqx::Point<double>(-10.0, 10.0);
 
-		doublePoint = { eqx::Random::randDouble(-100'000.0, 100'000.0), eqx::Random::randDouble(-100'000.0, 100'000.0) };
-		ans = std::string("(") + std::to_string(doublePoint.x) + std::string(", ") + std::to_string(doublePoint.y) + std::string(")");
-		if (doublePoint.toString() != ans)
-		{
-			std::cout << "\nTestPointFunction toStringDouble Fail" << std::endl;
-			return false;
-		}
-	}
+	UnitTester::test(eqx::equals(point1, point1), true);
+	UnitTester::test(eqx::equals(point1, point2), false);
+	UnitTester::test(eqx::equals(point1, point3), false);
+	UnitTester::test(eqx::equals(point1, point4), false);
+	UnitTester::test(eqx::equals(point2, point2), true);
+	UnitTester::test(eqx::equals(point2, point3), false);
+	UnitTester::test(eqx::equals(point2, point4), true);
+	UnitTester::test(eqx::equals(point3, point3), true);
+	UnitTester::test(eqx::equals(point3, point4), false);
+	UnitTester::test(eqx::equals(point4, point4), true);
+}
 
-	std::vector<std::tuple<eqx::Point<int>, eqx::Point<int>, int>> intTests;
-	intTests.emplace_back(eqx::Point<int>(0, 0), eqx::Point<int>(0, 0), 0);
-	intTests.emplace_back(eqx::Point<int>(0, 0), eqx::Point<int>(1, 1), 1);
-	intTests.emplace_back(eqx::Point<int>(0, 0), eqx::Point<int>(-1, -1), 1);
-	intTests.emplace_back(eqx::Point<int>(1, 1), eqx::Point<int>(1, 1), 0);
-	intTests.emplace_back(eqx::Point<int>(0, 0), eqx::Point<int>(0, 10), 10);
-	intTests.emplace_back(eqx::Point<int>(10, 10), eqx::Point<int>(-10, -10), 28);
+void PointTester::testToString()
+{
+	using namespace std::string_literals;
+	constexpr auto point1 = eqx::Point<double>(1.0, 1.0);
+	constexpr auto point2 = eqx::Point<double>(-10.0, 10.0);
+	constexpr auto point3 = eqx::Point<double>(1.234, 7.654);
 
-	for (const std::tuple<eqx::Point<int>, eqx::Point<int>, int>& test : intTests)
-	{
-		if (eqx::distance(std::get<0>(test), std::get<1>(test)) != std::get<2>(test) ||
-			eqx::distance(std::get<1>(test), std::get<0>(test)) != std::get<2>(test))
-		{
-			std::cout << "\nTestPointFunction distanceInt Fail" << std::endl;
-			return false;
-		}
-	}
+	UnitTester::test(eqx::toString(point1), "(1.000000, 1.000000)"s);
+	UnitTester::test(eqx::toString(point2), "(-10.000000, 10.000000)"s);
+	UnitTester::test(eqx::toString(point3), "(1.234000, 7.654000)"s);
+}
 
-	std::vector<std::tuple<eqx::Point<double>, eqx::Point<double>, double>> doubleTests;
-	doubleTests.emplace_back(eqx::Point<double>(0.0, 0.0), eqx::Point<double>(0.0, 0.0), 0.0);
-	doubleTests.emplace_back(eqx::Point<double>(0.0, 0.0), eqx::Point<double>(0.0, 1.0), 1.0);
-	doubleTests.emplace_back(eqx::Point<double>(0.0, 0.0), eqx::Point<double>(1.0, 0.0), 1.0);
-	doubleTests.emplace_back(eqx::Point<double>(0.0, 0.0), eqx::Point<double>(1.0, 1.0), std::sqrt(2.0));
+void PointTester::testDistance()
+{
+	constexpr auto point1 = eqx::Point<double>(1.0, 1.0);
+	constexpr auto point2 = eqx::Point<double>(-10.0, 10.0);
+	constexpr auto point3 = eqx::Point<double>(1.234, 7.654);
 
-	for (const std::tuple<eqx::Point<double>, eqx::Point<double>, double>& test : doubleTests)
-	{
-		if (eqx::distance(std::get<0>(test), std::get<1>(test)) != std::get<2>(test) ||
-			eqx::distance(std::get<1>(test), std::get<0>(test)) != std::get<2>(test))
-		{
-			std::cout << "\nTestPointFunction distanceDouble Fail" << std::endl;
-			return false;
-		}
-	}
+	UnitTester::test(eqx::distance(point1, point1), 0.0);
+	UnitTester::test(eqx::distance(point1, point2), 14.2126704);
+	UnitTester::test(eqx::distance(point1, point3), 6.658113246);
+	UnitTester::test(eqx::distance(point2, point2), 0.0);
+	UnitTester::test(eqx::distance(point2, point3), 11.47634402);
+	UnitTester::test(eqx::distance(point3, point3), 0.0);
 
-	return true;
+}
+
+void PointTester::testNormalize()
+{
+	constexpr auto origin = eqx::Point<double>(0.0, 0.0);
+
+	constexpr auto point1 = eqx::Point<double>(1.0, 1.0);
+	constexpr auto point2 = eqx::Point<double>(-10.0, 10.0);
+	constexpr auto point3 = eqx::Point<double>(1.234, 7.654);
+
+	auto point1Norm = eqx::normalize(point1);
+	auto point2Norm = eqx::normalize(point2);
+	auto point3Norm = eqx::normalize(point3);
+
+	UnitTester::test(point1Norm.x, 0.70710678);
+	UnitTester::test(point1Norm.y, 0.70710678);
+	UnitTester::test(point2Norm.x, -0.70710678);
+	UnitTester::test(point2Norm.y, 0.70710678);
+	UnitTester::test(point3Norm.x, 0.15916755);
+	UnitTester::test(point3Norm.y, 0.98725158);
+	
+	UnitTester::test(eqx::distance(origin, point1Norm), 1.0);
+	UnitTester::test(eqx::distance(origin, point2Norm), 1.0);
+	UnitTester::test(eqx::distance(origin, point3Norm), 1.0);
+}
+
+void PointTester::testAngle()
+{
+	constexpr auto point1 = eqx::Point<double>(1.0, 1.0);
+	constexpr auto point2 = eqx::Point<double>(-10.0, 10.0);
+	constexpr auto point3 = eqx::Point<double>(1.234, 7.654);
+
+	UnitTester::test(eqx::angle(point1), 45.0);
+	UnitTester::test(eqx::angle(point2), 135.0);
+	UnitTester::test(eqx::angle(point3), 80.84141723);
 }

@@ -6,13 +6,13 @@
 #include "UnitTest.hpp"
 #include "Mathematics.hpp"
 
-void testEquals();
-void testDistance();
-void testArccos();
-void testArcsin();
-
 namespace MathematicsTester
 {
+	void testEquals();
+	void testDistance();
+	void testArccos();
+	void testArcsin();
+
 	void test()
 	{
 		std::cout << "Testing Mathematics..." << std::endl;
@@ -23,9 +23,16 @@ namespace MathematicsTester
 		UnitTester::printStatus();
 		UnitTester::clear();
 	}
+
+	consteval void testGetSign();
+	consteval void testIsPositive();
+	consteval void testIsNegative();
+	consteval void testWillOverflow();
+	consteval void testDegreesToRadians();
+	consteval void testRadiansToDegrees();
 }
 
-void testEquals()
+void MathematicsTester::testEquals()
 {
 	constexpr auto loc = std::source_location::current();
 	auto testLambda =
@@ -53,9 +60,11 @@ void testEquals()
 	testLambda(false, 0.000001, 0.0000001, 0.0000001);
 	testLambda(false, 1000.0, 1100.0, 100.0);
 	testLambda(true, 1000.0, 1099.0, 100.0);
+
+	
 }
 
-consteval void testGetSign()
+consteval void MathematicsTester::testGetSign()
 {
 	static_assert(eqx::getSign(1) == 1);
 	static_assert(eqx::getSign(0) == 0);
@@ -78,7 +87,7 @@ consteval void testGetSign()
 	static_assert(eqx::getSign(-10) == -1);
 }
 
-consteval void testIsPositive()
+consteval void MathematicsTester::testIsPositive()
 {
 	static_assert(eqx::isPositive(1) == true);
 	static_assert(eqx::isPositive(0) == false);
@@ -105,7 +114,7 @@ consteval void testIsPositive()
 	static_assert(eqx::isPositive(-13) == false);
 }
 
-consteval void testIsNegative()
+consteval void MathematicsTester::testIsNegative()
 {
 	static_assert(eqx::isNegative(1) == false);
 	static_assert(eqx::isNegative(0) == false);
@@ -132,7 +141,7 @@ consteval void testIsNegative()
 	static_assert(eqx::isNegative(-13) == true);
 }
 
-consteval void testWillOverflow()
+consteval void MathematicsTester::testWillOverflow()
 {
 	constexpr auto testLamda = 
 		[]<typename T>(T x, T y, bool expected) constexpr
@@ -209,7 +218,7 @@ consteval void testWillOverflow()
 		== true);
 }
 
-void testDistance()
+void MathematicsTester::testDistance()
 {
 	UnitTester::test(eqx::distance(0, 0), 0);
 	UnitTester::test(eqx::distance(0, 1), 1);
@@ -238,7 +247,7 @@ void testDistance()
 	UnitTester::test(eqx::distance(0U, 100'000U), 100'000U);
 }
 
-consteval void testDegreesToRadians()
+consteval void MathematicsTester::testDegreesToRadians()
 {
 	constexpr auto cAbs =
 		[]<typename T>(T x)
@@ -280,7 +289,7 @@ consteval void testDegreesToRadians()
 	static_assert(aproxEq(eqx::degreesToRadians(360.0), 6.28319));
 }
 
-consteval void testRadiansToDegrees()
+consteval void MathematicsTester::testRadiansToDegrees()
 {
 	constexpr auto cAbs =
 		[]<typename T>(T x)
@@ -327,7 +336,7 @@ consteval void testRadiansToDegrees()
 	static_assert(aproxEq(eqx::radiansToDegrees(eqx::pi * 2), 360.0));
 }
 
-void testArccos()
+void MathematicsTester::testArccos()
 {
 	auto root2o2 = std::sqrt(2.0) / 2.0;
 	auto root3o2 = std::sqrt(3.0) / 2.0;
@@ -352,7 +361,7 @@ void testArccos()
 		PEQ<double, double, double, double>);
 }
 
-void testArcsin()
+void MathematicsTester::testArcsin()
 {
 	auto root2o2 = std::sqrt(2.0) / 2.0;
 	auto root3o2 = std::sqrt(3.0) / 2.0;

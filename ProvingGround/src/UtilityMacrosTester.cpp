@@ -15,16 +15,20 @@ namespace UtilityMacrosTester
 		UnitTester::printStatus();
 		UnitTester::clear();
 	}
+	consteval void testCountArgs();
+	consteval void testStringArgs();
+	consteval void testForEach();
+	consteval void testForEachList();
 }
 
-consteval void testCountArgs()
+consteval void UtilityMacrosTester::testCountArgs()
 {
 	static_assert(std::is_same_v<decltype(EQX_COUNT_ARGS(1, 2, 3)), 
 		std::size_t>);
 	static_assert(EQX_COUNT_ARGS(1, 2, 3, 4, 5) == 5ULL);
 }
 
-consteval void testStringArgs()
+consteval void UtilityMacrosTester::testStringArgs()
 {
 	static_assert(std::is_same_v<decltype(EQX_STRING_ARGS(1)), decltype("1")>);
 	constexpr auto arr = std::array<const char*, 5ULL>({
@@ -38,7 +42,7 @@ consteval void testStringArgs()
 #define TEST_FOR_EACH_MACRO1(x) static_assert(x); val++;
 #define TEST_FOR_EACH_MACRO2(x) static_assert(!x); val++;
 
-consteval void testForEach()
+consteval void UtilityMacrosTester::testForEach()
 {
 	constexpr auto testForEachAux = []() constexpr
 	{
@@ -51,7 +55,7 @@ consteval void testForEach()
 }
 
 #define TEST_FOR_EACH_LIST_MACRO(x) #x
-consteval void testForEachList()
+consteval void UtilityMacrosTester::testForEachList()
 {
 	constexpr auto testForEachListAux = []<typename... Types>
 		(Types... args) constexpr

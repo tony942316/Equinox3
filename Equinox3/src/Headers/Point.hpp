@@ -1,172 +1,162 @@
 #pragma once
 
-#include <type_traits>
-#include <limits>
 #include <string>
 #include <cmath>
 #include <cerrno>
 
-#include "Log.hpp"
+#include "Misc.hpp"
 #include "Mathematics.hpp"
 
 namespace eqx
 {
 	/**
-	 * @brief Point On The Cartesian Plane i.e. (X, Y)
-	 * @brief Must Be Arithmetic Type
+	 * @brief Point On The Cartesian Plane i.e. (X, Y), Note
+	 *		Must Be An Arithmetic Type
 	 */
-	template <class T>
+	template <eqx::arithmetic T>
 	class Point
 	{
 	public:
 		/**
-		 * @brief Initialized With A Type Accurate Zero
+		 * @brief Initialized With Zeros i.e. ((T)0, (T)0)
 		 */
-		Point()
+		constexpr Point() noexcept
 			:
-			Point(static_cast<T>(0), static_cast<T>(0))
+			Point(eqx::zero<T>, eqx::zero<T>)
 		{
 		}
 
 		/**
-		 * @brief Initialize With Values
+		 * @brief Initialize With Values i.e. (x, y)
 		 * 
 		 * @param x The x Value
 		 * @param y The y Value
 		 */
-		Point(T x, T y)
+		constexpr Point(T x, T y) noexcept
 			:
 			x(x),
 			y(y)
 		{
-			static_assert(std::is_arithmetic<T>::value, "eqx::Point must have an arithmetic type");
 		}
 
 		/**
-		 * @brief Initialize With Type Accurate Values From Another Point
-		 * 
-		 * @param other Point To Construct From
+		 * Trivial Move And Copy Operation
 		 */
-		template <typename U>
-		Point(const eqx::Point<U>& other)
-		{
-			*this = other;
-		}
+		Point(const Point& other) = default;
+		Point(Point&& other) = default;
+		Point& operator= (const Point& other) = default;
+		Point& operator= (Point&& other) = default;
+		~Point() = default;
 
 		/**
-		 * @brief Assign Point With Type Accurate Values From Another Point
-		 * 
-		 * @param other Point To Assign From
-		 */
-		template<typename U>
-		void operator= (const Point<U>& other)
-		{
-			this->x = static_cast<T>(other.x);
-			this->y = static_cast<T>(other.y);
-			if (std::numeric_limits<U>::max() > std::numeric_limits<T>::max())
-			{
-				eqx::Log::log(eqx::Log::Level::warning, "Lossy Conversion", eqx::Log::Type::runtimeWarning);
-			}
-		}
-
-		/**
-		 * @brief This.x + Other.x, This.y + Other.y
+		 * @brief x + other.x, y + other.y
 		 * 
 		 * @param other The Same Type Point We Add From
 		 * 
 		 * @returns Resulting Point
 		 */
-		Point<T> operator+ (const Point<T>& other) const
+		[[nodiscard]] constexpr 
+			Point<T> operator+ (const Point<T>& other) const noexcept
 		{
-			if (eqx::willOverflowAddition(this->x, other.y) ||
-				eqx::willOverflowAddition(this->y, other.y))
-			{
-				eqx::Log::log(eqx::Log::Level::error, "Arithmetic Overflow", eqx::Log::Type::overflowError);
-				return Point<T>();
-			}
-			else
-			{
-				return Point<T>(this->x + other.x, this->y + other.y);
-			}
+			return Point<T>(x + other.x, y + other.y);
 		}
 
 		/**
-		 * @brief This.x - Other.x, This.y - Other.y
+		 * @brief x - other.x, y - other.y
 		 * 
 		 * @param other The Same Type Point We Subtract From
 		 * 
 		 * @returns Resulting Point
 		 */
-		Point<T> operator- (const Point<T>& other) const
+		[[nodiscard]] constexpr 
+			Point<T> operator- (const Point<T>& other) const noexcept
 		{
-			if (eqx::willOverflowAddition(this->x, -other.y) ||
-				eqx::willOverflowAddition(this->y, -other.y))
-			{
-				eqx::Log::log(eqx::Log::Level::error, "Arithmetic Overflow", eqx::Log::Type::overflowError);
-				return Point<T>();
-			}
-			else
-			{
-				return Point<T>(this->x - other.x, this->y - other.y);
-			}
+			return Point<T>(x - other.x, y - other.y);
 		}
 
 		/**
-		 * @brief This.x += Other.x, This.y += Other.y
+		 * @brief x += other.x, y += other.y
 		 * 
 		 * @param other The Same Type Point We Add From
+		 * 
+		 * @returns *this
 		 */
-		void operator+= (const Point<T>& other)
+		constexpr Point<T> operator+= (const Point<T>& other) noexcept
 		{
-			*this = *this + other;
+			return *this = *this + other;
 		}
 
 		/**
-		 * @brief This.x -= Other.x, This.y -= Other.y
+		 * @brief x -= other.x, y -= other.y
 		 *
 		 * @param other The Same Type Point We Subtract From
+		 * 
+		 * @returns *this
 		 */
-		void operator-= (const Point<T>& other)
+		constexpr Point<T> operator-= (const Point<T>& other) noexcept
 		{
-			*this = *this - other;
+			return *this = *this - other;
 		}
 
 		/**
-		 * @brief This.x == Other.x, This.y == Other.y UNLESS FLOATING POINT
-		 * @brief If Floating Point, Difference Must Be Less Than 0.001
+		 * @brief eqx::equals(x, other.x), eqx::equals(y, other.y)
 		 * 
 		 * @param other The Same Type Point We Compare Against
 		 * 
-		 * @returns True If Points Are Equivalent
+		 * @returns true If Points Are Equivalent
 		 */
-		bool operator== (const Point<T>& other) const
+		[[nodiscard]] constexpr 
+			bool operator== (const Point<T>& other) const noexcept
 		{
-			return equals(*this, other);
+			return equals(x, other.x) && equals(y, other.y);
 		}
 
 		/**
-		 * @brief This.x != Other.x, This.y != Other.y UNLESS FLOATING POINT
-		 * @brief If Floating Point, Difference Must Be Greater Than Or Equal To 0.001
+		 * @brief !eqx::equals(x, other.x), !eqx::equals(y, other.y)
 		 *
 		 * @param other The Same Type Point We Compare Against
 		 *
-		 * @returns True If Points Are Not Equivalent
+		 * @returns true If Points Are Equivalent
 		 */
-		bool operator!= (const Point<T>& other) const
+		[[nodiscard]] constexpr 
+			bool operator!= (const Point<T>& other) const noexcept
 		{
 			return !(*this == other);
 		}
 
 		/**
+		 * @brief Computes The Distance From This Point To other
+		 *
+		 * @param other Point To Where The Distance Is Calculated
+		 *
+		 * @returns Distance Between This Point And other
+		 */
+		[[nodiscard]] T distanceTo(const Point<T>& other) const noexcept
+		{
+			eqx::runtimeAssert(errno == 0, "Previous errno Failure Detected!");
+
+			auto dx = static_cast<double>(distance(x, other.x));
+			auto dy = static_cast<double>(distance(y, other.y));
+			auto result = std::hypot(dx, dy);
+
+			eqx::runtimeAssert(errno != ERANGE, "errno == ERANGE!");
+
+			return static_cast<T>(result);
+		}
+
+		/**
 		 * @brief Creates Printable String Of Form "(x, y)"
 		 * 
-		 * @returns "({this->x}, {this->y})"
+		 * @returns "(x, y)"
 		 */
 		std::string toString() const
 		{
-			std::string res = "";
-			res +=
-				"(" + std::to_string(this->x) + ", " + std::to_string(this->y) + ")";
+			auto res = std::string("");
+			res += "(";
+			res += std::to_string(x);
+			res += ", ";
+			res += std::to_string(y);
+			res += ")";
 			return res;
 		}
 
@@ -174,33 +164,32 @@ namespace eqx
 	};
 
 	/**
-	 * @brief point1.x == point2.x, point1.y == point2.y UNLESS FLOATING POINT
-	 * @brief If Floating Point, Difference Must Be Less Than error
+	 * @brief Convert A eqx::Point To A std::string Of Form
+	 *		"(point.x, point.y)"
+	 *
+	 * @param val Point To Be Converted
+	 *
+	 * @returns Point Converted To std::string
+	 */
+	template <typename T>
+	[[nodiscard]] std::string toString(const Point<T>& point)
+	{
+		return point.toString();
+	}
+
+	/**
+	 * @brief point1 == point2
 	 *
 	 * @param point1 First Point
 	 * @param point2 Second Point
-	 * @param error Amount Of Inaccuracy Permissible For Floating Point Types
 	 *
-	 * @returns True If Points Are Equivalent
+	 * @returns true If Points Are Equivalent
 	 */
 	template <typename T>
-	bool equals(const Point<T>& point1, const Point<T>& point2, double error = 0.001)
+	[[nodiscard]] constexpr 
+		bool equals(const Point<T>& point1, const Point<T>& point2) noexcept
 	{
-		if (std::is_integral<T>::value)
-		{
-			return (point1.x == point2.x) && (point1.y == point2.y);
-		}
-		else if (std::is_floating_point<T>::value)
-		{
-			return
-				std::fabs(point1.x - point2.x) < static_cast<T>(error) &&
-				std::fabs(point1.y - point2.y) < static_cast<T>(error);
-		}
-		else
-		{
-			eqx::Log::log(eqx::Log::Level::error, "This case should never be reached", eqx::Log::Type::unreachableCodeError);
-			return false;
-		}
+		return point1 == point2;
 	}
 
 	/**
@@ -212,65 +201,51 @@ namespace eqx
 	 * @returns Distance Between The Points
 	 */
 	template <typename T>
-	T distance(const Point<T>& point1, const Point<T>& point2)
+	[[nodiscard]] 
+		T distance(const Point<T>& point1, const Point<T>& point2) noexcept
 	{
-		errno = 0;
-		double 
-			dx = static_cast<double>(eqx::distance(point1.x, point2.x)),
-			dy = static_cast<double>(eqx::distance(point1.y, point2.y)),
-			result = std::hypot(dx, dy);
-		if (errno == ERANGE ||
-			result > std::numeric_limits<T>::max() ||
-			result < std::numeric_limits<T>::lowest())
-		{
-			eqx::Log::log(eqx::Log::Level::error, "Arithmetic Overflow", eqx::Log::Type::overflowError);
-			return static_cast<T>(0);
-		}
-		else
-		{
-			return static_cast<T>(result);
-		}
+		return point1.distanceTo(point2);
 	}
 
 	/**
-	 * @brief Normalize A Point As If It Were A Vector From The Origin (0, 0)
+	 * @brief Normalize A Point As If It Were A Vector From The Origin (0, 0),
+	 *		Note T Must Be A std::floating_point
 	 * 
 	 * @param point Point To Be Normalized
 	 * 
 	 * @returns Normalized Point
 	 */
-	template <typename T>
-	Point<T> normalize(const Point<T>& point)
+	template <std::floating_point T>
+	[[nodiscard]] Point<T> normalize(const Point<T>& point) noexcept
 	{
-		if (std::is_integral<T>::value)
-		{
-			eqx::Log::log(eqx::Log::Level::warning, "Normalizing integral value!", eqx::Log::Type::runtimeWarning);
-		}
-		
-		Point<T> origin = { static_cast<T>(0), static_cast<T>(0) }, result;
-		result.x = eqx::distance(origin, point) == static_cast<T>(0) ? static_cast<T>(0) : point.x / distance(origin, point);
-		result.y = eqx::distance(origin, point) == static_cast<T>(0) ? static_cast<T>(0) : point.y / distance(origin, point);
+		constexpr auto origin = Point<T>();
+
+		auto dist = eqx::distance(origin, point);
+		eqx::runtimeAssert(dist != eqx::zero<T>, "dist Was 0!");
+
+		auto result = Point<T>(point.x / dist, point.y / dist);
 		return result;
 	}
 
 	/**
-	 * @brief Compute The Angle Of A Point In Degrees From The Origin (0, 0)
+	 * @brief Compute The Angle Of A Point In Degrees, Counter Clockwise
+	 *		From The Origin (0, 0)
 	 * 
 	 * @param point Point The Angle Is Computed From
 	 * 
 	 * @returns Angle In Degrees
 	 */
 	template <typename T>
-	double angle(const Point<T>& point)
+	[[nodiscard]] double angle(const Point<T>& point) noexcept
 	{
-		Point<T> normPoint = eqx::normalize(point);
-		std::pair<double, double> 
-			sinVals = eqx::arcsin(normPoint.y),
-			cosVals = eqx::arccos(normPoint.x);
+		auto normPoint = eqx::normalize(point);
+		auto sinVals = eqx::arcsin(normPoint.y);
+		auto cosVals = eqx::arccos(normPoint.x);
 
-		return
-			(eqx::equals(sinVals.first, cosVals.first) ||
-			eqx::equals(sinVals.first, cosVals.second)) ?
+		auto correctValue = equals(sinVals.first, cosVals.first) ||
+			equals(sinVals.second, cosVals.second) ?
 			sinVals.first : sinVals.second;
+
+		return correctValue;
 	}
 }

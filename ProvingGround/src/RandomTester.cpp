@@ -8,13 +8,13 @@
 #include "UnitTest.hpp"
 #include "Random.hpp"
 
-void testRandomNumber();
-void testFlipCoin();
-void testRollDice();
-void testGenerateSeed();
-
 namespace RandomTester
 {
+	void testRandomNumber();
+	void testFlipCoin();
+	void testRollDice();
+	void testGenerateSeed();
+
 	void test()
 	{
 		std::cout << "Testing Random..." << std::endl;
@@ -27,7 +27,7 @@ namespace RandomTester
 	}
 }
 
-void testRandomNumber()
+void RandomTester::testRandomNumber()
 {
 	auto runs = 1'000'000;
 	auto randNum = 0;
@@ -112,7 +112,7 @@ void testRandomNumber()
 	testDist(dist3);
 }
 
-void testFlipCoin()
+void RandomTester::testFlipCoin()
 {
 	auto runs = 1'000'000;
 	auto randCoin = 0U;
@@ -136,7 +136,7 @@ void testFlipCoin()
 	UnitTester::test(deviation, 1.1, LTE<double, double>);
 }
 
-void testRollDice()
+void RandomTester::testRollDice()
 {
 	auto runs = 1'000'000;
 	auto randNum = 0U;
@@ -161,7 +161,7 @@ void testRollDice()
 	}
 }
 
-void testGenerateSeed()
+void RandomTester::testGenerateSeed()
 {
 	auto runs = 1'000'000;
 	auto seed = 0U;

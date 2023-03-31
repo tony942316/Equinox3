@@ -11,15 +11,15 @@
 #include "UnitTest.hpp"
 #include "Log.hpp"
 
-void testLog();
-void testSetLevel();
-void testSetOutputStream();
-void testSetOutputFile();
-void testClear();
-void testGetFormattedString();
-
 namespace LogTester
 {
+	void testLog();
+	void testSetLevel();
+	void testSetOutputStream();
+	void testSetOutputFile();
+	void testClear();
+	void testGetFormattedString();
+
 	void test()
 	{
 		std::cout << "Testing Log..." << std::endl;
@@ -37,9 +37,11 @@ namespace LogTester
 			std::ios::out | std::ios::trunc);
 		cleanFile.close();
 	}
+
+	consteval void testGetLoggableLevels();
 }
 
-void testLog()
+void LogTester::testLog()
 {
 	using namespace std::string_view_literals;
 
@@ -68,7 +70,7 @@ void testLog()
 	UnitTester::test(eqx::Log::getLastLogType(), eqx::Log::Type::runtimeError);
 }
 
-void testSetLevel()
+void LogTester::testSetLevel()
 {
 	eqx::Log::setLevel(eqx::Log::Level::all);
 	UnitTester::test(eqx::Log::getCurrentLogLevel(), eqx::Log::Level::all);
@@ -82,7 +84,7 @@ void testSetLevel()
 	UnitTester::test(eqx::Log::getCurrentLogLevel(), eqx::Log::Level::none);
 }
 
-void testSetOutputStream()
+void LogTester::testSetOutputStream()
 {
 	using namespace std::string_literals;
 	using namespace std::string_view_literals;
@@ -107,7 +109,7 @@ void testSetOutputStream()
 	UnitTester::test(produced, ""s);
 }
 
-void testSetOutputFile()
+void LogTester::testSetOutputFile()
 {
 	using namespace std::string_view_literals;
 	using namespace std::string_literals;
@@ -130,7 +132,7 @@ void testSetOutputFile()
 	file.close();
 }
 
-void testClear()
+void LogTester::testClear()
 {
 	using namespace std::string_view_literals;
 
@@ -148,7 +150,7 @@ void testClear()
 	UnitTester::test(eqx::Log::getLastLogMessage(), ""sv);
 }
 
-void testGetFormattedString()
+void LogTester::testGetFormattedString()
 {
 	using namespace std::string_view_literals;
 
@@ -164,7 +166,7 @@ void testGetFormattedString()
 	UnitTester::test(produced, expected);
 }
 
-void testGetLoggableLevels()
+consteval void LogTester::testGetLoggableLevels()
 {
 	constexpr auto produced = eqx::Log::getLoggableLevels();
 	constexpr auto expected = std::array<eqx::Log::Level, 3ULL>({

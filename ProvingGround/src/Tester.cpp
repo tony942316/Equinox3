@@ -2,26 +2,28 @@
 
 #include <iostream>
 
-Tester::Tester()
-{
-}
+#include "UtilityMacrosTester.hpp"
+#include "MiscTester.hpp"
+#include "SuperEnumTester.hpp"
+#include "LogTester.hpp"
+#include "MathematicsTester.hpp"
+#include "RandomTester.hpp"
+#include "StopWatchTester.hpp"
+#include "PointTester.hpp"
 
-void Tester::testAll()
+namespace Tester
 {
-	std::cout << "\n*********************" << std::endl;
-	if (SuperEnumTester::test() &&
-		LogTester::test() &&
-		RandomTester::test() &&
-		StopWatchTester::test() &&
-		MathematicsTester::test() &&
-		pointTests.testAll() &&
-		rectTests.testAll())
+	void test()
 	{
-		std::cout << "---All Pass---" << std::endl;
+		std::cout << "\n*********************" << std::endl;
+		UtilityMacrosTester::test();
+		MiscTester::test();
+		SuperEnumTester::test();
+		LogTester::test();
+		MathematicsTester::test();
+		RandomTester::test();
+		StopWatchTester::test();
+		PointTester::test();
+		std::cout << "*********************\n" << std::endl;
 	}
-	else
-	{
-		std::cout << "---FAIL!!!!---" << std::endl;
-	}
-	std::cout << "*********************\n" << std::endl;
 }

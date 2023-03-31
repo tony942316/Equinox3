@@ -10,10 +10,10 @@
 #include "UnitTest.hpp"
 #include "SuperEnum.hpp"
 
-void testStreaming();
-
 namespace SuperEnumTester
 {
+	void testStreaming();
+
 	void test()
 	{
 		std::cout << "Testing SuperEnum..." << std::endl;
@@ -21,6 +21,10 @@ namespace SuperEnumTester
 		UnitTester::printStatus();
 		UnitTester::clear();
 	}
+
+	consteval void testEnumCollection();
+	consteval void testGetEnums();
+	consteval void testGetString();
 }
 
 class SuperEnumShell
@@ -35,7 +39,7 @@ public:
 		v6, v7)
 };
 
-consteval void testEnumCollection()
+consteval void SuperEnumTester::testEnumCollection()
 {
 	using namespace std::string_view_literals;
 
@@ -70,7 +74,7 @@ consteval void testEnumCollection()
 	static_assert(expected7 == SuperEnumShell::Pub7Collection);
 }
 
-consteval void testGetEnums()
+consteval void SuperEnumTester::testGetEnums()
 {
 	constexpr auto expected3 =
 		std::array<SuperEnumShell::Pub3, 3ULL>({
@@ -103,7 +107,7 @@ consteval void testGetEnums()
 	static_assert(expected7 == SuperEnumShell::getPub7Enums());
 }
 
-consteval void testGetString()
+consteval void SuperEnumTester::testGetString()
 {
 	using namespace std::string_view_literals;
 
@@ -138,7 +142,7 @@ consteval void testGetString()
 	static_assert(expected7 == SuperEnumShell::getPub7Strings());
 }
 
-void testStreaming()
+void SuperEnumTester::testStreaming()
 {
 	using namespace std::string_literals;
 

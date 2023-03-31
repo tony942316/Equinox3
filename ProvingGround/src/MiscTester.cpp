@@ -15,12 +15,12 @@
 #include "UnitTest.hpp"
 #include "Misc.hpp"
 
-void testToString();
-void testPairPrint();
-void testZip();
-
 namespace MiscTester
 {
+	void testToString();
+	void testPairPrint();
+	void testZip();
+
 	void test()
 	{
 		std::cout << "Testing Misc..." << std::endl;
@@ -30,9 +30,11 @@ namespace MiscTester
 		UnitTester::printStatus();
 		UnitTester::clear();
 	}
+
+	consteval void testLiterals();
 }
 
-void testToString()
+void MiscTester::testToString()
 {
 	using namespace std::string_view_literals;
 	using namespace std::string_literals;
@@ -78,7 +80,7 @@ void testToString()
 		"{ (1, One), (2, Two), (3, Three), (4, Four) }"s);
 }
 
-void testPairPrint()
+void MiscTester::testPairPrint()
 {
 	using namespace eqx::pairPrint;
 	using namespace std::string_view_literals;
@@ -99,7 +101,7 @@ void testPairPrint()
 	UnitTester::test(temp, "(1.500000, Double)"sv);
 }
 
-void testLiterals()
+consteval void MiscTester::testLiterals()
 {
 	using namespace eqx::literals;
 
@@ -108,7 +110,7 @@ void testLiterals()
 	static_assert(std::is_same_v<decltype(1_ushort), unsigned short>);
 }
 
-void testZip()
+void MiscTester::testZip()
 {
 	using namespace std::string_view_literals;
 

@@ -3,7 +3,6 @@
 #include <type_traits>
 #include <concepts>
 #include <limits>
-#include <functional>
 #include <cmath>
 
 #include "Misc.hpp"
@@ -27,6 +26,20 @@ namespace eqx
 	 */
 	template <typename T>
 	T constexpr zero = static_cast<T>(0);
+
+	/**
+	 * @brief Check If Two Integer Types Are Equal
+	 * @brief T Must Be An Integer Type
+	 *
+	 * @param x, y Values To Be Checked
+	 *
+	 * @returns true If The Values Are Equal
+	 */
+	template <eqx::integer T>
+	[[nodiscard]] constexpr bool equals(T x, T y) noexcept
+	{
+		return x == y;
+	}
 
 	/**
 	 * @brief Check If Two Floating Point Types Are Equal Given Some Amount 

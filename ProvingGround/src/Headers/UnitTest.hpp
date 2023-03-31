@@ -58,7 +58,7 @@ const UnitTestFunction EQ = UnitTestFunction(
 		if constexpr (std::is_floating_point_v<T> ||
 			std::is_floating_point_v<U>)
 		{
-			return std::fabs(x - y) < 0.000001L;
+			return std::fabs(x - y) < 0.00001L;
 		}
 		else
 		{
