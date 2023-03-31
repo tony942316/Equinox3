@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string>
+#include <cmath>
 #include <cerrno>
 
 #include "Misc.hpp"
@@ -9,7 +10,7 @@
 namespace eqx
 {
 	/**
-	 * @brief Point On The Cartesian Plane i.e. (X, Y), Note
+	 * @brief Point On The Cartesian Plane i.e. (X, Y), Note T
 	 *		Must Be An Arithmetic Type
 	 */
 	template <eqx::arithmetic T>
@@ -148,7 +149,7 @@ namespace eqx
 		 * 
 		 * @returns "(x, y)"
 		 */
-		std::string toString() const
+		[[nodiscard]] std::string toString() const
 		{
 			auto res = std::string("");
 			res += "(";
@@ -163,12 +164,12 @@ namespace eqx
 	};
 
 	/**
-	 * @brief Convert A eqx::Point To A std::string Of Form
+	 * @brief Convert An eqx::Point To A std::string Of Form
 	 *		"(point.x, point.y)"
 	 *
-	 * @param val Point To Be Converted
+	 * @param point Point To Be Converted
 	 *
-	 * @returns Point Converted To std::string
+	 * @returns Point Converted To A std::string
 	 */
 	template <typename T>
 	[[nodiscard]] std::string toString(const Point<T>& point)

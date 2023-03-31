@@ -2,183 +2,140 @@
 
 #include <string>
 
+#include "Misc.hpp"
 #include "Point.hpp"
 #include "Mathematics.hpp"
 
 namespace eqx
 {
 	/**
-	 * @brief Rectangle On The Cartesian Plane
-	 * @brief Must Be Arithmetic Type
+	 * @brief Rectangle On The Cartesian Plane Stored As Top Left Coordinates
+	 *		X, Y And Width And Height, Note That The Rectangle Coordinates
+	 *		Act As If They Are In Screen Space i.e. The Height Of The
+	 *		Rectangle Is Directed Downwards
 	 */
-	template<class T>
+	template<eqx::arithmetic T>
 	class Rectangle
 	{
 	public:
 		/**
-		 * @brief Initialized With A Type Accurate Zero
+		 * @brief Initialized With Zeros i.e. ((T)0, ...)
 		 */
-		Rectangle()
+		constexpr Rectangle() noexcept
 			:
-			Rectangle(static_cast<T>(0), static_cast<T>(0), static_cast<T>(0), static_cast<T>(0))
+			Rectangle(eqx::zero<T>, eqx::zero<T>, eqx::zero<T>, eqx::zero<T>)
 		{
 		}
 
 		/**
-		 * @brief Initalize With Values
+		 * @brief Initalize With Values i.e. (x, y, w, h)
 		 * 
 		 * @param x The x Value
 		 * @param y The y Value
 		 * @param w The Width
 		 * @param h The Height
 		 */
-		Rectangle(T x, T y, T w, T h)
+		constexpr Rectangle(T x, T y, T w, T h) noexcept
 			:
 			x(x),
 			y(y),
 			w(w),
 			h(h)
 		{
-			static_assert(std::is_arithmetic<T>::value, "eqx::Rectangle must have an arithmetic type");
 		}
 
 		/**
-		 * @brief Initialize With Type Accurate Values From Another Rectangle
-		 * 
-		 * @param other Rectangle To Construct From
+		 * Trivial Move And Copy Operation
 		 */
-		template<typename U>
-		Rectangle(const eqx::Rectangle<U>& other)
-		{
-			*this = other;
-		}
+		Rectangle(const Rectangle& other) = default;
+		Rectangle(Rectangle&& other) = default;
+		Rectangle& operator= (const Rectangle& other) = default;
+		Rectangle& operator= (Rectangle&& other) = default;
+		~Rectangle() = default;
 
 		/**
-		 * @brief Assign Rectangle With Type Accurate Values From Another Rectangle
+		 * @brief Create A Point At (X, Y), Note That This Is An
+		 *		Alias For GetTopLeftPoint()
 		 * 
-		 * @param other Rectangle To Assign From
+		 * @returns eqx::Point<T> Representing The Top Left Point
 		 */
-		template<typename U>
-		void operator= (const Rectangle<U>& other)
-		{
-			this->x = static_cast<T>(other.x);
-			this->y = static_cast<T>(other.y);
-			this->w = static_cast<T>(other.w);
-			this->h = static_cast<T>(other.h);
-			if (std::numeric_limits<U>::max() > std::numeric_limits<T>::max())
-			{
-				eqx::Log::log(eqx::Log::Level::warning, "Lossy Conversion", eqx::Log::Type::runtimeWarning);
-			}
-		}
-
-		/**
-		 * @brief Create A Point At (X, Y)
-		 * @brief Alias For GetTopLeftPoint
-		 * 
-		 * @returns eqx::Point Of Same Type
-		 */
-		eqx::Point<T> getLocation() const
+		[[nodiscard]] constexpr eqx::Point<T> getLocation() const noexcept
 		{
 			return getTopLeftPoint();
 		}
 
 		/**
-		 * @brief Create A Point At (X, Y)
+		 * @brief Create A Point At (X, Y), The Top Left Point
 		 * 
-		 * @returns eqx::Point Of Same Type
+		 * @returns eqx::Point<T> Representing The Top Left Point
 		 */
-		eqx::Point<T> getTopLeftPoint() const
+		[[nodiscard]] constexpr eqx::Point<T> getTopLeftPoint() const noexcept
 		{
 			return eqx::Point<T>(x, y);
 		}
 
 		/**
-		 * @brief Create A Point At (X + W, Y)
+		 * @brief Create A Point At (X + W, Y), The Top Right Point
 		 * 
-		 * @returns eqx::Point Of Same Type
+		 * @returns eqx::Point<T> Representing The Top Right Point
 		 */
-		eqx::Point<T> getTopRightPoint() const
+		[[nodiscard]] constexpr eqx::Point<T> getTopRightPoint() const noexcept
 		{
-			if (eqx::willOverflowAddition(x, w))
-			{
-				eqx::Log::log(eqx::Log::Level::error, "Arithmetic Overflow", eqx::Log::Type::overflowError);
-				return eqx::Point<T>();
-			}
-			else
-			{
-				return eqx::Point<T>(x + w, y);
-			}
+			return eqx::Point<T>(x + w, y);
 		}
 
 		/**
-		 * @brief Create A Point At (X, Y + H)
+		 * @brief Create A Point At (X, Y + H), The Bottom Left Point
 		 * 
-		 * @returns eqx::Point Of Same Type
+		 * @returns eqx::Point<T> Representing The Bottom Left Point
 		 */
-		eqx::Point<T> getBottomLeftPoint() const
+		[[nodiscard]] constexpr 
+			eqx::Point<T> getBottomLeftPoint() const noexcept
 		{
-			if (eqx::willOverflowAddition(y, h))
-			{
-				eqx::Log::log(eqx::Log::Level::error, "Arithmetic Overflow", eqx::Log::Type::overflowError);
-				return eqx::Point<T>();
-			}
-			else
-			{
-				return eqx::Point<T>(x, y + h);
-			}
+			return eqx::Point<T>(x, y + h);
 		}
 
 		/**
-		 * @brief Create A Point At (X + W, Y + H)
+		 * @brief Create A Point At (X + W, Y + H), The Bottom Right Point
 		 * 
-		 * @returns eqx::Point Of Same Type
+		 * @returns eqx::Point<T> Representing The Bottom Right Point
 		 */
-		eqx::Point<T> getBottomRightPoint() const
+		[[nodiscard]] constexpr 
+			eqx::Point<T> getBottomRightPoint() const noexcept
 		{
-			if (eqx::willOverflowAddition(x, w) ||
-				eqx::willOverflowAddition(y, h))
-			{
-				eqx::Log::log(eqx::Log::Level::error, "Arithmetic Overflow", eqx::Log::Type::overflowError);
-				return eqx::Point<T>();
-			}
-			else
-			{
-				return eqx::Point<T>(x + w, y + h);
-			}
+			return eqx::Point<T>(x + w, y + h);
 		}
 
 		/**
-		 * @brief Create A Point At (X + 0.5 * W, Y + 0.5 * H)
+		 * @brief Create A Point At (X + 0.5 * W, Y + 0.5 * H), 
+		 *		The Center point
 		 * 
-		 * @returns eqx::Point Of Same Type
+		 * @returns eqx::Point<T> Representing The Center Point
 		 */
-		eqx::Point<T> getCenterPoint() const
+		[[nodiscard]] constexpr eqx::Point<T> getCenterPoint() const noexcept
 		{
-			T dx = static_cast<T>(w / static_cast<T>(2));
-			T dy = static_cast<T>(h / static_cast<T>(2));
-			if (eqx::willOverflowAddition(x, dx) ||
-				eqx::willOverflowAddition(y, dy))
-			{
-				eqx::Log::log(eqx::Log::Level::error, "Arithmetic Overflow", eqx::Log::Type::overflowError);
-				return eqx::Point<T>();
-			}
-			else
-			{
-				return eqx::Point<T>(x + dx, y + dy);
-			}
+			auto dx = static_cast<T>(w * 0.5);
+			auto dy = static_cast<T>(h * 0.5);
+			return eqx::Point<T>(x + dx, y + dy);
 		}
 
 		/**
 		 * @brief Creates Printable String Of Form "(x, y, w, h)"
 		 * 
-		 * @returns "({this->x}, {this->y}, {this->w}, {this->h})"
+		 * @returns "(x, y, w, h)"
 		 */
-		std::string toString() const
+		[[nodiscard]] std::string toString() const
 		{
-			std::string res = "";
-			res +=
-				"(" + std::to_string(x) + ", " + std::to_string(y) +
-				", " + std::to_string(w) + ", " + std::to_string(h) + ")";
+			auto res = std::string("");
+			res += "(";
+			res += std::to_string(x);
+			res += ", ";
+			res += std::to_string(y);
+			res += ", ";
+			res += std::to_string(w);
+			res += ", ";
+			res += std::to_string(h);
+			res += ")";
 			return res;
 		}
 
@@ -186,15 +143,30 @@ namespace eqx
 	};
 
 	/**
+	 * @brief Convert An eqx::Rectangle To A std::string Of Form
+	 *		"(rect.x, rect.y, rect.w, rect.h)"
+	 *
+	 * @param rect Rectangle To Be Converted
+	 *
+	 * @returns Rectangle Converted To A std::string
+	 */
+	template <typename T>
+	[[nodiscard]] std::string toString(const eqx::Rectangle<T>& rect)
+	{
+		return rect.toString();
+	}
+
+	/**
 	 * @brief Determine If A Point Is Contained Inside A Rectangle
 	 * 
 	 * @param rect The Rectangle
 	 * @param point The Point
 	 * 
-	 * @returns True If point Is Contained By rect
+	 * @returns true If point Is Contained By rect
 	 */
-	template <typename U>
-	bool intersect(const Rectangle<U>& rect, const Point<U>& point)
+	template <typename T>
+	[[nodiscard]] constexpr bool 
+		intersect(const Rectangle<T>& rect, const Point<T>& point) noexcept
 	{
 		if (point.x < rect.getTopLeftPoint().x ||
 			point.x > rect.getTopRightPoint().x ||
@@ -215,10 +187,11 @@ namespace eqx
 	 * @param rect1 The First Rectangle
 	 * @param rect2 The Second Rectangle
 	 * 
-	 * @returns True If There Is Any Overlap Between The Two Rectangles
+	 * @returns true If There Is Any Overlap Between rect1 And rect2
 	 */
-	template <typename U>
-	bool intersect(const Rectangle<U>& rect1, const Rectangle<U>& rect2)
+	template <typename T>
+	[[nodiscard]] constexpr bool intersect(const Rectangle<T>& rect1, 
+		const Rectangle<T>& rect2) noexcept
 	{
 		if (rect1.getBottomRightPoint().x < rect2.getBottomLeftPoint().x ||
 			rect1.getBottomLeftPoint().x > rect2.getBottomRightPoint().x ||

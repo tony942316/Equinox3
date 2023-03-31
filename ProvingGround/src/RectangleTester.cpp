@@ -1,188 +1,159 @@
 #include "RectangleTester.hpp"
 
-#include <iostream>
-
-#include "EquinoxSTD.hpp"
 #include "UnitTest.hpp"
+#include "Rectangle.hpp"
 
-RectangleTester::RectangleTester()
+namespace RectangleTester
 {
+	void testToString();
+
+	void test()
+	{
+		std::cout << "Testing Rectangle..." << std::endl;
+		testToString();
+		UnitTester::printStatus();
+		UnitTester::clear();
+	}
+
+	consteval void testConstruction();
+	consteval void testGetPoints();
+	consteval void testIntersect();
 }
 
-bool RectangleTester::testAll()
+void RectangleTester::testToString()
 {
-	if (testConstruction() &&
-		testOperators() &&
-		testFunctions())
-	{
-		std::cout << "Rectangle Tests Passed" << std::endl;
-		return true;
-	}
-	else
-	{
-		std::cout << "Rectangle Tests Failed!" << std::endl;
-		return false;
-	}
+	using namespace std::string_literals;
+
+	constexpr auto rect1 = eqx::Rectangle<double>(1.0, 1.0, 1.0, 1.0);
+	constexpr auto rect2 = 
+		eqx::Rectangle<double>(-10.0, -10.0, 3.0, 15.0);
+	constexpr auto rect3 = 
+		eqx::Rectangle<double>(6.123, -9.874, 6.548, 3.698);
+
+	UnitTester::test(eqx::toString(rect1), 
+		"(1.000000, 1.000000, 1.000000, 1.000000)"s);
+	UnitTester::test(eqx::toString(rect2), 
+		"(-10.000000, -10.000000, 3.000000, 15.000000)"s);
+	UnitTester::test(eqx::toString(rect3), 
+		"(6.123000, -9.874000, 6.548000, 3.698000)"s);
 }
 
-bool RectangleTester::testConstruction()
+consteval void RectangleTester::testConstruction()
 {
-	eqx::Rectangle<int> defaultConInt;
-	if (defaultConInt.x != 0 || defaultConInt.y != 0 || 
-		defaultConInt.w != 0 || defaultConInt.h != 0)
-	{
-		std::cout << "\nTestRectangleConstruction IntDefault Fail!" << std::endl;
-		return false;
-	}
+	constexpr auto rect0 = eqx::Rectangle<double>();
+	constexpr auto rect1 = eqx::Rectangle<double>(1.0, 1.0, 1.0, 1.0);
+	constexpr auto rect2 =
+		eqx::Rectangle<double>(-10.0, -10.0, 3.0, 15.0);
+	constexpr auto rect3 =
+		eqx::Rectangle<double>(6.123, -9.874, 6.548, 3.698);
 
-	eqx::Rectangle<double> defaultConDouble;
-	if (defaultConDouble.x != 0.0 || defaultConDouble.y != 0.0 ||
-		defaultConDouble.w != 0.0 || defaultConDouble.h != 0.0)
-	{
-		std::cout << "\nTestRectangleConstruction DoubleDefault Fail!" << std::endl;
-		return false;
-	}
-
-	int paramIntX, paramIntY, paramIntW, paramIntH;
-	double paramDoubleX, paramDoubleY, paramDoubleW, paramDoubleH;
-	std::stringstream ss;
-	eqx::Log::setOutputStream(ss);
-	eqx::Log::setOutputFile("TestOutputFile.txt");
-	eqx::Log::clear();
-	for (int i = 0; i < 100'000; i++)
-	{
-		paramIntX = eqx::Random::randInt(-100'000, 100'000);
-		paramIntY = eqx::Random::randInt(-100'000, 100'000);
-		paramIntW = eqx::Random::randInt(-100'000, 100'000);
-		paramIntH = eqx::Random::randInt(-100'000, 100'000);
-		eqx::Rectangle<int> paramConInt(paramIntX, paramIntY, paramIntW, paramIntH);
-		if (paramConInt.x != paramIntX || paramConInt.y != paramIntY ||
-			paramConInt.w != paramIntW || paramConInt.h != paramIntH)
+	constexpr auto testLambda =
+		[](const eqx::Rectangle<double>& rect,
+			double x, double y, double w, double h) constexpr
 		{
-			std::cout << "\nTestRectangleConstruction IntParam Fail!" << std::endl;
-			return false;
-		}
+			return rect.x == x && rect.y == y && rect.w == w && rect.h == h;
+		};
 
-		paramDoubleX = eqx::Random::randDouble(-100'000.0, 100'000.0);
-		paramDoubleY = eqx::Random::randDouble(-100'000.0, 100'000.0);
-		paramDoubleW = eqx::Random::randDouble(-100'000.0, 100'000.0);
-		paramDoubleH = eqx::Random::randDouble(-100'000.0, 100'000.0);
-		eqx::Rectangle<double> paramConDouble(paramDoubleX, paramDoubleY, paramDoubleW, paramDoubleH);
-		if (paramConDouble.x != paramDoubleX || paramConDouble.y != paramDoubleY ||
-			paramConDouble.w != paramDoubleW || paramConDouble.h != paramDoubleH)
-		{
-			std::cout << "\nTestRectangleConstruction DoubleParam Fail!" << std::endl;
-			return false;
-		}
-
-		eqx::Rectangle<int> copyConInt(paramConDouble);
-		if (copyConInt.x != static_cast<int>(paramConDouble.x) || copyConInt.y != static_cast<int>(paramConDouble.y) ||
-			copyConInt.w != static_cast<int>(paramConDouble.w) || copyConInt.h != static_cast<int>(paramConDouble.h) ||
-			eqx::Log::getLastLogMessage() != "Lossy Conversion" || eqx::Log::getLastLogType() != eqx::Log::Type::runtimeWarning)
-		{
-			std::cout << "\nTestRectangleConstruction IntCopyDouble Fail!" << std::endl;
-			return false;
-		}
-		eqx::Log::clear();
-
-		eqx::Rectangle<double> copyConDouble(paramConInt);
-		if (copyConDouble.x != static_cast<double>(paramConInt.x) || copyConDouble.y != static_cast<double>(paramConInt.y) ||
-			copyConDouble.w != static_cast<double>(paramConInt.w) || copyConDouble.h != static_cast<double>(paramConInt.h))
-		{
-			std::cout << "\nTestRectangleConstruction DoubleCopy Fail!" << std::endl;
-			return false;
-		}
-	}
-	eqx::Log::setOutputStream(std::cout);
-	eqx::Log::setOutputFile("Log.txt");
-	eqx::Log::clear();
-
-	return true;
+	static_assert(testLambda(rect0, 0.0, 0.0, 0.0, 0.0));
+	static_assert(testLambda(rect1, 1.0, 1.0, 1.0, 1.0));
+	static_assert(testLambda(rect2, -10.0, -10.0, 3.0, 15.0));
+	static_assert(testLambda(rect3, 6.123, -9.874, 6.548, 3.698));
 }
 
-bool RectangleTester::testOperators()
+consteval void RectangleTester::testGetPoints()
 {
-	int intParamX, intParamY, intParamW, intParamH;
-	eqx::Rectangle<int> intRect;
-	double doubleParamX, doubleParamY, doubleParamW, doubleParamH;
-	eqx::Rectangle<double> doubleRect;
-	std::stringstream ss;
-	eqx::Log::setOutputStream(ss);
-	eqx::Log::setOutputFile("TestOutputFile.txt");
-	eqx::Log::clear();
-	for (int i = 0; i < 100'000; i++)
-	{
-		intParamX = eqx::Random::randInt(-100'000, 100'000);
-		intParamY = eqx::Random::randInt(-100'000, 100'000);
-		intParamW = eqx::Random::randInt(-100'000, 100'000);
-		intParamH = eqx::Random::randInt(-100'000, 100'000);
-		intRect = eqx::Rectangle<int>(intParamX, intParamY, intParamW, intParamH);
-		if (intRect.x != intParamX || intRect.y != intParamY ||
-			intRect.w != intParamW || intRect.h != intParamH)
+	constexpr auto rect1 = eqx::Rectangle<double>(1.0, 1.0, 1.0, 1.0);
+	constexpr auto rect2 =
+		eqx::Rectangle<double>(-10.0, -10.0, 3.0, 15.0);
+	constexpr auto rect3 =
+		eqx::Rectangle<double>(6.123, -9.874, 6.548, 3.698);
+
+	constexpr auto cabs =
+		[](double x) constexpr
 		{
-			std::cout << "\nTestRectangleOperator Int= Fail!" << std::endl;
-			return false;
-		}
+			return x >= 0.0 ? x : -x;
+		};
 
-		doubleParamX = eqx::Random::randDouble(-100'000.0, 100'000.0);
-		doubleParamY = eqx::Random::randDouble(-100'000.0, 100'000.0);
-		doubleParamW = eqx::Random::randDouble(-100'000.0, 100'000.0);
-		doubleParamH = eqx::Random::randDouble(-100'000.0, 100'000.0);
-		doubleRect = eqx::Rectangle<double>(doubleParamX, doubleParamY, doubleParamW, doubleParamH);
-		if (doubleRect.x != doubleParamX || doubleRect.y != doubleParamY ||
-			doubleRect.w != doubleParamW || doubleRect.h != doubleParamH)
+	constexpr auto approxEq =
+		[](double x, double y) constexpr
 		{
-			std::cout << "\nTestRectangleOperator Double= Fail!" << std::endl;
-			return false;
-		}
+			return cabs(x - y) < 0.001;
+		};
 
-		intRect = doubleRect;
-		if (intRect.x != static_cast<int>(doubleRect.x) || intRect.y != static_cast<int>(doubleRect.y) ||
-			intRect.w != static_cast<int>(doubleRect.w) || intRect.h != static_cast<int>(doubleRect.h) ||
-			eqx::Log::getLastLogMessage() != "Lossy Conversion" || eqx::Log::getLastLogType() != eqx::Log::Type::runtimeWarning)
+	constexpr auto testLambdaHelper =
+		[](const eqx::Point<double>& point1, 
+			const eqx::Point<double>& point2) constexpr
 		{
-			std::cout << "\nTestRectangleOperator Int==Double Fail" << std::endl;
-			return false;
-		}
-		eqx::Log::clear();
-	}
+			return approxEq(point1.x, point2.x) && 
+				approxEq(point1.y, point2.y);
+		};
 
-	eqx::Log::setOutputStream(std::cout);
-	eqx::Log::setOutputFile("Log.txt");
-	eqx::Log::clear();
+	constexpr auto testLambda =
+		[](const eqx::Rectangle<double>& rect,
+			const eqx::Point<double>& point) constexpr
+		{
+			auto tl = rect.getLocation();
+			auto tr = rect.getTopRightPoint();
+			auto bl = rect.getBottomLeftPoint();
+			auto br = rect.getBottomRightPoint();
+			auto c = rect.getCenterPoint();
+			auto ec = eqx::Point<double>(rect.x + (rect.w / 2.0),
+				rect.y + (rect.h / 2.0));
 
-	return true;
+			return testLambdaHelper(tl, eqx::Point<double>(rect.x, rect.y)) &&
+				testLambdaHelper(tr, eqx::Point<double>(point.x, rect.y)) &&
+				testLambdaHelper(bl, eqx::Point<double>(rect.x, point.y)) &&
+				testLambdaHelper(c, ec) && testLambdaHelper(br, point);
+		};
+
+	static_assert(testLambda(rect1, eqx::Point<double>(2.0, 2.0)));
+	static_assert(testLambda(rect2, eqx::Point<double>(-7.0, 5.0)));
+	static_assert(testLambda(rect3, eqx::Point<double>(12.671, -6.176)));
 }
 
-bool RectangleTester::testFunctions()
+consteval void RectangleTester::testIntersect()
 {
-	eqx::Rectangle<int> intRect;
-	eqx::Rectangle<double> doubleRect;
-	std::string ans = "";
-	for (int i = 0; i < 100'000; i++)
-	{
-		intRect = { eqx::Random::randInt(-100'000, 100'000), eqx::Random::randInt(-100'000, 100'000),
-					eqx::Random::randInt(-100'000, 100'000), eqx::Random::randInt(-100'000, 100'000) };
-		ans = std::string("(") + std::to_string(intRect.x) + std::string(", ") + 
-			  std::to_string(intRect.y) + std::string(", ") + std::to_string(intRect.w) + std::string(", ") +
-			  std::to_string(intRect.h) + std::string(")");
-		if (intRect.toString() != ans)
-		{
-			std::cout << "\nTestPointFunction toStringInt Fail" << std::endl;
-			return false;
-		}
+	constexpr auto rect1 = eqx::Rectangle<double>(1.0, 1.0, 1.0, 1.0);
+	constexpr auto rect2 =
+		eqx::Rectangle<double>(0.0, 0.0, 3.0, 3.0);
+	constexpr auto rect3 =
+		eqx::Rectangle<double>(1.459, 0.889, 0.374, 8.398);
+	constexpr auto rect4 =
+		eqx::Rectangle<double>(-5.689, -2.448, 3.589, 1.005);
 
-		doubleRect = { eqx::Random::randDouble(-100'000.0, 100'000.0), eqx::Random::randDouble(-100'000.0, 100'000.0),
-						eqx::Random::randDouble(-100'000.0, 100'000.0), eqx::Random::randDouble(-100'000.0, 100'000.0) };
-		ans = std::string("(") + std::to_string(doubleRect.x) + std::string(", ") +
-			  std::to_string(doubleRect.y) + std::string(", ") + std::to_string(doubleRect.w) + std::string(", ") +
-			  std::to_string(doubleRect.h) + std::string(")");
-		if (doubleRect.toString() != ans)
-		{
-			std::cout << "\nTestPointFunction toStringDouble Fail" << std::endl;
-			return false;
-		}
-	}
+	static_assert(eqx::intersect(rect1, rect1) == true);
+	static_assert(eqx::intersect(rect1, rect2) == true);
+	static_assert(eqx::intersect(rect1, rect3) == true);
+	static_assert(eqx::intersect(rect1, rect4) == false);
+	static_assert(eqx::intersect(rect2, rect2) == true);
+	static_assert(eqx::intersect(rect2, rect3) == true);
+	static_assert(eqx::intersect(rect2, rect4) == false);
+	static_assert(eqx::intersect(rect3, rect3) == true);
+	static_assert(eqx::intersect(rect3, rect4) == false);
+	static_assert(eqx::intersect(rect4, rect4) == true);
 
-	return true;
+	constexpr auto point1 = eqx::Point<double>();
+	constexpr auto point2 = eqx::Point<double>(1.0, 1.0);
+	constexpr auto point3 = eqx::Point<double>(1.713, 7.145);
+	constexpr auto point4 = eqx::Point<double>(-3.1, -2.1);
+
+	static_assert(eqx::intersect(rect1, point1) == false);
+	static_assert(eqx::intersect(rect1, point2) == true);
+	static_assert(eqx::intersect(rect1, point3) == false);
+	static_assert(eqx::intersect(rect1, point4) == false);
+
+	static_assert(eqx::intersect(rect2, point1) == true);
+	static_assert(eqx::intersect(rect2, point2) == true);
+	static_assert(eqx::intersect(rect2, point3) == false);
+	static_assert(eqx::intersect(rect2, point4) == false);
+
+	static_assert(eqx::intersect(rect3, point1) == false);
+	static_assert(eqx::intersect(rect3, point2) == false);
+	static_assert(eqx::intersect(rect3, point3) == true);
+	static_assert(eqx::intersect(rect3, point4) == false);
+
+	static_assert(eqx::intersect(rect4, point1) == false);
+	static_assert(eqx::intersect(rect4, point2) == false);
+	static_assert(eqx::intersect(rect4, point3) == false);
+	static_assert(eqx::intersect(rect4, point4) == true);
 }

@@ -10,6 +10,7 @@
 #include "RandomTester.hpp"
 #include "StopWatchTester.hpp"
 #include "PointTester.hpp"
+#include "RectangleTester.hpp"
 
 namespace Tester
 {
@@ -24,6 +25,7 @@ namespace Tester
 		RandomTester::test();
 		StopWatchTester::test();
 		PointTester::test();
+		RectangleTester::test();
 		std::cout << "*********************\n" << std::endl;
 	}
 }
