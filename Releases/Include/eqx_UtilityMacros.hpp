@@ -103,18 +103,18 @@
  * @brief Macro For Use By Other Macros In The UtilityMacros Header,
  *		NOT FOR EXTERNAL USE!
  **/
-#define P_EQX_COUNT_ARGS_HELPER(x) 1ULL+
+#define P_EQX_COUNT_ARGS_HELPER(x) 1U+
 /**
  * @brief Macro That Will Count The Number Of Arguments Provided
- *		i.e. EQX_COUNT_ARGS(a, b, c) Would Produce 1ULL + 1ULL + 1ULL + 0ULL
+ *		i.e. EQX_COUNT_ARGS(a, b, c) Would Produce 1U + 1U + 1U + 0U
  * 
  * @param ... The Arguments To Be Counted
  * 
  * @returns The Sum Of The Number Of Arguments As A Repeated Addition Of
- *		1ULL
+ *		1U
  */
 #define EQX_COUNT_ARGS(...) \
-    EQX_FOR_EACH(P_EQX_COUNT_ARGS_HELPER, __VA_ARGS__) 0ULL
+    EQX_FOR_EACH(P_EQX_COUNT_ARGS_HELPER, __VA_ARGS__) 0U
 
 /**
  * @brief Macro For Use By Other Macros In The UtilityMacros Header,

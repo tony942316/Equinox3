@@ -1,3 +1,20 @@
+/*
+ * Copyright (C) 2023 Anthony H. Grasso
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
 #pragma once
 
 /**
@@ -103,18 +120,18 @@
  * @brief Macro For Use By Other Macros In The UtilityMacros Header,
  *		NOT FOR EXTERNAL USE!
  **/
-#define P_EQX_COUNT_ARGS_HELPER(x) 1ULL+
+#define P_EQX_COUNT_ARGS_HELPER(x) 1U+
 /**
  * @brief Macro That Will Count The Number Of Arguments Provided
- *		i.e. EQX_COUNT_ARGS(a, b, c) Would Produce 1ULL + 1ULL + 1ULL + 0ULL
+ *		i.e. EQX_COUNT_ARGS(a, b, c) Would Produce 1U + 1U + 1U + 0U
  * 
  * @param ... The Arguments To Be Counted
  * 
  * @returns The Sum Of The Number Of Arguments As A Repeated Addition Of
- *		1ULL
+ *		1U
  */
 #define EQX_COUNT_ARGS(...) \
-    EQX_FOR_EACH(P_EQX_COUNT_ARGS_HELPER, __VA_ARGS__) 0ULL
+    EQX_FOR_EACH(P_EQX_COUNT_ARGS_HELPER, __VA_ARGS__) 0U
 
 /**
  * @brief Macro For Use By Other Macros In The UtilityMacros Header,
