@@ -201,26 +201,26 @@ Xcopy /Y $(SolutionDir)bin\$(Platform)$(Configuration)\$(ProjectName)\$(ProjectN
     </CustomBuildStep>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="src\Headers\Benchmark.hpp" />
+    <ClInclude Include="src\Headers\eqx_Benchmark.hpp" />
     <ClInclude Include="src\Headers\EquinoxSTD.hpp" />
-    <ClInclude Include="src\Headers\Log.hpp" />
-    <ClInclude Include="src\Headers\Mathematics.hpp" />
-    <ClInclude Include="src\Headers\Misc.hpp" />
-    <ClInclude Include="src\Headers\Point.hpp" />
-    <ClInclude Include="src\Headers\Random.hpp" />
-    <ClInclude Include="src\Headers\Rectangle.hpp" />
-    <ClInclude Include="src\Headers\StopWatch.hpp" />
-    <ClInclude Include="src\Headers\SuperEnum.hpp" />
-    <ClInclude Include="src\Headers\UtilityMacros.hpp" />
+    <ClInclude Include="src\Headers\eqx_Log.hpp" />
+    <ClInclude Include="src\Headers\eqx_Mathematics.hpp" />
+    <ClInclude Include="src\Headers\eqx_Misc.hpp" />
+    <ClInclude Include="src\Headers\eqx_Point.hpp" />
+    <ClInclude Include="src\Headers\eqx_Random.hpp" />
+    <ClInclude Include="src\Headers\eqx_Rectangle.hpp" />
+    <ClInclude Include="src\Headers\eqx_StopWatch.hpp" />
+    <ClInclude Include="src\Headers\eqx_SuperEnum.hpp" />
+    <ClInclude Include="src\Headers\eqx_UtilityMacros.hpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\Benchmark.cpp" />
-    <ClCompile Include="src\Log.cpp" />
-    <ClCompile Include="src\Mathematics.cpp" />
-    <ClCompile Include="src\Misc.cpp" />
-    <ClCompile Include="src\Random.cpp" />
-    <ClCompile Include="src\StopWatch.cpp" />
-    <ClCompile Include="src\SuperEnum.cpp" />
+    <ClCompile Include="src\eqx_Benchmark.cpp" />
+    <ClCompile Include="src\eqx_Log.cpp" />
+    <ClCompile Include="src\eqx_Mathematics.cpp" />
+    <ClCompile Include="src\eqx_Misc.cpp" />
+    <ClCompile Include="src\eqx_Random.cpp" />
+    <ClCompile Include="src\eqx_StopWatch.cpp" />
+    <ClCompile Include="src\eqx_SuperEnum.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

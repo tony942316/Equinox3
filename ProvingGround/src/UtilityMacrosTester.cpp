@@ -5,7 +5,7 @@
 #include <array>
 
 #include "UnitTest.hpp"
-#include "UtilityMacros.hpp"
+#include "eqx_UtilityMacros.hpp"
 
 namespace UtilityMacrosTester
 {

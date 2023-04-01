@@ -3,7 +3,7 @@
 #include <iostream>
 
 #include "UnitTest.hpp"
-#include "Point.hpp"
+#include "eqx_Point.hpp"
 
 namespace PointTester
 {

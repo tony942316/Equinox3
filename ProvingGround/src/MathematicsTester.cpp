@@ -4,7 +4,7 @@
 #include <source_location>
 
 #include "UnitTest.hpp"
-#include "Mathematics.hpp"
+#include "eqx_Mathematics.hpp"
 
 namespace MathematicsTester
 {

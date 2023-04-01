@@ -4,7 +4,7 @@
 #include <string>
 
 #include "UnitTest.hpp"
-#include "Benchmark.hpp"
+#include "eqx_Benchmark.hpp"
 
 namespace BenchmarkTester
 {

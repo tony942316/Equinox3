@@ -13,7 +13,7 @@
 #include <unordered_map>
 
 #include "UnitTest.hpp"
-#include "Misc.hpp"
+#include "eqx_Misc.hpp"
 
 namespace MiscTester
 {

@@ -1,7 +1,7 @@
 #include "RectangleTester.hpp"
 
 #include "UnitTest.hpp"
-#include "Rectangle.hpp"
+#include "eqx_Rectangle.hpp"
 
 namespace RectangleTester
 {

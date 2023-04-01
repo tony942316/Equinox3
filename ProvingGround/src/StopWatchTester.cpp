@@ -1,9 +1,10 @@
 #include "StopWatchTester.hpp"
 
 #include <iostream>
+#include <chrono>
 
 #include "UnitTest.hpp"
-#include "StopWatch.hpp"
+#include "eqx_StopWatch.hpp"
 
 namespace StopWatchTester
 {

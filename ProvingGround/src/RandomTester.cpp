@@ -6,7 +6,7 @@
 #include <unordered_map>
 
 #include "UnitTest.hpp"
-#include "Random.hpp"
+#include "eqx_Random.hpp"
 
 namespace RandomTester
 {

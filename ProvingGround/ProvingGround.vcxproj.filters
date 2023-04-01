@@ -68,12 +68,6 @@
     <ClInclude Include="src\Headers\MiscTester.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Headers\HolyMacros.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Headers\AuxMacros.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="src\Headers\UtilityMacrosTester.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>

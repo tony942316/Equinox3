@@ -9,7 +9,7 @@
 #include <array>
 
 #include "UnitTest.hpp"
-#include "Log.hpp"
+#include "eqx_Log.hpp"
 
 namespace LogTester
 {

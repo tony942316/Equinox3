@@ -8,7 +8,7 @@
 #include <array>
 
 #include "UnitTest.hpp"
-#include "SuperEnum.hpp"
+#include "eqx_SuperEnum.hpp"
 
 namespace SuperEnumTester
 {
