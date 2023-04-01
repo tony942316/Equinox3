@@ -30,10 +30,10 @@ namespace eqx
 		/**
 		 * Trivial Move And Copy Operation
 		 */
-		StopWatch(const StopWatch&) = default;
-		StopWatch(StopWatch&&) = default;
-		StopWatch& operator= (const StopWatch&) = default;
-		StopWatch& operator= (StopWatch&&) = default;
+		StopWatch(const StopWatch& other) = default;
+		StopWatch(StopWatch&& other) = default;
+		StopWatch& operator= (const StopWatch& other) = default;
+		StopWatch& operator= (StopWatch&& other) = default;
 		~StopWatch() = default;
 
 		/**
@@ -47,26 +47,38 @@ namespace eqx
 		void stop() noexcept;
 
 		/**
-		 * @brief Gives The Time Between The Last this->start() Call And
-		 *		this->stop() Call In Milliseconds (Or T If Defined)
+		 * @brief Gives The std::chrono::duration<T> Between The Last
+		 *		this->start Call And this->stop
 		 *
-		 * @returns long long Representing The Milliseconds (Or T) Past Between
-		 *		The Last this->start() Call And this->stop() Call 
+		 * @returns std::chrono::duration<T> Between The Last this->start() 
+		 *		Call And this->stop Call
 		 */
 		template <timeUnit T = std::chrono::milliseconds>
-		[[nodiscard]] long long getTime() noexcept
+		[[nodiscard]] T getDuration() const noexcept
 		{
-			return std::chrono::duration_cast<T>(
-				m_EndTime - m_StartTime).count();
+			return std::chrono::duration_cast<T>(m_EndTime - m_StartTime);
 		}
 
 		/**
-		 * @brief Gives The Time Between The Last this->start() Call And
-		 *		The Current Time In Milliseconds (Or T If Defined), Note That
-		 *		this->stop() Is Called
+		 * @brief Gives The Time Between The Last this->start Call And
+		 *		this->stop Call In Milliseconds (Or T If Defined)
 		 *
 		 * @returns long long Representing The Milliseconds (Or T) Past Between
-		 *		The Last this->start() Call The Current Time
+		 *		The Last this->start Call And this->stop Call
+		 */
+		template <timeUnit T = std::chrono::milliseconds>
+		[[nodiscard]] long long getTime() const noexcept
+		{
+			return getDuration<T>().count();
+		}
+
+		/**
+		 * @brief Gives The Time Between The Last this->start Call And
+		 *		The Current Time In Milliseconds (Or T If Defined), Note That
+		 *		this->stop Is Called
+		 *
+		 * @returns long long Representing The Milliseconds (Or T) Past Between
+		 *		The Last this->start Call The Current Time
 		 */
 		template <timeUnit T = std::chrono::milliseconds>
 		[[nodiscard]] long long readTime() noexcept

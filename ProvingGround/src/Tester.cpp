@@ -11,6 +11,7 @@
 #include "StopWatchTester.hpp"
 #include "PointTester.hpp"
 #include "RectangleTester.hpp"
+#include "BenchmarkTester.hpp"
 
 namespace Tester
 {
@@ -26,6 +27,7 @@ namespace Tester
 		StopWatchTester::test();
 		PointTester::test();
 		RectangleTester::test();
+		BenchmarkTester::test();
 		std::cout << "*********************\n" << std::endl;
 	}
 }

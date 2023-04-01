@@ -17,8 +17,6 @@
 #include "UnitTest.hpp"
 #include "EquinoxSTD.hpp"
 
-
-
 void workbenchMain()
 {
 	std::cout << std::setprecision(100);
