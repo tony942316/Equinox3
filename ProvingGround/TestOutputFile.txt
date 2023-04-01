@@ -1,1 +1,1 @@
-..\LogTester.cpp(testSetOutputFile,119) [ERROR]: testOutputFile
+..\LogTester.cpp(testSetOutputFile,136) [ERROR]: testOutputFile
