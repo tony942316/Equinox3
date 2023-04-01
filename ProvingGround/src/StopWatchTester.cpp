@@ -1,96 +1,72 @@
-#include "StopWatchTester.h"
+/*
+ * Copyright (C) 2023 Anthony H. Grasso
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
+#include "StopWatchTester.hpp"
 
 #include <iostream>
+#include <chrono>
 
-#include "EquinoxSTD.h"
-#include "UnitTest.h"
+#include "UnitTest.hpp"
+#include "eqx_StopWatch.hpp"
 
-StopWatchTester::StopWatchTester()
+namespace StopWatchTester
 {
+	void testGetTime();
+	void testReadTime();
+
+	void test()
+	{
+		std::cout << "Testing StopWatch..." << std::endl;
+		testGetTime();
+		testReadTime();
+		UnitTester::printStatus();
+		UnitTester::clear();
+	}
+
+	void wasteTime(std::chrono::microseconds ms);
 }
 
-bool StopWatchTester::testAll()
+void StopWatchTester::wasteTime(std::chrono::microseconds ms)
 {
-	if (testStartStop() &&
-		testReading() &&
-		testGetting())
-	{
-		std::cout << "StopWatch Tests Passed" << std::endl;
-		return true;
-	}
-	else
-	{
-		std::cout << "StopWatch Tests Failed!" << std::endl;
-		return false;
-	}
+	std::this_thread::sleep_for(ms);
 }
 
-bool StopWatchTester::testStartStop()
+void StopWatchTester::testGetTime()
 {
-	eqx::StopWatch watch;
-	for (int i = 0; i < 100'000; i++)
-	{
-		watch.start();
-		watch.stop();
-		std::chrono::system_clock::time_point start = std::chrono::system_clock::now();
-		std::chrono::system_clock::time_point end = start;
-		while (watch.getTimeNano() < 1)
-		{
-			watch.stop();
-			if (watch.getTimeNano() > 0 ||
-				std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count() > 50)
-			{
-				break;
-			}
-			end = std::chrono::system_clock::now();
-		}
+	using namespace std::chrono_literals;
+	using namespace eqx::shortTimeUnits;
+	auto watch = eqx::StopWatch();
+	wasteTime(1'000us);
+	watch.stop();
 
-		if (!TEST(watch.getTimeNano(), 1LL, GTE<long long, long long>()))
-		{
-			return false;
-		}
-	}
-
-	return true;
+	UnitTester::test(watch.getTime<tu_us>(), 100'000LL, 
+		LTE<long long, long long>);
+	UnitTester::test(watch.getTime<tu_us>(), 1'000LL,
+		GTE<long long, long long>);
 }
 
-bool StopWatchTester::testReading()
+void StopWatchTester::testReadTime()
 {
-	eqx::StopWatch watch;
-	for (int i = 0; i < 100'000; i++)
-	{
-		watch.start();
-		std::chrono::system_clock::time_point start = std::chrono::system_clock::now();
-		std::chrono::system_clock::time_point end = start;
-		while (watch.readTimeNano() < 1)
-		{
-			if (watch.readTimeNano() > 0 ||
-				std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count() > 50)
-			{
-				break;
-			}
-			end = std::chrono::system_clock::now();
-		}
+	using namespace std::chrono_literals;
+	using namespace eqx::shortTimeUnits;
+	auto watch = eqx::StopWatch();
+	wasteTime(1'000us);
+	auto result = watch.readTime<tu_us>();
 
-		if (!TEST(watch.getTimeNano(), 1LL, GTE<long long, long long>()))
-		{
-			return false;
-		}
-	}
-
-	return true;
-}
-
-bool StopWatchTester::testGetting()
-{
-	eqx::StopWatch watch;
-	for (int i = 0; i < 100'000; i++)
-	{
-		if (!TEST(watch.getTimeNano(), 0LL))
-		{
-			return false;
-		}
-	}
-
-	return true;
+	UnitTester::test(result, 100'000LL, LTE<long long, long long>);
+	UnitTester::test(result, 1'000LL, GTE<long long, long long>);
 }

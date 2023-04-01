@@ -96,6 +96,8 @@
       <LanguageStandard>stdcpp20</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
       <EnableModules>false</EnableModules>
+      <FloatingPointModel>Precise</FloatingPointModel>
+      <UseStandardPreprocessor>true</UseStandardPreprocessor>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -117,6 +119,8 @@
       <LanguageStandard_C>stdc17</LanguageStandard_C>
       <EnableModules>false</EnableModules>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
+      <FloatingPointModel>Precise</FloatingPointModel>
+      <UseStandardPreprocessor>true</UseStandardPreprocessor>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -137,6 +141,8 @@
       <LanguageStandard>stdcpp20</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
       <EnableModules>false</EnableModules>
+      <FloatingPointModel>Precise</FloatingPointModel>
+      <UseStandardPreprocessor>true</UseStandardPreprocessor>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -158,6 +164,8 @@
       <LanguageStandard_C>stdc17</LanguageStandard_C>
       <EnableModules>false</EnableModules>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
+      <FloatingPointModel>Precise</FloatingPointModel>
+      <UseStandardPreprocessor>true</UseStandardPreprocessor>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -169,24 +177,35 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="src\RectangleTester.cpp" />
-    <ClCompile Include="src\PointTester.cpp" />
-    <ClCompile Include="src\MathematicsTester.cpp" />
-    <ClCompile Include="src\RandomTester.cpp" />
+    <ClCompile Include="src\BenchmarkTester.cpp" />
     <ClCompile Include="src\LogTester.cpp" />
     <ClCompile Include="src\Main.cpp" />
-    <ClCompile Include="src\Tester.cpp" />
+    <ClCompile Include="src\MathematicsTester.cpp" />
+    <ClCompile Include="src\MiscTester.cpp" />
+    <ClCompile Include="src\PointTester.cpp" />
+    <ClCompile Include="src\RandomTester.cpp" />
+    <ClCompile Include="src\RectangleTester.cpp" />
     <ClCompile Include="src\StopWatchTester.cpp" />
+    <ClCompile Include="src\SuperEnumTester.cpp" />
+    <ClCompile Include="src\Tester.cpp" />
+    <ClCompile Include="src\UnitTest.cpp" />
+    <ClCompile Include="src\UtilityMacrosTester.cpp" />
+    <ClCompile Include="src\Workbench.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\Headers\RectangleTester.h" />
-    <ClInclude Include="src\Headers\PointTester.h" />
-    <ClInclude Include="src\Headers\MathematicsTester.h" />
-    <ClInclude Include="src\Headers\RandomTester.h" />
-    <ClInclude Include="src\Headers\LogTester.h" />
-    <ClInclude Include="src\Headers\Tester.h" />
-    <ClInclude Include="src\Headers\UnitTest.h" />
-    <ClInclude Include="src\Headers\StopWatchTester.h" />
+    <ClInclude Include="src\Headers\BenchmarkTester.hpp" />
+    <ClInclude Include="src\Headers\LogTester.hpp" />
+    <ClInclude Include="src\Headers\MathematicsTester.hpp" />
+    <ClInclude Include="src\Headers\MiscTester.hpp" />
+    <ClInclude Include="src\Headers\PointTester.hpp" />
+    <ClInclude Include="src\Headers\RandomTester.hpp" />
+    <ClInclude Include="src\Headers\RectangleTester.hpp" />
+    <ClInclude Include="src\Headers\StopWatchTester.hpp" />
+    <ClInclude Include="src\Headers\SuperEnumTester.hpp" />
+    <ClInclude Include="src\Headers\Tester.hpp" />
+    <ClInclude Include="src\Headers\UnitTest.hpp" />
+    <ClInclude Include="src\Headers\UtilityMacrosTester.hpp" />
+    <ClInclude Include="src\Headers\Workbench.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

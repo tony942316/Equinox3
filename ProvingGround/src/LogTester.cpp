@@ -1,167 +1,195 @@
-#include "LogTester.h"
+/*
+ * Copyright (C) 2023 Anthony H. Grasso
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
+#include "LogTester.hpp"
 
 #include <iostream>
+#include <sstream>
+#include <fstream>
+#include <string>
 #include <source_location>
 
-#include "Log.h"
+#include <array>
 
-#include "UnitTest.h"
+#include "UnitTest.hpp"
+#include "eqx_Log.hpp"
 
-LogTester::LogTester()
-	:
-	m_FileName("TestOutputFile.txt")
+namespace LogTester
 {
-	eqx::Log::setOutputFile(m_FileName);
-	eqx::Log::setOutputStream(m_SS);
-	eqx::Log::setLevel(eqx::Log::Level::info);
-}
+	void testLog();
+	void testSetLevel();
+	void testSetOutputStream();
+	void testSetOutputFile();
+	void testClear();
+	void testGetFormattedString();
 
-LogTester::~LogTester()
-{
-	eqx::Log::setOutputFile("Log.txt");
-	eqx::Log::setOutputStream(std::cout);
-	eqx::Log::setLevel(eqx::Log::Level::none);
-}
-
-bool LogTester::testAll()
-{
-	if (testLog() &&
-		testSetLevel() &&
-		testSetOutputStream() &&
-		testSetOutputFile() &&
-		testClear() &&
-		testGetLastLogType() &&
-		testGetLastLogMessage())
+	void test()
 	{
-		std::cout << "Log Tests Passed" << std::endl;
-		return true;
+		std::cout << "Testing Log..." << std::endl;
+		auto prevLogLevel = eqx::Log::getCurrentLogLevel();
+		testLog();
+		testSetLevel();
+		testSetOutputStream();
+		testSetOutputFile();
+		testClear();
+		testGetFormattedString();
+		UnitTester::printStatus();
+		UnitTester::clear();
+		eqx::Log::setLevel(prevLogLevel);
+		auto cleanFile = std::ofstream("Log.txt",
+			std::ios::out | std::ios::trunc);
+		cleanFile.close();
 	}
-	else
-	{
-		std::cout << "Log Tests Failed!" << std::endl;
-		return false;
-	}
+
+	consteval void testGetLoggableLevels();
 }
 
-bool LogTester::testLog()
+void LogTester::testLog()
 {
-	eqx::Log::clear();
-	m_SS = std::stringstream();
+	using namespace std::string_view_literals;
 
-	std::source_location location = std::source_location::current();
-	std::string
-		actual = "",
-		expected = "..\\LogTester.cpp(testLog," + std::to_string(location.line()) + ") [ERROR]: Testing Logging";
-	eqx::Log::log(eqx::Log::Level::error, "Testing Logging", eqx::Log::Type::runtimeError, location);
-	std::getline(m_SS, actual);
+	auto ss = std::stringstream();
+	auto produced = std::string("");
+	auto loc = std::source_location::current();
+	eqx::Log::setOutputStream(ss);
+	eqx::Log::setLevel(eqx::Log::Level::all);
+	
+	eqx::Log::log(eqx::Log::Level::error, "TestLog"sv, eqx::Log::Type::none, 
+		loc);
+	eqx::Log::log(eqx::Log::Level::warning, "TestLog"sv, eqx::Log::Type::none,
+		loc);
 
-	return TEST(actual, expected);
+	std::getline(ss, produced);
+	UnitTester::test(produced,
+		eqx::Log::getFormattedString(loc, eqx::Log::Level::error, 
+			"TestLog"sv));
+	std::getline(ss, produced);
+	UnitTester::test(produced,
+		eqx::Log::getFormattedString(loc, eqx::Log::Level::warning,
+			"TestLog"sv));
+
+	eqx::Log::log(eqx::Log::Level::error, "TestLog"sv,
+		eqx::Log::Type::runtimeError);
+	UnitTester::test(eqx::Log::getLastLogType(), eqx::Log::Type::runtimeError);
 }
 
-bool LogTester::testSetLevel()
+void LogTester::testSetLevel()
 {
-	eqx::Log::clear();
-	m_SS = std::stringstream();
-
-	std::vector<std::tuple<std::string, std::string>> tests;
-	std::source_location location = std::source_location::current();
-
-	std::string
-		actual = "",
-		expected = "..\\LogTester.cpp(testSetLevel," + std::to_string(location.line()) + ") [INFO]: Should Stream";
+	eqx::Log::setLevel(eqx::Log::Level::all);
+	UnitTester::test(eqx::Log::getCurrentLogLevel(), eqx::Log::Level::all);
 	eqx::Log::setLevel(eqx::Log::Level::info);
-	eqx::Log::log(eqx::Log::Level::info, "Should Stream", eqx::Log::Type::none, location);
-	std::getline(m_SS, actual);
-	tests.emplace_back(actual, expected);
-
-	expected = "";
+	UnitTester::test(eqx::Log::getCurrentLogLevel(), eqx::Log::Level::info);
+	eqx::Log::setLevel(eqx::Log::Level::warning);
+	UnitTester::test(eqx::Log::getCurrentLogLevel(), eqx::Log::Level::warning);
 	eqx::Log::setLevel(eqx::Log::Level::error);
-	eqx::Log::log(eqx::Log::Level::info, "Shouldn't Stream", eqx::Log::Type::none, location);
-	std::getline(m_SS, actual);
-	tests.emplace_back(actual, expected);
-
-	eqx::Log::setLevel(eqx::Log::Level::info);
-
-	for (const std::tuple<std::string, std::string>& test : tests)
-	{
-		if (!TEST(std::get<0>(test), std::get<1>(test)))
-		{
-			return false;
-		}
-	}
-
-	return true;
+	UnitTester::test(eqx::Log::getCurrentLogLevel(), eqx::Log::Level::error);
+	eqx::Log::setLevel(eqx::Log::Level::none);
+	UnitTester::test(eqx::Log::getCurrentLogLevel(), eqx::Log::Level::none);
 }
 
-bool LogTester::testSetOutputStream()
+void LogTester::testSetOutputStream()
 {
-	eqx::Log::clear();
-	m_SS = std::stringstream();
+	using namespace std::string_literals;
+	using namespace std::string_view_literals;
 
-	std::source_location location = std::source_location::current();
-	std::string
-		actual = "",
-		expected = "..\\LogTester.cpp(testSetOutputStream," + std::to_string(location.line()) + ") [ERROR]: Testing Output Stream";
-	eqx::Log::log(eqx::Log::Level::error, "Testing Output Stream", eqx::Log::Type::runtimeError, location);
-	std::getline(m_SS, actual);
+	auto ss = std::stringstream();
+	auto produced = std::string("");
+	eqx::Log::setLevel(eqx::Log::Level::all);
+	eqx::Log::setOutputStream(ss);
 
-	return TEST(actual, expected);
+	eqx::Log::log(eqx::Log::Level::error, "testOutputStream"sv);
+	std::getline(ss, produced);
+	UnitTester::test(produced, ""s, NEQ<std::string, std::string>);
+
+	auto ss2 = std::stringstream();
+	eqx::Log::setOutputStream(ss2);
+
+	eqx::Log::log(eqx::Log::Level::error, "testOutputStream"sv);
+	std::getline(ss2, produced);
+	UnitTester::test(produced, ""s, NEQ<std::string, std::string>);
+
+	std::getline(ss, produced);
+	UnitTester::test(produced, ""s);
 }
 
-bool LogTester::testSetOutputFile()
+void LogTester::testSetOutputFile()
 {
-	eqx::Log::clear();
-	m_SS = std::stringstream();
+	using namespace std::string_view_literals;
+	using namespace std::string_literals;
 
-	std::source_location location = std::source_location::current();
-	std::string
-		actual = "",
-		expected = "..\\LogTester.cpp(testSetOutputFile," + std::to_string(location.line()) + ") [ERROR]: Testing Output File";
-	eqx::Log::setOutputFile(m_FileName);
-	eqx::Log::log(eqx::Log::Level::error, "Testing Output File", eqx::Log::Type::runtimeError, location);
-	std::fstream file(m_FileName);
-	std::getline(file, actual);
+	auto ss = std::stringstream();
+	auto produced = std::string("");
+	auto loc = std::source_location::current();
+	eqx::Log::setLevel(eqx::Log::Level::all);
+	eqx::Log::setOutputStream(ss);
+	eqx::Log::setOutputFile("TestOutputFile.txt"sv);
+
+	eqx::Log::log(eqx::Log::Level::error, "testOutputFile"sv, 
+		eqx::Log::Type::none, loc);
+	eqx::Log::setOutputFile("Log.txt"sv);
+	auto file = std::ifstream("testOutputFile.txt"s, std::ios::in);
+	std::getline(file, produced);
+
+	UnitTester::test(produced, eqx::Log::getFormattedString(loc, 
+		eqx::Log::Level::error, "testOutputFile"sv));
 	file.close();
-
-	return TEST(actual, expected);
 }
 
-bool LogTester::testClear()
+void LogTester::testClear()
 {
+	using namespace std::string_view_literals;
+
+	auto ss = std::stringstream();
+	eqx::Log::setOutputStream(ss);
+	eqx::Log::setLevel(eqx::Log::Level::all);
+
+	eqx::Log::log(eqx::Log::Level::error, "testClear"sv, 
+		eqx::Log::Type::runtimeError);
+
+	UnitTester::test(eqx::Log::getLastLogType(), eqx::Log::Type::runtimeError);
+	UnitTester::test(eqx::Log::getLastLogMessage(), "testClear"sv);
 	eqx::Log::clear();
-	m_SS = std::stringstream();
-
-	std::source_location location = std::source_location::current();
-	eqx::Log::log(eqx::Log::Level::error, "Testing Clear", eqx::Log::Type::runtimeError, location);
-	eqx::Log::clear();
-
-	if (!TEST(eqx::Log::getLastLogMessage(), "") ||
-		!TEST(static_cast<int>(eqx::Log::getLastLogType()), static_cast<int>(eqx::Log::Type::none)))
-	{
-		return false;
-	}
-
-	return true;
+	UnitTester::test(eqx::Log::getLastLogType(), eqx::Log::Type::none);
+	UnitTester::test(eqx::Log::getLastLogMessage(), ""sv);
 }
 
-bool LogTester::testGetLastLogType()
+void LogTester::testGetFormattedString()
 {
-	eqx::Log::clear();
-	m_SS = std::stringstream();
+	using namespace std::string_view_literals;
 
-	std::source_location location = std::source_location::current();
-	eqx::Log::log(eqx::Log::Level::error, "Testing Get Last Log Type", eqx::Log::Type::runtimeError, location);
+	auto loc = std::source_location::current();
+	auto lineNumber = std::to_string(loc.line());
 
-	return TEST(static_cast<int>(eqx::Log::getLastLogType()), static_cast<int>(eqx::Log::Type::runtimeError));
+	auto produced = eqx::Log::getFormattedString(loc, eqx::Log::Level::error,
+		"testFString"sv);
+	auto expected = std::string("..\\LogTester.cpp(testGetFormattedString,"sv);
+	expected += lineNumber;
+	expected += ") [ERROR]: testFString"sv;
+
+	UnitTester::test(produced, expected);
 }
 
-bool LogTester::testGetLastLogMessage()
+consteval void LogTester::testGetLoggableLevels()
 {
-	eqx::Log::clear();
-	m_SS = std::stringstream();
-
-	std::source_location location = std::source_location::current();
-	eqx::Log::log(eqx::Log::Level::error, "Testing Get Last Log Message", eqx::Log::Type::runtimeError, location);
-
-	return TEST(eqx::Log::getLastLogMessage(), "Testing Get Last Log Message");
+	constexpr auto produced = eqx::Log::getLoggableLevels();
+	constexpr auto expected = std::array<eqx::Log::Level, 3ULL>({
+			eqx::Log::Level::info,
+			eqx::Log::Level::warning,
+			eqx::Log::Level::error
+		});
+	static_assert(produced == expected);
 }
