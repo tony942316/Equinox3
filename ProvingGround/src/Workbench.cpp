@@ -30,17 +30,24 @@
 #include <type_traits>
 #include <fstream>
 #include <thread>
+#include <memory>
 
 #include "UnitTest.hpp"
 #include "EquinoxSTD.hpp"
+
+constexpr void func(const int& x)
+{
+	x;
+}
 
 void workbenchMain()
 {
 	std::cout << std::setprecision(100);
 	std::cout << std::boolalpha;
 
-	
-	
+	constexpr auto x = 10;
+	func(x);
+
 	std::cout << "End Workbench" << std::endl;
 	std::cin.get();
 }

@@ -107,9 +107,7 @@
     </CustomBuildStep>
     <CustomBuildStep>
       <Outputs>NONE%(Outputs)</Outputs>
-      <Command>Xcopy /E /Y /I $(ProjectDir)src\Headers $(SolutionDir)bin\Include
-Xcopy /E /Y /I $(ProjectDir)src\Headers $(SolutionDir)Releases\Include
-Xcopy /Y $(SolutionDir)bin\$(Platform)$(Configuration)\$(ProjectName)\$(ProjectName).lib $(SolutionDir)Releases\Libs\$(Platform)$(Configuration)\</Command>
+      <Command>Xcopy /E /Y /I $(ProjectDir)src\Headers $(SolutionDir)Releases\Include</Command>
     </CustomBuildStep>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -138,9 +136,7 @@ Xcopy /Y $(SolutionDir)bin\$(Platform)$(Configuration)\$(ProjectName)\$(ProjectN
     </CustomBuildStep>
     <CustomBuildStep>
       <Outputs>NONE%(Outputs)</Outputs>
-      <Command>Xcopy /E /Y /I $(ProjectDir)src\Headers $(SolutionDir)bin\Include
-Xcopy /E /Y /I $(ProjectDir)src\Headers $(SolutionDir)Releases\Include
-Xcopy /Y $(SolutionDir)bin\$(Platform)$(Configuration)\$(ProjectName)\$(ProjectName).lib $(SolutionDir)Releases\Libs\$(Platform)$(Configuration)\</Command>
+      <Command>Xcopy /E /Y /I $(ProjectDir)src\Headers $(SolutionDir)Releases\Include</Command>
     </CustomBuildStep>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -164,9 +160,7 @@ Xcopy /Y $(SolutionDir)bin\$(Platform)$(Configuration)\$(ProjectName)\$(ProjectN
     </CustomBuildStep>
     <CustomBuildStep>
       <Outputs>NONE%(Outputs)</Outputs>
-      <Command>Xcopy /E /Y /I $(ProjectDir)src\Headers $(SolutionDir)bin\Include
-Xcopy /E /Y /I $(ProjectDir)src\Headers $(SolutionDir)Releases\Include
-Xcopy /Y $(SolutionDir)bin\$(Platform)$(Configuration)\$(ProjectName)\$(ProjectName).lib $(SolutionDir)Releases\Libs\$(Platform)$(Configuration)\</Command>
+      <Command>Xcopy /E /Y /I $(ProjectDir)src\Headers $(SolutionDir)Releases\Include</Command>
     </CustomBuildStep>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -195,9 +189,7 @@ Xcopy /Y $(SolutionDir)bin\$(Platform)$(Configuration)\$(ProjectName)\$(ProjectN
     </CustomBuildStep>
     <CustomBuildStep>
       <Outputs>NONE%(Outputs)</Outputs>
-      <Command>Xcopy /E /Y /I $(ProjectDir)src\Headers $(SolutionDir)bin\Include
-Xcopy /E /Y /I $(ProjectDir)src\Headers $(SolutionDir)Releases\Include
-Xcopy /Y $(SolutionDir)bin\$(Platform)$(Configuration)\$(ProjectName)\$(ProjectName).lib $(SolutionDir)Releases\Libs\$(Platform)$(Configuration)\</Command>
+      <Command>Xcopy /E /Y /I $(ProjectDir)src\Headers $(SolutionDir)Releases\Include</Command>
     </CustomBuildStep>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -212,15 +204,6 @@ Xcopy /Y $(SolutionDir)bin\$(Platform)$(Configuration)\$(ProjectName)\$(ProjectN
     <ClInclude Include="src\Headers\eqx_StopWatch.hpp" />
     <ClInclude Include="src\Headers\eqx_SuperEnum.hpp" />
     <ClInclude Include="src\Headers\eqx_UtilityMacros.hpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="src\eqx_Benchmark.cpp" />
-    <ClCompile Include="src\eqx_Log.cpp" />
-    <ClCompile Include="src\eqx_Mathematics.cpp" />
-    <ClCompile Include="src\eqx_Misc.cpp" />
-    <ClCompile Include="src\eqx_Random.cpp" />
-    <ClCompile Include="src\eqx_StopWatch.cpp" />
-    <ClCompile Include="src\eqx_SuperEnum.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
