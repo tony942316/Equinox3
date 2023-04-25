@@ -42,7 +42,7 @@ namespace eqx
 		/**
 		 * @brief Starts StopWatch On Construction
 		 */
-		StopWatch() noexcept
+		explicit StopWatch() noexcept
 		{
 			start();
 		}
@@ -115,7 +115,7 @@ namespace eqx
 		}
 
 	private:
-		std::chrono::time_point<std::chrono::steady_clock> 
-			m_StartTime, m_EndTime;
+		std::chrono::time_point<std::chrono::steady_clock> m_StartTime, 
+			m_EndTime;
 	};
 }
