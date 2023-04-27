@@ -193,8 +193,16 @@
     </CustomBuildStep>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\Headers\eqx_DefHeaders\eqx_BenchmarkDef.hpp" />
+    <ClInclude Include="src\Headers\eqx_DefHeaders\eqx_LogDef.hpp" />
+    <ClInclude Include="src\Headers\eqx_DefHeaders\eqx_MathematicsDef.hpp" />
     <ClInclude Include="src\Headers\eqx_Benchmark.hpp" />
     <ClInclude Include="src\Headers\EquinoxSTD.hpp" />
+    <ClInclude Include="src\Headers\eqx_DefHeaders\eqx_MiscDef.hpp" />
+    <ClInclude Include="src\Headers\eqx_DefHeaders\eqx_PointDef.hpp" />
+    <ClInclude Include="src\Headers\eqx_DefHeaders\eqx_RandomDef.hpp" />
+    <ClInclude Include="src\Headers\eqx_DefHeaders\eqx_RectangleDef.hpp" />
+    <ClInclude Include="src\Headers\eqx_DefHeaders\eqx_StopWatchDef.hpp" />
     <ClInclude Include="src\Headers\eqx_Log.hpp" />
     <ClInclude Include="src\Headers\eqx_Mathematics.hpp" />
     <ClInclude Include="src\Headers\eqx_Misc.hpp" />
