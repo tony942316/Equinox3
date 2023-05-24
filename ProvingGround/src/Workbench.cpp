@@ -44,5 +44,7 @@ void workbenchMain()
 
 
 	std::cout << "End Workbench" << std::endl;
+	std::cout << std::setprecision(6);
+	std::cout << std::noboolalpha;
 	std::cin.get();
 }
