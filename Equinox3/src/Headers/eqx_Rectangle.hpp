@@ -31,18 +31,14 @@ namespace eqx
 	 *		Act As If They Are In Screen Space i.e. The Height Of The
 	 *		Rectangle Is Directed Downwards
 	 */
-	template<eqx::arithmetic T>
+	template <eqx::arithmetic T>
 	class Rectangle
 	{
 	public:
 		/**
 		 * @brief Initialized With Zeros i.e. ((T)0, ...)
 		 */
-		constexpr Rectangle() noexcept
-			:
-			Rectangle(eqx::zero<T>, eqx::zero<T>, eqx::zero<T>, eqx::zero<T>)
-		{
-		}
+		explicit constexpr Rectangle() noexcept;
 
 		/**
 		 * @brief Initalize With Values i.e. (x, y, w, h)
@@ -52,23 +48,37 @@ namespace eqx
 		 * @param w The Width
 		 * @param h The Height
 		 */
-		constexpr Rectangle(T x, T y, T w, T h) noexcept
-			:
-			x(x),
-			y(y),
-			w(w),
-			h(h)
-		{
-		}
+		explicit constexpr Rectangle(T x, T y, T w, T h) noexcept;
 
 		/**
 		 * Trivial Move And Copy Operation
 		 */
-		Rectangle(const Rectangle& other) = default;
-		Rectangle(Rectangle&& other) = default;
-		Rectangle& operator= (const Rectangle& other) = default;
-		Rectangle& operator= (Rectangle&& other) = default;
+		Rectangle(const Rectangle&) = default;
+		Rectangle(Rectangle&&) = default;
+		Rectangle& operator= (const Rectangle&) = default;
+		Rectangle& operator= (Rectangle&&) = default;
 		~Rectangle() = default;
+
+		/**
+		 * @brief eqx::equals(x, other.x) && eqx::equals(y, other.y) &&
+		 *		eqx::equals(w, other.w) && eqx::equals(h, other.h)
+		 *
+		 * @param other The Same Type Rectangle We Compare Against
+		 *
+		 * @returns true If Rectanges Are Equivalent
+		 */
+		[[nodiscard]] constexpr bool
+			operator== (const Rectangle<T>& other) const noexcept;
+
+		/**
+		 * @brief !(*this == other)
+		 *
+		 * @param other The Same Type Rectangle We Compare Against
+		 *
+		 * @returns true If Rectangles Are Not Equivalent
+		 */
+		[[nodiscard]] constexpr bool
+			operator!= (const Rectangle<T>& other) const noexcept;
 
 		/**
 		 * @brief Create A Point At (X, Y), Note That This Is An
@@ -76,52 +86,35 @@ namespace eqx
 		 * 
 		 * @returns eqx::Point<T> Representing The Top Left Point
 		 */
-		[[nodiscard]] constexpr eqx::Point<T> getLocation() const noexcept
-		{
-			return getTopLeftPoint();
-		}
+		[[nodiscard]] constexpr Point<T> getLocation() const noexcept;
 
 		/**
 		 * @brief Create A Point At (X, Y), The Top Left Point
 		 * 
 		 * @returns eqx::Point<T> Representing The Top Left Point
 		 */
-		[[nodiscard]] constexpr eqx::Point<T> getTopLeftPoint() const noexcept
-		{
-			return eqx::Point<T>(x, y);
-		}
+		[[nodiscard]] constexpr Point<T> getTopLeftPoint() const noexcept;
 
 		/**
 		 * @brief Create A Point At (X + W, Y), The Top Right Point
 		 * 
 		 * @returns eqx::Point<T> Representing The Top Right Point
 		 */
-		[[nodiscard]] constexpr eqx::Point<T> getTopRightPoint() const noexcept
-		{
-			return eqx::Point<T>(x + w, y);
-		}
+		[[nodiscard]] constexpr Point<T> getTopRightPoint() const noexcept;
 
 		/**
 		 * @brief Create A Point At (X, Y + H), The Bottom Left Point
 		 * 
 		 * @returns eqx::Point<T> Representing The Bottom Left Point
 		 */
-		[[nodiscard]] constexpr 
-			eqx::Point<T> getBottomLeftPoint() const noexcept
-		{
-			return eqx::Point<T>(x, y + h);
-		}
+		[[nodiscard]] constexpr Point<T> getBottomLeftPoint() const noexcept;
 
 		/**
 		 * @brief Create A Point At (X + W, Y + H), The Bottom Right Point
 		 * 
 		 * @returns eqx::Point<T> Representing The Bottom Right Point
 		 */
-		[[nodiscard]] constexpr 
-			eqx::Point<T> getBottomRightPoint() const noexcept
-		{
-			return eqx::Point<T>(x + w, y + h);
-		}
+		[[nodiscard]] constexpr Point<T> getBottomRightPoint() const noexcept;
 
 		/**
 		 * @brief Create A Point At (X + 0.5 * W, Y + 0.5 * H), 
@@ -129,32 +122,14 @@ namespace eqx
 		 * 
 		 * @returns eqx::Point<T> Representing The Center Point
 		 */
-		[[nodiscard]] constexpr eqx::Point<T> getCenterPoint() const noexcept
-		{
-			auto dx = static_cast<T>(w * 0.5);
-			auto dy = static_cast<T>(h * 0.5);
-			return eqx::Point<T>(x + dx, y + dy);
-		}
+		[[nodiscard]] constexpr eqx::Point<T> getCenterPoint() const noexcept;
 
 		/**
 		 * @brief Creates Printable String Of Form "(x, y, w, h)"
 		 * 
 		 * @returns "(x, y, w, h)"
 		 */
-		[[nodiscard]] std::string toString() const
-		{
-			auto res = std::string("");
-			res += "(";
-			res += std::to_string(x);
-			res += ", ";
-			res += std::to_string(y);
-			res += ", ";
-			res += std::to_string(w);
-			res += ", ";
-			res += std::to_string(h);
-			res += ")";
-			return res;
-		}
+		[[nodiscard]] std::string toString() const;
 
 		T x, y, w, h;
 	};
@@ -168,13 +143,18 @@ namespace eqx
 	 * @returns Rectangle Converted To A std::string
 	 */
 	template <typename T>
-	[[nodiscard]] std::string toString(const eqx::Rectangle<T>& rect)
-	{
-		return rect.toString();
-	}
+	[[nodiscard]] std::string toString(const Rectangle<T>& rect);
+
+	template <std::floating_point T>
+	[[nodiscard]] constexpr bool equals(const Rectangle<T>& rect1,
+		const Rectangle<T>& rect2, double error = 0.001) noexcept;
+
+	template <eqx::integer T>
+	[[nodiscard]] constexpr bool equals(const Rectangle<T>& rect1,
+		const Rectangle<T>& rect2) noexcept;
 
 	/**
-	 * @brief Determine If A Point Is Contained Inside A Rectangle
+	 * @brief Determine If A Point Is Contained Inside A Rectangle (Inclusive)
 	 * 
 	 * @param rect The Rectangle
 	 * @param point The Point
@@ -182,24 +162,11 @@ namespace eqx
 	 * @returns true If point Is Contained By rect
 	 */
 	template <typename T>
-	[[nodiscard]] constexpr bool 
-		intersect(const Rectangle<T>& rect, const Point<T>& point) noexcept
-	{
-		if (point.x < rect.getTopLeftPoint().x ||
-			point.x > rect.getTopRightPoint().x ||
-			point.y > rect.getBottomLeftPoint().y ||
-			point.y < rect.getTopLeftPoint().y)
-		{
-			return false;
-		}
-		else
-		{
-			return true;
-		}
-	}
+	[[nodiscard]] constexpr bool intersect(const Rectangle<T>& rect, 
+		const Point<T>& point) noexcept;
 
 	/**
-	 * @brief Determine If Two Rectangles Overlap
+	 * @brief Determine If Two Rectangles Overlap (Inclusive)
 	 * 
 	 * @param rect1 The First Rectangle
 	 * @param rect2 The Second Rectangle
@@ -207,19 +174,46 @@ namespace eqx
 	 * @returns true If There Is Any Overlap Between rect1 And rect2
 	 */
 	template <typename T>
-	[[nodiscard]] constexpr bool intersect(const Rectangle<T>& rect1, 
-		const Rectangle<T>& rect2) noexcept
-	{
-		if (rect1.getBottomRightPoint().x < rect2.getBottomLeftPoint().x ||
-			rect1.getBottomLeftPoint().x > rect2.getBottomRightPoint().x ||
-			rect1.getBottomLeftPoint().y < rect2.getTopLeftPoint().y ||
-			rect1.getTopLeftPoint().y > rect2.getBottomLeftPoint().y)
-		{
-			return false;
-		}
-		else
-		{
-			return true;
-		}
-	}
+	[[nodiscard]] constexpr bool intersect(const Rectangle<T>& rect1,
+		const Rectangle<T>& rect2) noexcept;
+
+	/**
+	 * @brief Determine If A Point Is Contained Inside A Rectangle (Exclusive)
+	 * 
+	 * @param rect The Rectangle
+	 * @param point The Point
+	 * 
+	 * @returns true If point Is Contained By rect
+	 */
+	template <typename T>
+	[[nodiscard]] constexpr bool intersectExclusive(const Rectangle<T>& rect,
+		const Point<T>& point) noexcept;
+
+	/**
+	 * @brief Determine If Two Rectangles Overlap (Exclusive)
+	 * 
+	 * @param rect1 The First Rectangle
+	 * @param rect2 The Second Rectangle
+	 * 
+	 * @returns true If There Is Any Overlap Between rect1 And rect2
+	 */
+	template <typename T>
+	[[nodiscard]] constexpr bool intersectExclusive(const Rectangle<T>& rect1,
+		const Rectangle<T>& rect2) noexcept;
 }
+
+/**
+ * @brief std::hash Overload For Hashed Containers
+ */
+template <typename T>
+struct std::hash<eqx::Rectangle<T>>
+{
+	[[nodiscard]] std::size_t
+		operator() (const eqx::Rectangle<T>& rect) const noexcept
+	{
+		return std::hash<T>()(rect.x) ^ std::hash<T>()(rect.y) ^
+			std::hash<T>()(rect.w) ^ std::hash<T>()(rect.h);
+	}
+};
+
+#include "eqx_DefHeaders/eqx_RectangleDef.hpp"

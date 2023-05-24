@@ -27,26 +27,26 @@
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
-    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <ConfigurationType>Utility</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v143</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
-    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <ConfigurationType>Utility</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v143</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
-    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <ConfigurationType>Utility</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v143</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
-    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <ConfigurationType>Utility</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v143</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
@@ -71,19 +71,19 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <OutDir>$(SolutionDir)bin\$(Platform)$(Configuration)\$(ProjectName)\</OutDir>
+    <OutDir>$(SolutionDir)bin\$(Platform)$(Configuration)\ProvingGround\</OutDir>
     <IntDir>$(SolutionDir)bin\intermediates\$(Platform)$(Configuration)\$(ProjectName)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <OutDir>$(SolutionDir)bin\$(Platform)$(Configuration)\$(ProjectName)\</OutDir>
+    <OutDir>$(SolutionDir)bin\$(Platform)$(Configuration)\ProvingGround\</OutDir>
     <IntDir>$(SolutionDir)bin\intermediates\$(Platform)$(Configuration)\$(ProjectName)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <OutDir>$(SolutionDir)bin\$(Platform)$(Configuration)\$(ProjectName)\</OutDir>
+    <OutDir>$(SolutionDir)bin\$(Platform)$(Configuration)\ProvingGround\</OutDir>
     <IntDir>$(SolutionDir)bin\intermediates\$(Platform)$(Configuration)\$(ProjectName)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <OutDir>$(SolutionDir)bin\$(Platform)$(Configuration)\$(ProjectName)\</OutDir>
+    <OutDir>$(SolutionDir)bin\$(Platform)$(Configuration)\ProvingGround\</OutDir>
     <IntDir>$(SolutionDir)bin\intermediates\$(Platform)$(Configuration)\$(ProjectName)\</IntDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -103,14 +103,21 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <CustomBuildStep>
-      <Message>Moving Headers</Message>
+      <Message>
+      </Message>
     </CustomBuildStep>
     <CustomBuildStep>
-      <Outputs>NONE%(Outputs)</Outputs>
-      <Command>Xcopy /E /Y /I $(ProjectDir)src\Headers $(SolutionDir)bin\Include
-Xcopy /E /Y /I $(ProjectDir)src\Headers $(SolutionDir)Releases\Include
-Xcopy /Y $(SolutionDir)bin\$(Platform)$(Configuration)\$(ProjectName)\$(ProjectName).lib $(SolutionDir)Releases\Libs\$(Platform)$(Configuration)\</Command>
+      <Outputs>
+      </Outputs>
+      <Command>
+      </Command>
     </CustomBuildStep>
+    <PostBuildEvent>
+      <Command>Xcopy /E /Y /I $(ProjectDir)\src\Headers $(SolutionDir)Releases\Include &gt; nul</Command>
+    </PostBuildEvent>
+    <PostBuildEvent>
+      <Message>Moving Headers</Message>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -134,14 +141,21 @@ Xcopy /Y $(SolutionDir)bin\$(Platform)$(Configuration)\$(ProjectName)\$(ProjectN
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <CustomBuildStep>
-      <Message>Moving Headers</Message>
+      <Message>
+      </Message>
     </CustomBuildStep>
     <CustomBuildStep>
-      <Outputs>NONE%(Outputs)</Outputs>
-      <Command>Xcopy /E /Y /I $(ProjectDir)src\Headers $(SolutionDir)bin\Include
-Xcopy /E /Y /I $(ProjectDir)src\Headers $(SolutionDir)Releases\Include
-Xcopy /Y $(SolutionDir)bin\$(Platform)$(Configuration)\$(ProjectName)\$(ProjectName).lib $(SolutionDir)Releases\Libs\$(Platform)$(Configuration)\</Command>
+      <Outputs>
+      </Outputs>
+      <Command>
+      </Command>
     </CustomBuildStep>
+    <PostBuildEvent>
+      <Command>Xcopy /E /Y /I $(ProjectDir)\src\Headers $(SolutionDir)Releases\Include &gt; nul</Command>
+    </PostBuildEvent>
+    <PostBuildEvent>
+      <Message>Moving Headers</Message>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -160,14 +174,21 @@ Xcopy /Y $(SolutionDir)bin\$(Platform)$(Configuration)\$(ProjectName)\$(ProjectN
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <CustomBuildStep>
-      <Message>Moving Headers</Message>
+      <Message>
+      </Message>
     </CustomBuildStep>
     <CustomBuildStep>
-      <Outputs>NONE%(Outputs)</Outputs>
-      <Command>Xcopy /E /Y /I $(ProjectDir)src\Headers $(SolutionDir)bin\Include
-Xcopy /E /Y /I $(ProjectDir)src\Headers $(SolutionDir)Releases\Include
-Xcopy /Y $(SolutionDir)bin\$(Platform)$(Configuration)\$(ProjectName)\$(ProjectName).lib $(SolutionDir)Releases\Libs\$(Platform)$(Configuration)\</Command>
+      <Outputs>
+      </Outputs>
+      <Command>
+      </Command>
     </CustomBuildStep>
+    <PostBuildEvent>
+      <Command>Xcopy /E /Y /I $(ProjectDir)\src\Headers $(SolutionDir)Releases\Include &gt; nul</Command>
+    </PostBuildEvent>
+    <PostBuildEvent>
+      <Message>Moving Headers</Message>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -191,18 +212,33 @@ Xcopy /Y $(SolutionDir)bin\$(Platform)$(Configuration)\$(ProjectName)\$(ProjectN
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <CustomBuildStep>
-      <Message>Moving Headers</Message>
+      <Message>
+      </Message>
     </CustomBuildStep>
     <CustomBuildStep>
-      <Outputs>NONE%(Outputs)</Outputs>
-      <Command>Xcopy /E /Y /I $(ProjectDir)src\Headers $(SolutionDir)bin\Include
-Xcopy /E /Y /I $(ProjectDir)src\Headers $(SolutionDir)Releases\Include
-Xcopy /Y $(SolutionDir)bin\$(Platform)$(Configuration)\$(ProjectName)\$(ProjectName).lib $(SolutionDir)Releases\Libs\$(Platform)$(Configuration)\</Command>
+      <Outputs>
+      </Outputs>
+      <Command>
+      </Command>
     </CustomBuildStep>
+    <PostBuildEvent>
+      <Command>Xcopy /E /Y /I $(ProjectDir)\src\Headers $(SolutionDir)Releases\Include &gt; nul</Command>
+    </PostBuildEvent>
+    <PostBuildEvent>
+      <Message>Moving Headers</Message>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\Headers\eqx_DefHeaders\eqx_BenchmarkDef.hpp" />
+    <ClInclude Include="src\Headers\eqx_DefHeaders\eqx_LogDef.hpp" />
+    <ClInclude Include="src\Headers\eqx_DefHeaders\eqx_MathematicsDef.hpp" />
     <ClInclude Include="src\Headers\eqx_Benchmark.hpp" />
     <ClInclude Include="src\Headers\EquinoxSTD.hpp" />
+    <ClInclude Include="src\Headers\eqx_DefHeaders\eqx_MiscDef.hpp" />
+    <ClInclude Include="src\Headers\eqx_DefHeaders\eqx_PointDef.hpp" />
+    <ClInclude Include="src\Headers\eqx_DefHeaders\eqx_RandomDef.hpp" />
+    <ClInclude Include="src\Headers\eqx_DefHeaders\eqx_RectangleDef.hpp" />
+    <ClInclude Include="src\Headers\eqx_DefHeaders\eqx_StopWatchDef.hpp" />
     <ClInclude Include="src\Headers\eqx_Log.hpp" />
     <ClInclude Include="src\Headers\eqx_Mathematics.hpp" />
     <ClInclude Include="src\Headers\eqx_Misc.hpp" />
@@ -212,15 +248,6 @@ Xcopy /Y $(SolutionDir)bin\$(Platform)$(Configuration)\$(ProjectName)\$(ProjectN
     <ClInclude Include="src\Headers\eqx_StopWatch.hpp" />
     <ClInclude Include="src\Headers\eqx_SuperEnum.hpp" />
     <ClInclude Include="src\Headers\eqx_UtilityMacros.hpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="src\eqx_Benchmark.cpp" />
-    <ClCompile Include="src\eqx_Log.cpp" />
-    <ClCompile Include="src\eqx_Mathematics.cpp" />
-    <ClCompile Include="src\eqx_Misc.cpp" />
-    <ClCompile Include="src\eqx_Random.cpp" />
-    <ClCompile Include="src\eqx_StopWatch.cpp" />
-    <ClCompile Include="src\eqx_SuperEnum.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

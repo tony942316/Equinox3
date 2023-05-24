@@ -46,12 +46,13 @@ namespace RandomTester
 
 void RandomTester::testRandomNumber()
 {
-	auto runs = 1'000'000;
+	constexpr auto runs = 1'000'000;
 	auto randNum = 0;
 	auto randNumDouble = 0.0;
 	auto distInit = [](int lb, int ub)
 	{
 		auto dist = std::unordered_map<int, std::size_t>();
+		dist.reserve(std::abs(ub - lb));
 		for (int i = lb; i <= ub; i++)
 		{
 			dist[i] = 0ULL;
@@ -63,8 +64,8 @@ void RandomTester::testRandomNumber()
 		std::ranges::for_each(dist,
 			[&dist, runs](const auto& x)
 			{
-				auto exp = (static_cast<double>(runs) / dist.size());
-				auto deviation = x.second / exp;
+				const auto exp = (static_cast<double>(runs) / dist.size());
+				const auto deviation = x.second / exp;
 				UnitTester::test(deviation, 0.9, GTE<double, double>);
 				UnitTester::test(deviation, 1.1, LTE<double, double>);
 			});
@@ -131,7 +132,7 @@ void RandomTester::testRandomNumber()
 
 void RandomTester::testFlipCoin()
 {
-	auto runs = 1'000'000;
+	constexpr auto runs = 1'000'000;
 	auto randCoin = 0U;
 	auto heads = 0U;
 	auto tails = 0U;
@@ -144,7 +145,7 @@ void RandomTester::testFlipCoin()
 		UnitTester::test(randCoin, 1U, LTE<unsigned int, unsigned int>);
 	}
 
-	auto expected = runs / 2.0;
+	constexpr auto expected = runs / 2.0;
 	auto deviation = heads / expected;
 	UnitTester::test(deviation, 0.9, GTE<double, double>);
 	UnitTester::test(deviation, 1.1, LTE<double, double>);
@@ -155,7 +156,7 @@ void RandomTester::testFlipCoin()
 
 void RandomTester::testRollDice()
 {
-	auto runs = 1'000'000;
+	constexpr auto runs = 1'000'000;
 	auto randNum = 0U;
 
 	for (int i = 0; i < runs; i++)
@@ -180,9 +181,10 @@ void RandomTester::testRollDice()
 
 void RandomTester::testGenerateSeed()
 {
-	auto runs = 1'000'000;
+	constexpr auto runs = 1'000'000;
 	auto seed = 0U;
 	auto dist = std::unordered_map<unsigned int, std::size_t>();
+	dist.reserve(runs);
 
 	for (int i = 0; i < runs; i++)
 	{
@@ -193,26 +195,25 @@ void RandomTester::testGenerateSeed()
 		}
 		catch (const std::out_of_range&)
 		{
-			dist[seed] = static_cast<std::size_t>(1);
+			dist[seed] = 1U;
 		}
 	}
 
 	auto collisions = 0ULL;
-	auto expectedVariance = 1ULL;
+	constexpr auto expectedVariance = 1ULL;
 	std::ranges::for_each(dist,
 		[expectedVariance, &collisions](const auto& x)
 		{
-			if (x.second > static_cast<std::size_t>(1))
+			if (x.second > 1U)
 			{
-				auto count = x.second - static_cast<std::size_t>(1);
-				collisions += static_cast<unsigned long long>(count);
-				auto deviation = 
-					static_cast<unsigned long long>(count - expectedVariance);
+				auto count = x.second - 1U;
+				collisions += count;
+				const auto deviation = count - expectedVariance;
 				UnitTester::test(deviation, 3ULL,
 					LTE<unsigned long long, unsigned long long>);
 			}
 		});
 
-	auto totalVariance = collisions / static_cast<double>(runs);
+	const auto totalVariance = collisions / static_cast<double>(runs);
 	UnitTester::test(totalVariance, 0.001, LTE<double, double>);
 }

@@ -20,6 +20,7 @@
 #include <string>
 #include <cmath>
 #include <cerrno>
+#include <functional>
 
 #include "eqx_Misc.hpp"
 #include "eqx_Mathematics.hpp"
@@ -37,11 +38,7 @@ namespace eqx
 		/**
 		 * @brief Initialized With Zeros i.e. ((T)0, (T)0)
 		 */
-		constexpr Point() noexcept
-			:
-			Point(eqx::zero<T>, eqx::zero<T>)
-		{
-		}
+		explicit constexpr Point() noexcept;
 
 		/**
 		 * @brief Initialize With Values i.e. (x, y)
@@ -49,20 +46,15 @@ namespace eqx
 		 * @param x The x Value
 		 * @param y The y Value
 		 */
-		constexpr Point(T x, T y) noexcept
-			:
-			x(x),
-			y(y)
-		{
-		}
+		explicit constexpr Point(T x, T y) noexcept;
 
 		/**
 		 * Trivial Move And Copy Operation
 		 */
-		Point(const Point& other) = default;
-		Point(Point&& other) = default;
-		Point& operator= (const Point& other) = default;
-		Point& operator= (Point&& other) = default;
+		Point(const Point&) = default;
+		Point(Point&&) = default;
+		Point& operator= (const Point&) = default;
+		Point& operator= (Point&&) = default;
 		~Point() = default;
 
 		/**
@@ -72,11 +64,8 @@ namespace eqx
 		 * 
 		 * @returns Resulting Point
 		 */
-		[[nodiscard]] constexpr 
-			Point<T> operator+ (const Point<T>& other) const noexcept
-		{
-			return Point<T>(x + other.x, y + other.y);
-		}
+		[[nodiscard]] constexpr Point<T>
+			operator+ (const Point<T>& other) const noexcept;
 
 		/**
 		 * @brief x - other.x, y - other.y
@@ -85,11 +74,8 @@ namespace eqx
 		 * 
 		 * @returns Resulting Point
 		 */
-		[[nodiscard]] constexpr 
-			Point<T> operator- (const Point<T>& other) const noexcept
-		{
-			return Point<T>(x - other.x, y - other.y);
-		}
+		[[nodiscard]] constexpr Point<T>
+			operator- (const Point<T>& other) const noexcept;
 
 		/**
 		 * @brief x += other.x, y += other.y
@@ -98,10 +84,7 @@ namespace eqx
 		 * 
 		 * @returns *this
 		 */
-		constexpr Point<T> operator+= (const Point<T>& other) noexcept
-		{
-			return *this = *this + other;
-		}
+		constexpr Point<T> operator+= (const Point<T>& other) noexcept;
 
 		/**
 		 * @brief x -= other.x, y -= other.y
@@ -110,10 +93,7 @@ namespace eqx
 		 * 
 		 * @returns *this
 		 */
-		constexpr Point<T> operator-= (const Point<T>& other) noexcept
-		{
-			return *this = *this - other;
-		}
+		constexpr Point<T> operator-= (const Point<T>& other) noexcept;
 
 		/**
 		 * @brief eqx::equals(x, other.x), eqx::equals(y, other.y)
@@ -122,24 +102,18 @@ namespace eqx
 		 * 
 		 * @returns true If Points Are Equivalent
 		 */
-		[[nodiscard]] constexpr 
-			bool operator== (const Point<T>& other) const noexcept
-		{
-			return equals(x, other.x) && equals(y, other.y);
-		}
+		[[nodiscard]] constexpr bool
+			operator== (const Point<T>& other) const noexcept;
 
 		/**
-		 * @brief !eqx::equals(x, other.x), !eqx::equals(y, other.y)
+		 * @brief !(*this == other)
 		 *
 		 * @param other The Same Type Point We Compare Against
 		 *
-		 * @returns true If Points Are Equivalent
+		 * @returns true If Points Are Not Equivalent
 		 */
-		[[nodiscard]] constexpr 
-			bool operator!= (const Point<T>& other) const noexcept
-		{
-			return !(*this == other);
-		}
+		[[nodiscard]] constexpr bool
+			operator!= (const Point<T>& other) const noexcept;
 
 		/**
 		 * @brief Computes The Distance From This Point To other
@@ -148,34 +122,14 @@ namespace eqx
 		 *
 		 * @returns Distance Between This Point And other
 		 */
-		[[nodiscard]] T distanceTo(const Point<T>& other) const noexcept
-		{
-			eqx::runtimeAssert(errno == 0, "Previous errno Failure Detected!");
-
-			auto dx = static_cast<double>(distance(x, other.x));
-			auto dy = static_cast<double>(distance(y, other.y));
-			auto result = std::hypot(dx, dy);
-
-			eqx::runtimeAssert(errno != ERANGE, "errno == ERANGE!");
-
-			return static_cast<T>(result);
-		}
+		[[nodiscard]] T distanceTo(const Point<T>& other) const noexcept;
 
 		/**
 		 * @brief Creates Printable String Of Form "(x, y)"
 		 * 
 		 * @returns "(x, y)"
 		 */
-		[[nodiscard]] std::string toString() const
-		{
-			auto res = std::string("");
-			res += "(";
-			res += std::to_string(x);
-			res += ", ";
-			res += std::to_string(y);
-			res += ")";
-			return res;
-		}
+		[[nodiscard]] std::string toString() const;
 
 		T x, y;
 	};
@@ -189,10 +143,7 @@ namespace eqx
 	 * @returns Point Converted To A std::string
 	 */
 	template <typename T>
-	[[nodiscard]] std::string toString(const Point<T>& point)
-	{
-		return point.toString();
-	}
+	[[nodiscard]] std::string toString(const Point<T>& point);
 
 	/**
 	 * @brief point1 == point2
@@ -202,12 +153,21 @@ namespace eqx
 	 *
 	 * @returns true If Points Are Equivalent
 	 */
-	template <typename T>
-	[[nodiscard]] constexpr 
-		bool equals(const Point<T>& point1, const Point<T>& point2) noexcept
-	{
-		return point1 == point2;
-	}
+	template <std::floating_point T>
+	[[nodiscard]] constexpr bool equals(const Point<T>& point1,
+		const Point<T>& point2, double error = 0.001) noexcept;
+
+	/**
+	 * @brief point1 == point2
+	 *
+	 * @param point1 First Point
+	 * @param point2 Second Point
+	 *
+	 * @returns true If Points Are Equivalent
+	 */
+	template <eqx::integer T>
+	[[nodiscard]] constexpr bool equals(const Point<T>& point1,
+		const Point<T>& point2) noexcept;
 
 	/**
 	 * @brief Computes The Distance Between Two Points
@@ -218,11 +178,8 @@ namespace eqx
 	 * @returns Distance Between The Points
 	 */
 	template <typename T>
-	[[nodiscard]] 
-		T distance(const Point<T>& point1, const Point<T>& point2) noexcept
-	{
-		return point1.distanceTo(point2);
-	}
+	[[nodiscard]] T distance(const Point<T>& point1,
+		const Point<T>& point2) noexcept;
 
 	/**
 	 * @brief Normalize A Point As If It Were A Vector From The Origin (0, 0),
@@ -233,16 +190,7 @@ namespace eqx
 	 * @returns Normalized Point
 	 */
 	template <std::floating_point T>
-	[[nodiscard]] Point<T> normalize(const Point<T>& point) noexcept
-	{
-		constexpr auto origin = Point<T>();
-
-		auto dist = eqx::distance(origin, point);
-		eqx::runtimeAssert(dist != eqx::zero<T>, "dist Was 0!");
-
-		auto result = Point<T>(point.x / dist, point.y / dist);
-		return result;
-	}
+	[[nodiscard]] Point<T> normalize(const Point<T>& point) noexcept;
 
 	/**
 	 * @brief Compute The Angle Of A Point In Degrees, Counter Clockwise
@@ -253,16 +201,20 @@ namespace eqx
 	 * @returns Angle In Degrees
 	 */
 	template <typename T>
-	[[nodiscard]] double angle(const Point<T>& point) noexcept
-	{
-		auto normPoint = eqx::normalize(point);
-		auto sinVals = eqx::arcsin(normPoint.y);
-		auto cosVals = eqx::arccos(normPoint.x);
-
-		auto correctValue = equals(sinVals.first, cosVals.first) ||
-			equals(sinVals.second, cosVals.second) ?
-			sinVals.first : sinVals.second;
-
-		return correctValue;
-	}
+	[[nodiscard]] double angle(const Point<T>& point) noexcept;
 }
+
+/**
+ * @brief std::hash Overload For Hashed Containers
+ */
+template <typename T>
+struct std::hash<eqx::Point<T>>
+{
+	[[nodiscard]] std::size_t
+		operator() (const eqx::Point<T>& point) const noexcept
+	{
+		return std::hash<T>()(point.x) ^ std::hash<T>()(point.y);
+	}
+};
+
+#include "eqx_DefHeaders/eqx_PointDef.hpp"

@@ -36,15 +36,16 @@ namespace BenchmarkTester
 	}
 }
 
-void doWork()
+std::vector<int> doWork()
 {
 	constexpr auto size = 1'000'000;
-	volatile auto data = new int[size];
+	auto data = std::vector<int>();
+	data.resize(size);
 	for (int i = 0; i < size; i++)
 	{
-		data[i] = 44;
+		data.at(i) = 44;
 	}
-	delete[] data;
+	return data;
 }
 
 void BenchmarkTester::testToString()

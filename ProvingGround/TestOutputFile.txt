@@ -1,1 +1,1 @@
-..\LogTester.cpp(testSetOutputFile,136) [ERROR]: testOutputFile
+..\LogTester.cpp(void __cdecl LogTester::testSetOutputFile(void),136) [ERROR]: testOutputFile

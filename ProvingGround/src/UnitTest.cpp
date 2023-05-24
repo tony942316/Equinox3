@@ -21,7 +21,9 @@
 
 std::vector<std::string> UnitTester::s_FailedTests;
 
-Primitives::Primitives()
+/*
+
+Primitives::Primitives() noexcept
 {
 	makePrimitives();
 	makeStrings();
@@ -229,7 +231,7 @@ std::vector<std::string> makeMacroString(const std::string& macroName,
 
 	for (const auto& val : macroDefTokens)
 	{
-		if (temp.size() + val.size() > 75ULL)
+		if (temp.size() + val.size() > static_cast<std::size_t>(75))
 		{
 			temp += " \\";
 			macroLines.emplace_back(std::move(temp));
@@ -300,4 +302,4 @@ void makeMacros()
 		});
 
 	file.close();
-}
+}*/
