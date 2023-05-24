@@ -74,11 +74,15 @@ consteval void UtilityMacrosTester::testForEach()
 #define TEST_FOR_EACH_LIST_MACRO(x) #x
 consteval void UtilityMacrosTester::testForEachList()
 {
+#pragma warning(push)
+#pragma warning(disable: 4100)
 	constexpr auto testForEachListAux = []<typename... Types>
 		(Types... args) constexpr
 		{
 			return static_cast<std::size_t>(sizeof...(args));
 		};
+#pragma warning(pop)
+
 
 	constexpr auto x = testForEachListAux
 		(EQX_FOR_EACH_LIST(TEST_FOR_EACH_LIST_MACRO, a, b, c, d, e, f, g));

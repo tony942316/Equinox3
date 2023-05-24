@@ -204,6 +204,9 @@ namespace eqx
 	[[nodiscard]] double angle(const Point<T>& point) noexcept;
 }
 
+/**
+ * @brief std::hash Overload For Hashed Containers
+ */
 template <typename T>
 struct std::hash<eqx::Point<T>>
 {

@@ -202,6 +202,9 @@ namespace eqx
 		const Rectangle<T>& rect2) noexcept;
 }
 
+/**
+ * @brief std::hash Overload For Hashed Containers
+ */
 template <typename T>
 struct std::hash<eqx::Rectangle<T>>
 {

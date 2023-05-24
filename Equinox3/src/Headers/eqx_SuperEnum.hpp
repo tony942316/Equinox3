@@ -105,7 +105,7 @@ constexpr bool operator!= (EnumPair<T> lhs, EnumPair<T> rhs)
 	[[nodiscard]] static consteval \
         std::array<name, name##Collection.size()> get##name##Enums() \
 	{ \
-        std::array<name, name##Collection.size()> result; \
+        auto result = std::array<name, name##Collection.size()>(); \
         for (std::size_t i = 0ULL; i < name##Collection.size(); i++) \
         { \
             result[i] = name##Collection.at(i).m_Enum; \
@@ -122,7 +122,8 @@ constexpr bool operator!= (EnumPair<T> lhs, EnumPair<T> rhs)
         std::array<std::string_view, name##Collection.size()> \
         get##name##Strings() \
 	{ \
-        std::array<std::string_view, name##Collection.size()> result; \
+        auto result = \
+            std::array<std::string_view, name##Collection.size()>(); \
         for (std::size_t i = 0ULL; i < name##Collection.size(); i++) \
         { \
             result[i] = name##Collection.at(i).m_String; \

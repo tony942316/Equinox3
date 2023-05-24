@@ -176,7 +176,8 @@ void LogTester::testGetFormattedString()
 
 	auto produced = eqx::Log::getFormattedString(loc, eqx::Log::Level::Error,
 		"testFString"sv);
-	auto expected = std::string("..\\LogTester.cpp(testGetFormattedString,"sv);
+	auto expected = std::string("..\\LogTester.cpp"sv);
+	expected += "(void __cdecl LogTester::testGetFormattedString(void),"sv;
 	expected += lineNumber;
 	expected += ") [ERROR]: testFString"sv;
 

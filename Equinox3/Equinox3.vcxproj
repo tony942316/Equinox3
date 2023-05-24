@@ -27,26 +27,26 @@
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
-    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <ConfigurationType>Utility</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v143</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
-    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <ConfigurationType>Utility</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v143</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
-    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <ConfigurationType>Utility</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v143</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
-    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <ConfigurationType>Utility</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v143</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
@@ -71,19 +71,19 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <OutDir>$(SolutionDir)bin\$(Platform)$(Configuration)\$(ProjectName)\</OutDir>
+    <OutDir>$(SolutionDir)bin\$(Platform)$(Configuration)\ProvingGround\</OutDir>
     <IntDir>$(SolutionDir)bin\intermediates\$(Platform)$(Configuration)\$(ProjectName)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <OutDir>$(SolutionDir)bin\$(Platform)$(Configuration)\$(ProjectName)\</OutDir>
+    <OutDir>$(SolutionDir)bin\$(Platform)$(Configuration)\ProvingGround\</OutDir>
     <IntDir>$(SolutionDir)bin\intermediates\$(Platform)$(Configuration)\$(ProjectName)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <OutDir>$(SolutionDir)bin\$(Platform)$(Configuration)\$(ProjectName)\</OutDir>
+    <OutDir>$(SolutionDir)bin\$(Platform)$(Configuration)\ProvingGround\</OutDir>
     <IntDir>$(SolutionDir)bin\intermediates\$(Platform)$(Configuration)\$(ProjectName)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <OutDir>$(SolutionDir)bin\$(Platform)$(Configuration)\$(ProjectName)\</OutDir>
+    <OutDir>$(SolutionDir)bin\$(Platform)$(Configuration)\ProvingGround\</OutDir>
     <IntDir>$(SolutionDir)bin\intermediates\$(Platform)$(Configuration)\$(ProjectName)\</IntDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -103,12 +103,21 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <CustomBuildStep>
-      <Message>Moving Headers</Message>
+      <Message>
+      </Message>
     </CustomBuildStep>
     <CustomBuildStep>
-      <Outputs>NONE%(Outputs)</Outputs>
-      <Command>Xcopy /E /Y /I $(ProjectDir)src\Headers $(SolutionDir)Releases\Include</Command>
+      <Outputs>
+      </Outputs>
+      <Command>
+      </Command>
     </CustomBuildStep>
+    <PostBuildEvent>
+      <Command>Xcopy /E /Y /I $(ProjectDir)\src\Headers $(SolutionDir)Releases\Include &gt; nul</Command>
+    </PostBuildEvent>
+    <PostBuildEvent>
+      <Message>Moving Headers</Message>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -132,12 +141,21 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <CustomBuildStep>
-      <Message>Moving Headers</Message>
+      <Message>
+      </Message>
     </CustomBuildStep>
     <CustomBuildStep>
-      <Outputs>NONE%(Outputs)</Outputs>
-      <Command>Xcopy /E /Y /I $(ProjectDir)src\Headers $(SolutionDir)Releases\Include</Command>
+      <Outputs>
+      </Outputs>
+      <Command>
+      </Command>
     </CustomBuildStep>
+    <PostBuildEvent>
+      <Command>Xcopy /E /Y /I $(ProjectDir)\src\Headers $(SolutionDir)Releases\Include &gt; nul</Command>
+    </PostBuildEvent>
+    <PostBuildEvent>
+      <Message>Moving Headers</Message>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -156,12 +174,21 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <CustomBuildStep>
-      <Message>Moving Headers</Message>
+      <Message>
+      </Message>
     </CustomBuildStep>
     <CustomBuildStep>
-      <Outputs>NONE%(Outputs)</Outputs>
-      <Command>Xcopy /E /Y /I $(ProjectDir)src\Headers $(SolutionDir)Releases\Include</Command>
+      <Outputs>
+      </Outputs>
+      <Command>
+      </Command>
     </CustomBuildStep>
+    <PostBuildEvent>
+      <Command>Xcopy /E /Y /I $(ProjectDir)\src\Headers $(SolutionDir)Releases\Include &gt; nul</Command>
+    </PostBuildEvent>
+    <PostBuildEvent>
+      <Message>Moving Headers</Message>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -185,12 +212,21 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <CustomBuildStep>
-      <Message>Moving Headers</Message>
+      <Message>
+      </Message>
     </CustomBuildStep>
     <CustomBuildStep>
-      <Outputs>NONE%(Outputs)</Outputs>
-      <Command>Xcopy /E /Y /I $(ProjectDir)src\Headers $(SolutionDir)Releases\Include</Command>
+      <Outputs>
+      </Outputs>
+      <Command>
+      </Command>
     </CustomBuildStep>
+    <PostBuildEvent>
+      <Command>Xcopy /E /Y /I $(ProjectDir)\src\Headers $(SolutionDir)Releases\Include &gt; nul</Command>
+    </PostBuildEvent>
+    <PostBuildEvent>
+      <Message>Moving Headers</Message>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="src\Headers\eqx_DefHeaders\eqx_BenchmarkDef.hpp" />

@@ -35,6 +35,7 @@ namespace RectangleTester
 	consteval void testConstruction();
 	consteval void testGetPoints();
 	consteval void testIntersect();
+	consteval void testIntersectExclusive();
 }
 
 void RectangleTester::testToString()
@@ -173,4 +174,60 @@ consteval void RectangleTester::testIntersect()
 	static_assert(eqx::intersect(rect4, point2) == false);
 	static_assert(eqx::intersect(rect4, point3) == false);
 	static_assert(eqx::intersect(rect4, point4) == true);
+}
+
+consteval void testIntersectExclusive()
+{
+	constexpr auto rect1 = eqx::Rectangle<double>(1.0, 1.0, 1.0, 1.0);
+	constexpr auto rect2 =
+		eqx::Rectangle<double>(0.0, 0.0, 3.0, 3.0);
+	constexpr auto rect3 =
+		eqx::Rectangle<double>(1.459, 0.889, 0.374, 8.398);
+	constexpr auto rect4 =
+		eqx::Rectangle<double>(-5.689, -2.448, 3.589, 1.005);
+
+	// Same As Inclusive
+	static_assert(eqx::intersectExclusive(rect1, rect1) == true);
+	static_assert(eqx::intersectExclusive(rect1, rect2) == true);
+	static_assert(eqx::intersectExclusive(rect1, rect3) == true);
+	static_assert(eqx::intersectExclusive(rect1, rect4) == false);
+	static_assert(eqx::intersectExclusive(rect2, rect2) == true);
+	static_assert(eqx::intersectExclusive(rect2, rect3) == true);
+	static_assert(eqx::intersectExclusive(rect2, rect4) == false);
+	static_assert(eqx::intersectExclusive(rect3, rect3) == true);
+	static_assert(eqx::intersectExclusive(rect3, rect4) == false);
+	static_assert(eqx::intersectExclusive(rect4, rect4) == true);
+
+	// Diff
+	constexpr auto rect5 =
+		eqx::Rectangle<double>(3.0, 0.0, 3.0, 3.0);
+	static_assert(eqx::intersectExclusive(rect2, rect5) == false);
+
+	constexpr auto point1 = eqx::Point<double>();
+	constexpr auto point2 = eqx::Point<double>(1.0, 1.0);
+	constexpr auto point3 = eqx::Point<double>(1.713, 7.145);
+	constexpr auto point4 = eqx::Point<double>(-3.1, -2.1);
+
+	// Same As Inclusive
+	static_assert(eqx::intersectExclusive(rect1, point1) == false);
+	static_assert(eqx::intersectExclusive(rect1, point3) == false);
+	static_assert(eqx::intersectExclusive(rect1, point4) == false);
+
+	static_assert(eqx::intersectExclusive(rect2, point2) == true);
+	static_assert(eqx::intersectExclusive(rect2, point3) == false);
+	static_assert(eqx::intersectExclusive(rect2, point4) == false);
+
+	static_assert(eqx::intersectExclusive(rect3, point1) == false);
+	static_assert(eqx::intersectExclusive(rect3, point2) == false);
+	static_assert(eqx::intersectExclusive(rect3, point3) == true);
+	static_assert(eqx::intersectExclusive(rect3, point4) == false);
+
+	static_assert(eqx::intersectExclusive(rect4, point1) == false);
+	static_assert(eqx::intersectExclusive(rect4, point2) == false);
+	static_assert(eqx::intersectExclusive(rect4, point3) == false);
+	static_assert(eqx::intersectExclusive(rect4, point4) == true);
+
+	// Diff
+	static_assert(eqx::intersectExclusive(rect1, point2) == false);
+	static_assert(eqx::intersectExclusive(rect2, point1) == false);
 }

@@ -176,8 +176,35 @@ namespace eqx
 	template <typename T>
 	[[nodiscard]] constexpr bool intersect(const Rectangle<T>& rect1,
 		const Rectangle<T>& rect2) noexcept;
+
+	/**
+	 * @brief Determine If A Point Is Contained Inside A Rectangle (Exclusive)
+	 * 
+	 * @param rect The Rectangle
+	 * @param point The Point
+	 * 
+	 * @returns true If point Is Contained By rect
+	 */
+	template <typename T>
+	[[nodiscard]] constexpr bool intersectExclusive(const Rectangle<T>& rect,
+		const Point<T>& point) noexcept;
+
+	/**
+	 * @brief Determine If Two Rectangles Overlap (Exclusive)
+	 * 
+	 * @param rect1 The First Rectangle
+	 * @param rect2 The Second Rectangle
+	 * 
+	 * @returns true If There Is Any Overlap Between rect1 And rect2
+	 */
+	template <typename T>
+	[[nodiscard]] constexpr bool intersectExclusive(const Rectangle<T>& rect1,
+		const Rectangle<T>& rect2) noexcept;
 }
 
+/**
+ * @brief std::hash Overload For Hashed Containers
+ */
 template <typename T>
 struct std::hash<eqx::Rectangle<T>>
 {
