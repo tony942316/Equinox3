@@ -21,7 +21,9 @@
 
 std::vector<std::string> UnitTester::s_FailedTests;
 
-Primitives::Primitives()
+/*
+
+Primitives::Primitives() noexcept
 {
 	makePrimitives();
 	makeStrings();
@@ -300,4 +302,4 @@ void makeMacros()
 		});
 
 	file.close();
-}
+}*/

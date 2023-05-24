@@ -40,7 +40,7 @@ namespace LogTester
 	void test()
 	{
 		std::cout << "Testing Log..." << std::endl;
-		auto prevLogLevel = eqx::Log::getCurrentLogLevel();
+		const auto prevLogLevel = eqx::Log::getCurrentLogLevel();
 		testLog();
 		testSetLevel();
 		testSetOutputStream();
@@ -55,7 +55,7 @@ namespace LogTester
 		cleanFile.close();
 	}
 
-	consteval void testGetLoggableLevels();
+	constexpr void testGetLoggableLevels() noexcept;
 }
 
 void LogTester::testLog()
@@ -64,7 +64,7 @@ void LogTester::testLog()
 
 	auto ss = std::stringstream();
 	auto produced = std::string("");
-	auto loc = std::source_location::current();
+	const auto loc = std::source_location::current();
 	eqx::Log::setOutputStream(ss);
 	eqx::Log::setLevel(eqx::Log::Level::All);
 	
@@ -133,7 +133,7 @@ void LogTester::testSetOutputFile()
 
 	auto ss = std::stringstream();
 	auto produced = std::string("");
-	auto loc = std::source_location::current();
+	const auto loc = std::source_location::current();
 	eqx::Log::setLevel(eqx::Log::Level::All);
 	eqx::Log::setOutputStream(ss);
 	eqx::Log::setOutputFile("TestOutputFile.txt"sv);
@@ -171,7 +171,7 @@ void LogTester::testGetFormattedString()
 {
 	using namespace std::string_view_literals;
 
-	auto loc = std::source_location::current();
+	const auto loc = std::source_location::current();
 	auto lineNumber = std::to_string(loc.line());
 
 	auto produced = eqx::Log::getFormattedString(loc, eqx::Log::Level::Error,
@@ -184,7 +184,7 @@ void LogTester::testGetFormattedString()
 	UnitTester::test(produced, expected);
 }
 
-consteval void LogTester::testGetLoggableLevels()
+constexpr void LogTester::testGetLoggableLevels() noexcept
 {
 	constexpr auto produced = eqx::Log::getLoggableLevels();
 	constexpr auto expected = std::array<eqx::Log::Level, 3ULL>({

@@ -38,7 +38,7 @@ namespace eqx
 	 * @brief Type Accurate Zero
 	 */
 	template <typename T>
-	inline constexpr T zero = static_cast<T>(0);
+	inline constexpr T zero = narrowCast<T>(0);
 
 	/**
 	 * @brief Check If Two Integer Types Are Equal

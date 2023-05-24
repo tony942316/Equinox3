@@ -42,12 +42,12 @@ namespace PointTester
 		UnitTester::clear();
 	}
 
-	consteval void testConstruction();
-	consteval void testPlus();
-	consteval void testMinus();
+	constexpr void testConstruction() noexcept;
+	constexpr void testPlus() noexcept;
+	constexpr void testMinus() noexcept;
 }
 
-consteval void PointTester::testConstruction()
+constexpr void PointTester::testConstruction() noexcept
 {
 	constexpr auto pointDefault = eqx::Point<double>();
 	static_assert(pointDefault.x == 0.0);
@@ -58,7 +58,7 @@ consteval void PointTester::testConstruction()
 	static_assert(pointParam.y == 3.9);
 }
 
-consteval void PointTester::testPlus()
+constexpr void PointTester::testPlus() noexcept
 {
 	constexpr auto point1 = eqx::Point<double>(1.0, 1.0);
 	constexpr auto point2 = eqx::Point<double>(-10.0, 10.0);
@@ -84,7 +84,7 @@ consteval void PointTester::testPlus()
 	static_assert(testLambda(point3 + point3, 2.468, 15.308));
 }
 
-consteval void PointTester::testMinus()
+constexpr void PointTester::testMinus() noexcept
 {
 	constexpr auto point1 = eqx::Point<double>(1.0, 1.0);
 	constexpr auto point2 = eqx::Point<double>(-10.0, 10.0);
@@ -166,9 +166,9 @@ void PointTester::testNormalize()
 	constexpr auto point2 = eqx::Point<double>(-10.0, 10.0);
 	constexpr auto point3 = eqx::Point<double>(1.234, 7.654);
 
-	auto point1Norm = eqx::normalize(point1);
-	auto point2Norm = eqx::normalize(point2);
-	auto point3Norm = eqx::normalize(point3);
+	const auto point1Norm = eqx::normalize(point1);
+	const auto point2Norm = eqx::normalize(point2);
+	const auto point3Norm = eqx::normalize(point3);
 
 	UnitTester::test(point1Norm.x, 0.70710678);
 	UnitTester::test(point1Norm.y, 0.70710678);

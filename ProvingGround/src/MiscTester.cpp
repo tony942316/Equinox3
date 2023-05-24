@@ -48,7 +48,7 @@ namespace MiscTester
 		UnitTester::clear();
 	}
 
-	consteval void testLiterals();
+	consteval void testLiterals() noexcept;
 }
 
 void MiscTester::testToString()
@@ -118,7 +118,7 @@ void MiscTester::testPairPrint()
 	UnitTester::test(temp, "(1.500000, Double)"sv);
 }
 
-consteval void MiscTester::testLiterals()
+consteval void MiscTester::testLiterals() noexcept
 {
 	using namespace eqx::literals;
 

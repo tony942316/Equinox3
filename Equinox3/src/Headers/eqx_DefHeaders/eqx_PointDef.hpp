@@ -79,9 +79,9 @@ namespace eqx
 	{
 		eqx::runtimeAssert(errno == 0, "Previous errno Failure Detected!");
 
-		auto dx = static_cast<double>(distance(x, other.x));
-		auto dy = static_cast<double>(distance(y, other.y));
-		auto result = std::hypot(dx, dy);
+		const auto dx = static_cast<double>(distance(x, other.x));
+		const auto dy = static_cast<double>(distance(y, other.y));
+		const auto result = std::hypot(dx, dy);
 
 		eqx::runtimeAssert(errno != ERANGE, "errno == ERANGE!");
 
@@ -144,9 +144,9 @@ namespace eqx
 	template <typename T>
 	[[nodiscard]] double angle(const Point<T>& point) noexcept
 	{
-		auto normPoint = eqx::normalize(point);
-		auto sinVals = eqx::arcsin(normPoint.y);
-		auto cosVals = eqx::arccos(normPoint.x);
+		const auto normPoint = eqx::normalize(point);
+		const auto sinVals = eqx::arcsin(normPoint.y);
+		const auto cosVals = eqx::arccos(normPoint.x);
 
 		auto correctValue = equals(sinVals.first, cosVals.first) ||
 			equals(sinVals.second, cosVals.second) ?

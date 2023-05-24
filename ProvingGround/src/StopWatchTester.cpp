@@ -65,7 +65,7 @@ void StopWatchTester::testReadTime()
 	using namespace eqx::shortTimeUnits;
 	auto watch = eqx::StopWatch();
 	wasteTime(1'000us);
-	auto result = watch.readTime<tu_us>();
+	const auto result = watch.readTime<tu_us>();
 
 	UnitTester::test(result, 100'000LL, LTE<long long, long long>);
 	UnitTester::test(result, 1'000LL, GTE<long long, long long>);

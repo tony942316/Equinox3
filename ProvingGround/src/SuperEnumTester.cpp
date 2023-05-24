@@ -39,9 +39,9 @@ namespace SuperEnumTester
 		UnitTester::clear();
 	}
 
-	consteval void testEnumCollection();
-	consteval void testGetEnums();
-	consteval void testGetString();
+	consteval void testEnumCollection() noexcept;
+	constexpr void testGetEnums() noexcept;
+	constexpr void testGetString() noexcept;
 }
 
 class SuperEnumShell
@@ -56,7 +56,7 @@ public:
 		v6, v7)
 };
 
-consteval void SuperEnumTester::testEnumCollection()
+consteval void SuperEnumTester::testEnumCollection() noexcept
 {
 	using namespace std::string_view_literals;
 
@@ -91,7 +91,7 @@ consteval void SuperEnumTester::testEnumCollection()
 	static_assert(expected7 == SuperEnumShell::Pub7Collection);
 }
 
-consteval void SuperEnumTester::testGetEnums()
+constexpr void SuperEnumTester::testGetEnums() noexcept
 {
 	constexpr auto expected3 =
 		std::array<SuperEnumShell::Pub3, 3ULL>({
@@ -124,7 +124,7 @@ consteval void SuperEnumTester::testGetEnums()
 	static_assert(expected7 == SuperEnumShell::getPub7Enums());
 }
 
-consteval void SuperEnumTester::testGetString()
+constexpr void SuperEnumTester::testGetString() noexcept
 {
 	using namespace std::string_view_literals;
 

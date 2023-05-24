@@ -32,7 +32,9 @@ namespace eqx
 		 * 
 		 * @param function The Function To Be Tested
 		 */
-		explicit inline Benchmark(std::function<void(void)> function) noexcept;
+		explicit inline 
+			Benchmark(const std::function<void(void)>& func) 
+			noexcept(noexcept(func()));
 
 		/**
 		 * Trivial Move And Copy Operation

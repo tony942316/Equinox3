@@ -58,7 +58,7 @@ public:
 		return m_Function;
 	}
 
-	std::string_view toString() const
+	std::string_view toString() const noexcept
 	{
 		return m_String;
 	}
@@ -70,7 +70,7 @@ private:
 
 template <typename T, typename U>
 const UnitTestFunction EQ = UnitTestFunction(
-	std::function([](T x, U y) 
+	std::function([](T x, U y) noexcept
 	{ 
 		if constexpr (std::is_floating_point_v<T> ||
 			std::is_floating_point_v<U>)
@@ -82,7 +82,7 @@ const UnitTestFunction EQ = UnitTestFunction(
 			return x == y; 
 		}
 	}),
-	" == ");
+	std::string_view(" == "));
 
 template <typename T, typename U, typename V, typename W>
 const UnitTestFunction PEQ = UnitTestFunction(
@@ -105,7 +105,7 @@ const UnitTestFunction GT = UnitTestFunction(
 template <typename T, typename U>
 const UnitTestFunction GTE = UnitTestFunction(
 	std::function([](T x, U y) { return x >= y; }),
-	" >= ");
+	std::string_view(" >= "));
 
 template <typename T, typename U>
 const UnitTestFunction LT = UnitTestFunction(
@@ -134,7 +134,7 @@ public:
 		}
 	}
 
-	static bool isPassing()
+	static bool isPassing() noexcept
 	{
 		if (s_FailedTests.size() == 0)
 		{
@@ -156,7 +156,7 @@ public:
 		else
 		{
 			std::cout << "Fail!\n" << std::endl;
-			auto i = std::size_t(0ULL);
+			auto i = 0U;
 			for (; i < num && i < s_FailedTests.size(); i++)
 			{
 				std::cout << i + 1 << ")" << std::endl;
@@ -170,7 +170,7 @@ public:
 		}
 	}
 
-	static void clear()
+	static void clear() noexcept
 	{
 		s_FailedTests.clear();
 	}
@@ -260,10 +260,11 @@ private:
 	static std::vector<std::string> s_FailedTests;
 };
 
+/*
 class Primitives
 {
 public:
-	Primitives();
+	Primitives() noexcept;
 
 	std::vector<std::string> primitives;
 	std::vector<std::string> volatilePrimitives;
@@ -308,4 +309,4 @@ private:
 
 std::vector<std::string> makeMacroString(const std::string& macroName,
 	const std::vector<std::string>& macroDefTokens);
-void makeMacros();
+void makeMacros();*/

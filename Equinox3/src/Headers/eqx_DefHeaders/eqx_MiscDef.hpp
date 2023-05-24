@@ -24,7 +24,7 @@ inline void eqx_debugOnly_runtimeAssert(bool expr,
 {
 	if (!expr)
 	{
-		std::cerr << msg << std::endl;
+		std::fprintf(stderr, msg.data());
 		std::abort();
 	}
 }
@@ -83,22 +83,29 @@ namespace eqx
 		}
 	}
 
+	template <typename T, typename U>
+	[[nodiscard]] constexpr T narrowCast(U x) noexcept
+	{
+#pragma warning(suppress: 26472)
+		return static_cast<T>(x);
+	}
+
 	namespace literals
 	{
 		consteval std::size_t operator""_size (unsigned long long x) noexcept
 		{
-			return static_cast<std::size_t>(x);
+			return narrowCast<std::size_t>(x);
 		}
 
 		consteval short operator""_short (unsigned long long x) noexcept
 		{
-			return static_cast<short>(x);
+			return narrowCast<short>(x);
 		}
 
 		consteval unsigned short 
 			operator""_ushort (unsigned long long x) noexcept
 		{
-			return static_cast<unsigned short>(x);
+			return narrowCast<unsigned short>(x);
 		}
 	}
 
@@ -106,7 +113,7 @@ namespace eqx
 	{
 		if (!expr)
 		{
-			std::cerr << msg << std::endl;
+			std::fprintf(stderr, msg.data());
 			std::abort();
 		}
 	}

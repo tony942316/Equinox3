@@ -194,6 +194,12 @@ namespace eqx
 		std::ostream& operator<< (std::ostream& os, std::pair<T, U> p);
 	}
 
+	/**
+	 * @brief Implementation Of gsl::narrow_cast<>
+	 */
+	template <typename T, typename U>
+	[[nodiscard]] constexpr T narrowCast(U x) noexcept;
+
 	namespace literals
 	{
 		/**

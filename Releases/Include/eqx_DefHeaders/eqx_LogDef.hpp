@@ -82,7 +82,7 @@ namespace eqx
 		auto result = std::string("");
 		result.reserve(100);
 
-		auto fileName = std::string_view(loc.file_name());
+		const auto fileName = std::string_view(loc.file_name());
 		auto functionName = std::string(loc.function_name());
 		auto lineNumber = std::to_string(loc.line());
 
@@ -116,7 +116,7 @@ namespace eqx
 		return result;
 	}
 
-	[[nodiscard]] consteval std::array<Log::Level, 3ULL>
+	[[nodiscard]] constexpr std::array<Log::Level, 3ULL>
 		Log::getLoggableLevels() noexcept
 	{
 		return std::array<Level, 3ULL>({

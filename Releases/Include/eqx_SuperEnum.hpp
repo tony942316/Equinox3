@@ -37,14 +37,14 @@ namespace eqx
 template <eqx::enumType T>
 struct EnumPair
 {
-    consteval EnumPair()
+    consteval EnumPair() noexcept
         :
         m_Enum(static_cast<T>(0ULL)),
         m_String("")
     {
     }
 
-    consteval EnumPair(T e, std::string_view s)
+    consteval EnumPair(T e, std::string_view s) noexcept
         :
         m_Enum(e),
         m_String(s)
@@ -68,8 +68,8 @@ namespace eqx
 
         for (std::size_t i = 0ULL; i < arr.size(); i++)
         {
-            arr[i].m_Enum = static_cast<EnumType>(i);
-            arr[i].m_String = arr2[i];
+            arr.at(i).m_Enum = static_cast<EnumType>(i);
+            arr.at(i).m_String = arr2.at(i);
         }
 
         return arr;
@@ -108,7 +108,7 @@ constexpr bool operator!= (EnumPair<T> lhs, EnumPair<T> rhs)
         auto result = std::array<name, name##Collection.size()>(); \
         for (std::size_t i = 0ULL; i < name##Collection.size(); i++) \
         { \
-            result[i] = name##Collection.at(i).m_Enum; \
+            result.at(i) = name##Collection.at(i).m_Enum; \
         } \
         return result; \
     }
@@ -126,7 +126,7 @@ constexpr bool operator!= (EnumPair<T> lhs, EnumPair<T> rhs)
             std::array<std::string_view, name##Collection.size()>(); \
         for (std::size_t i = 0ULL; i < name##Collection.size(); i++) \
         { \
-            result[i] = name##Collection.at(i).m_String; \
+            result.at(i) = name##Collection.at(i).m_String; \
         } \
         return result; \
     }

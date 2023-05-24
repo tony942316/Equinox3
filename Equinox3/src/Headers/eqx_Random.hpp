@@ -92,9 +92,6 @@ namespace eqx
 		 * @returns Seed
 		 */
 		[[nodiscard]] static unsigned int generateSeed();
-
-	private:
-		static inline auto s_Engine = std::mt19937_64(generateSeed());
 	};
 }
 

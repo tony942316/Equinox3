@@ -149,7 +149,7 @@ namespace eqx
 		 * 
 		 * @returns std::vector Of Loggable Levels
 		 */
-		[[nodiscard]] static consteval std::array<eqx::Log::Level, 3ULL>
+		[[nodiscard]] static constexpr std::array<eqx::Log::Level, 3ULL>
 			getLoggableLevels() noexcept;
 
 	private:

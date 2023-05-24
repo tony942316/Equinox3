@@ -29,6 +29,7 @@ namespace eqx
 	{
 		static auto dist =
 			std::uniform_int_distribution<T>(lowerBound, upperBound);
+		static auto engine = std::mt19937_64(generateSeed());
 
 		eqx::runtimeAssert(lowerBound < upperBound,
 			"Lower Bound Is Larger Than UpperBound!");
@@ -39,13 +40,14 @@ namespace eqx
 				std::uniform_int_distribution<T>(lowerBound, upperBound);
 		}
 
-		return dist(s_Engine);
+		return dist(engine);
 	}
 
 	template <std::floating_point T>
 	[[nodiscard]] T Random::randomNumber(T lowerBound, T upperBound)
 	{
 		static auto dist = std::uniform_real_distribution<T>();
+		static auto engine = std::mt19937_64(generateSeed());
 
 		eqx::runtimeAssert(upperBound >= lowerBound,
 			"Lower Bound Is Larger Than UpperBound!");
@@ -58,7 +60,7 @@ namespace eqx
 			errno = prevErr;
 			dist = std::uniform_real_distribution<T>(
 				decoyValue, upperBound);
-			double producedValue = dist(s_Engine);
+			const double producedValue = dist(engine);
 			if (producedValue == decoyValue)
 			{
 				return upperBound;
@@ -104,6 +106,6 @@ namespace eqx
 	[[nodiscard]] inline unsigned int Random::generateSeed()
 	{
 		static std::random_device rd;
-		return static_cast<unsigned int>(rd());
+		return narrowCast<unsigned int>(rd());
 	}
 }

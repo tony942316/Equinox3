@@ -19,9 +19,10 @@
 
 namespace eqx
 {
-	inline Benchmark::Benchmark(std::function<void(void)> function) noexcept
+	inline Benchmark::Benchmark(const std::function<void(void)>& func) 
+		noexcept(noexcept(func()))
 		:
-		m_Function(function),
+		m_Function(func),
 		m_Bench(std::chrono::nanoseconds())
 	{
 	}

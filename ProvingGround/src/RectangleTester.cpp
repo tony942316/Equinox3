@@ -32,10 +32,10 @@ namespace RectangleTester
 		UnitTester::clear();
 	}
 
-	consteval void testConstruction();
-	consteval void testGetPoints();
-	consteval void testIntersect();
-	consteval void testIntersectExclusive();
+	constexpr void testConstruction() noexcept;
+	constexpr void testGetPoints() noexcept;
+	constexpr void testIntersect() noexcept;
+	constexpr void testIntersectExclusive() noexcept;
 }
 
 void RectangleTester::testToString()
@@ -56,7 +56,7 @@ void RectangleTester::testToString()
 		"(6.123000, -9.874000, 6.548000, 3.698000)"s);
 }
 
-consteval void RectangleTester::testConstruction()
+constexpr void RectangleTester::testConstruction() noexcept
 {
 	constexpr auto rect0 = eqx::Rectangle<double>();
 	constexpr auto rect1 = eqx::Rectangle<double>(1.0, 1.0, 1.0, 1.0);
@@ -78,7 +78,7 @@ consteval void RectangleTester::testConstruction()
 	static_assert(testLambda(rect3, 6.123, -9.874, 6.548, 3.698));
 }
 
-consteval void RectangleTester::testGetPoints()
+constexpr void RectangleTester::testGetPoints() noexcept
 {
 	constexpr auto rect1 = eqx::Rectangle<double>(1.0, 1.0, 1.0, 1.0);
 	constexpr auto rect2 =
@@ -110,12 +110,12 @@ consteval void RectangleTester::testGetPoints()
 		[](const eqx::Rectangle<double>& rect,
 			const eqx::Point<double>& point) constexpr
 		{
-			auto tl = rect.getLocation();
-			auto tr = rect.getTopRightPoint();
-			auto bl = rect.getBottomLeftPoint();
-			auto br = rect.getBottomRightPoint();
-			auto c = rect.getCenterPoint();
-			auto ec = eqx::Point<double>(rect.x + (rect.w / 2.0),
+			const auto tl = rect.getLocation();
+			const auto tr = rect.getTopRightPoint();
+			const auto bl = rect.getBottomLeftPoint();
+			const auto br = rect.getBottomRightPoint();
+			const auto c = rect.getCenterPoint();
+			const auto ec = eqx::Point<double>(rect.x + (rect.w / 2.0),
 				rect.y + (rect.h / 2.0));
 
 			return testLambdaHelper(tl, eqx::Point<double>(rect.x, rect.y)) &&
@@ -129,7 +129,7 @@ consteval void RectangleTester::testGetPoints()
 	static_assert(testLambda(rect3, eqx::Point<double>(12.671, -6.176)));
 }
 
-consteval void RectangleTester::testIntersect()
+constexpr void RectangleTester::testIntersect() noexcept
 {
 	constexpr auto rect1 = eqx::Rectangle<double>(1.0, 1.0, 1.0, 1.0);
 	constexpr auto rect2 =
@@ -176,7 +176,7 @@ consteval void RectangleTester::testIntersect()
 	static_assert(eqx::intersect(rect4, point4) == true);
 }
 
-consteval void testIntersectExclusive()
+constexpr void testIntersectExclusive() noexcept
 {
 	constexpr auto rect1 = eqx::Rectangle<double>(1.0, 1.0, 1.0, 1.0);
 	constexpr auto rect2 =
