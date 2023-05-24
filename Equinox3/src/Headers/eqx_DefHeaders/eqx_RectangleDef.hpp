@@ -168,4 +168,38 @@ namespace eqx
 			return true;
 		}
 	}
+
+	template <typename T>
+	[[nodiscard]] constexpr bool intersectExclusive(const Rectangle<T>& rect,
+		const Point<T>& point) noexcept
+	{
+		if (point.x <= rect.getTopLeftPoint().x ||
+			point.x >= rect.getTopRightPoint().x ||
+			point.y >= rect.getBottomLeftPoint().y ||
+			point.y <= rect.getTopLeftPoint().y)
+		{
+			return false;
+		}
+		else
+		{
+			return true;
+		}
+	}
+
+	template <typename T>
+	[[nodiscard]] constexpr bool intersectExclusive(const Rectangle<T>& rect1,
+		const Rectangle<T>& rect2) noexcept
+	{
+		if (rect1.getBottomRightPoint().x <= rect2.getBottomLeftPoint().x ||
+			rect1.getBottomLeftPoint().x >= rect2.getBottomRightPoint().x ||
+			rect1.getBottomLeftPoint().y <= rect2.getTopLeftPoint().y ||
+			rect1.getTopLeftPoint().y >= rect2.getBottomLeftPoint().y)
+		{
+			return false;
+		}
+		else
+		{
+			return true;
+		}
+	}
 }

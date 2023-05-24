@@ -31,6 +31,7 @@
 #include <fstream>
 #include <thread>
 #include <memory>
+#include <iomanip>
 
 #include "UnitTest.hpp"
 #include "EquinoxSTD.hpp"
