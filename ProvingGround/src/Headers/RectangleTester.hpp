@@ -17,7 +17,24 @@
 
 #pragma once
 
-namespace RectangleTester
+class RectangleTester
 {
-	void test();
-}
+public:
+	RectangleTester() = delete;
+	RectangleTester(const RectangleTester&) = delete;
+	RectangleTester(RectangleTester&&) = delete;
+	RectangleTester& operator= (const RectangleTester&) = delete;
+	RectangleTester& operator= (RectangleTester&&) = delete;
+	~RectangleTester() = delete;
+
+	static inline void test();
+
+private:
+	static inline void testToString();
+	static constexpr void testConstruction() noexcept;
+	static constexpr void testGetPoints() noexcept;
+	static constexpr void testIntersect() noexcept;
+	static constexpr void testIntersectExclusive() noexcept;
+};
+
+#include "DefHeaders/RectangleTesterDef.hpp"

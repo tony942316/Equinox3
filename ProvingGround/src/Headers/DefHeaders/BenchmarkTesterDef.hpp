@@ -15,28 +15,17 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "BenchmarkTester.hpp"
+#pragma once
 
-#include <iostream>
-#include <string>
-
-#include "UnitTest.hpp"
-#include "eqx_Benchmark.hpp"
-
-namespace BenchmarkTester
+inline void BenchmarkTester::test()
 {
-	void testToString();
-
-	void test()
-	{
-		std::cout << "Testing Benchmark..." << std::endl;
-		testToString();
-		UnitTester::printStatus();
-		UnitTester::clear();
-	}
+	std::cout << "Testing Benchmark..." << std::endl;
+	testToString();
+	UnitTester::printStatus();
+	UnitTester::clear();
 }
 
-std::vector<int> doWork()
+inline std::vector<int> BenchmarkTester::doWork()
 {
 	constexpr auto size = 1'000'000;
 	auto data = std::vector<int>();
@@ -48,9 +37,9 @@ std::vector<int> doWork()
 	return data;
 }
 
-void BenchmarkTester::testToString()
+inline void BenchmarkTester::testToString()
 {
-	auto bench = eqx::Benchmark(doWork);
+	auto bench = eqx::Benchmark([]() { doWork(); });
 	bench.bench();
 	auto str = bench.toString<std::chrono::microseconds>();
 	auto numStr = str.substr(7);

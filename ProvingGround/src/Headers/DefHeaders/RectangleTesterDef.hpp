@@ -15,44 +15,31 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "RectangleTester.hpp"
+#pragma once
 
-#include "UnitTest.hpp"
-#include "eqx_Rectangle.hpp"
-
-namespace RectangleTester
+inline void RectangleTester::test()
 {
-	void testToString();
-
-	void test()
-	{
-		std::cout << "Testing Rectangle..." << std::endl;
-		testToString();
-		UnitTester::printStatus();
-		UnitTester::clear();
-	}
-
-	constexpr void testConstruction() noexcept;
-	constexpr void testGetPoints() noexcept;
-	constexpr void testIntersect() noexcept;
-	constexpr void testIntersectExclusive() noexcept;
+	std::cout << "Testing Rectangle..." << std::endl;
+	testToString();
+	UnitTester::printStatus();
+	UnitTester::clear();
 }
 
-void RectangleTester::testToString()
+inline void RectangleTester::testToString()
 {
 	using namespace std::string_literals;
 
 	constexpr auto rect1 = eqx::Rectangle<double>(1.0, 1.0, 1.0, 1.0);
-	constexpr auto rect2 = 
+	constexpr auto rect2 =
 		eqx::Rectangle<double>(-10.0, -10.0, 3.0, 15.0);
-	constexpr auto rect3 = 
+	constexpr auto rect3 =
 		eqx::Rectangle<double>(6.123, -9.874, 6.548, 3.698);
 
-	UnitTester::test(eqx::toString(rect1), 
+	UnitTester::test(eqx::toString(rect1),
 		"(1.000000, 1.000000, 1.000000, 1.000000)"s);
-	UnitTester::test(eqx::toString(rect2), 
+	UnitTester::test(eqx::toString(rect2),
 		"(-10.000000, -10.000000, 3.000000, 15.000000)"s);
-	UnitTester::test(eqx::toString(rect3), 
+	UnitTester::test(eqx::toString(rect3),
 		"(6.123000, -9.874000, 6.548000, 3.698000)"s);
 }
 
@@ -68,9 +55,9 @@ constexpr void RectangleTester::testConstruction() noexcept
 	constexpr auto testLambda =
 		[](const eqx::Rectangle<double>& rect,
 			double x, double y, double w, double h) constexpr
-		{
-			return rect.x == x && rect.y == y && rect.w == w && rect.h == h;
-		};
+	{
+		return rect.x == x && rect.y == y && rect.w == w && rect.h == h;
+	};
 
 	static_assert(testLambda(rect0, 0.0, 0.0, 0.0, 0.0));
 	static_assert(testLambda(rect1, 1.0, 1.0, 1.0, 1.0));
@@ -88,41 +75,41 @@ constexpr void RectangleTester::testGetPoints() noexcept
 
 	constexpr auto cabs =
 		[](double x) constexpr
-		{
-			return x >= 0.0 ? x : -x;
-		};
+	{
+		return x >= 0.0 ? x : -x;
+	};
 
 	constexpr auto approxEq =
 		[](double x, double y) constexpr
-		{
-			return cabs(x - y) < 0.001;
-		};
+	{
+		return cabs(x - y) < 0.001;
+	};
 
 	constexpr auto testLambdaHelper =
-		[](const eqx::Point<double>& point1, 
+		[](const eqx::Point<double>& point1,
 			const eqx::Point<double>& point2) constexpr
-		{
-			return approxEq(point1.x, point2.x) && 
-				approxEq(point1.y, point2.y);
-		};
+	{
+		return approxEq(point1.x, point2.x) &&
+			approxEq(point1.y, point2.y);
+	};
 
 	constexpr auto testLambda =
 		[](const eqx::Rectangle<double>& rect,
 			const eqx::Point<double>& point) constexpr
-		{
-			const auto tl = rect.getLocation();
-			const auto tr = rect.getTopRightPoint();
-			const auto bl = rect.getBottomLeftPoint();
-			const auto br = rect.getBottomRightPoint();
-			const auto c = rect.getCenterPoint();
-			const auto ec = eqx::Point<double>(rect.x + (rect.w / 2.0),
-				rect.y + (rect.h / 2.0));
+	{
+		const auto tl = rect.getLocation();
+		const auto tr = rect.getTopRightPoint();
+		const auto bl = rect.getBottomLeftPoint();
+		const auto br = rect.getBottomRightPoint();
+		const auto c = rect.getCenterPoint();
+		const auto ec = eqx::Point<double>(rect.x + (rect.w / 2.0),
+			rect.y + (rect.h / 2.0));
 
-			return testLambdaHelper(tl, eqx::Point<double>(rect.x, rect.y)) &&
-				testLambdaHelper(tr, eqx::Point<double>(point.x, rect.y)) &&
-				testLambdaHelper(bl, eqx::Point<double>(rect.x, point.y)) &&
-				testLambdaHelper(c, ec) && testLambdaHelper(br, point);
-		};
+		return testLambdaHelper(tl, eqx::Point<double>(rect.x, rect.y)) &&
+			testLambdaHelper(tr, eqx::Point<double>(point.x, rect.y)) &&
+			testLambdaHelper(bl, eqx::Point<double>(rect.x, point.y)) &&
+			testLambdaHelper(c, ec) && testLambdaHelper(br, point);
+	};
 
 	static_assert(testLambda(rect1, eqx::Point<double>(2.0, 2.0)));
 	static_assert(testLambda(rect2, eqx::Point<double>(-7.0, 5.0)));

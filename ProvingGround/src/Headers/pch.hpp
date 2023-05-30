@@ -17,27 +17,5 @@
 
 #pragma once
 
-class PointTester
-{
-public:
-	PointTester() = delete;
-	PointTester(const PointTester&) = delete;
-	PointTester(PointTester&&) = delete;
-	PointTester& operator= (const PointTester&) = delete;
-	PointTester& operator= (PointTester&&) = delete;
-	~PointTester() = delete;
-
-	static inline void test();
-
-private:
-	static inline void testEquals();
-	static inline void testToString();
-	static inline void testDistance();
-	static inline void testNormalize();
-	static inline void testAngle();
-	static constexpr void testConstruction() noexcept;
-	static constexpr void testPlus() noexcept;
-	static constexpr void testMinus() noexcept;
-};
-
-#include "DefHeaders/PointTesterDef.hpp"
+#include "Dependencies.hpp"
+#include "Tester.hpp"

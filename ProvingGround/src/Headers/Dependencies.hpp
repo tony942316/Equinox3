@@ -15,34 +15,51 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "Workbench.hpp"
+#pragma once
 
-#include <algorithm>
-#include <vector>
-#include <chrono>
-#include <unordered_map>
-#include <map>
-#include <list>
-#include <array>
-#include <iostream>
-#include <iterator>
-#include <string_view>
+//STL Concepts
+#include <concepts>
+
+//STL Diagnostics
+#include <source_location>
+
+//STL Meta
+#include <limits>
 #include <type_traits>
-#include <fstream>
-#include <thread>
-#include <memory>
-#include <iomanip>
 
-#include "UnitTest.hpp"
+//STL Utilities
+#include <utility>
+#include <optional>
+#include <format>
+
+//STL Strings
+#include <string>
+#include <string_view>
+
+//STL Containers
+#include <array>
+#include <vector>
+#include <set>
+#include <unordered_set>
+#include <map>
+#include <unordered_map>
+
+//STL Ranges
+#include <ranges>
+
+//STL Algorithms
+#include <algorithm>
+
+//STL Time
+#include <chrono>
+
+//STL IO
+#include <iostream>
+#include <fstream>
+#include <sstream>
+
+//EQX Lib
 #include "EquinoxSTD.hpp"
 
-void workbenchMain()
-{
-	std::cout << std::setprecision(100);
-	std::cout << std::boolalpha;
-
-
-
-	std::cout << "End Workbench" << std::endl;
-	std::cin.get();
-}
+//Unittester
+#include "UnitTest.hpp"

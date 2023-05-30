@@ -17,7 +17,20 @@
 
 #pragma once
 
+#include "UtilityMacrosTester.hpp"
+#include "MiscTester.hpp"
+#include "SuperEnumTester.hpp"
+#include "LogTester.hpp"
+#include "MathematicsTester.hpp"
+#include "RandomTester.hpp"
+#include "StopWatchTester.hpp"
+#include "PointTester.hpp"
+#include "RectangleTester.hpp"
+#include "BenchmarkTester.hpp"
+
 namespace Tester
 {
-	void test();
+	inline void test();
 }
+
+#include "DefHeaders/TesterDef.hpp"

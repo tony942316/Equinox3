@@ -15,22 +15,20 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include <iostream>
-
-#include "Tester.hpp"
+#include "pch.hpp"
 
 #include "Workbench.hpp"
 
 int main()
 {
-	std::cout << "Start" << std::endl;
+	std::cout << "Start: ";
 	std::cin.get();
 
 	workbenchMain();
 
 	Tester::test();
 
-	std::cout << "\nEnd" << std::endl;
+	std::cout << "\nEnd: ";
 	std::cin.get();
 	return 0;
 }

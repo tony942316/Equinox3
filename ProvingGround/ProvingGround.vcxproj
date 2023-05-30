@@ -114,6 +114,7 @@
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <MultiProcessorCompilation>false</MultiProcessorCompilation>
       <EnablePREfast>true</EnablePREfast>
+      <PrecompiledHeaderFile>pch.hpp</PrecompiledHeaderFile>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -152,6 +153,7 @@
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <MultiProcessorCompilation>false</MultiProcessorCompilation>
       <EnablePREfast>true</EnablePREfast>
+      <PrecompiledHeaderFile>pch.hpp</PrecompiledHeaderFile>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -189,6 +191,7 @@
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <MultiProcessorCompilation>false</MultiProcessorCompilation>
       <EnablePREfast>true</EnablePREfast>
+      <PrecompiledHeaderFile>pch.hpp</PrecompiledHeaderFile>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -227,6 +230,7 @@
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <MultiProcessorCompilation>false</MultiProcessorCompilation>
       <EnablePREfast>true</EnablePREfast>
+      <PrecompiledHeaderFile>pch.hpp</PrecompiledHeaderFile>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -249,26 +253,37 @@
     </CustomBuildStep>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="src\BenchmarkTester.cpp" />
-    <ClCompile Include="src\LogTester.cpp" />
-    <ClCompile Include="src\Main.cpp" />
-    <ClCompile Include="src\MathematicsTester.cpp" />
-    <ClCompile Include="src\MiscTester.cpp" />
-    <ClCompile Include="src\PointTester.cpp" />
-    <ClCompile Include="src\RandomTester.cpp" />
-    <ClCompile Include="src\RectangleTester.cpp" />
-    <ClCompile Include="src\StopWatchTester.cpp" />
-    <ClCompile Include="src\SuperEnumTester.cpp" />
-    <ClCompile Include="src\Tester.cpp" />
-    <ClCompile Include="src\UnitTest.cpp" />
-    <ClCompile Include="src\UtilityMacrosTester.cpp" />
-    <ClCompile Include="src\Workbench.cpp" />
+    <ClCompile Include="src\Main.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Use</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Use</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Use</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="src\pch.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Headers\BenchmarkTester.hpp" />
+    <ClInclude Include="src\Headers\DefHeaders\BenchmarkTesterDef.hpp" />
+    <ClInclude Include="src\Headers\DefHeaders\LogTesterDef.hpp" />
+    <ClInclude Include="src\Headers\DefHeaders\MathematicsTesterDef.hpp" />
+    <ClInclude Include="src\Headers\DefHeaders\MiscTesterDef.hpp" />
+    <ClInclude Include="src\Headers\DefHeaders\PointTesterDef.hpp" />
+    <ClInclude Include="src\Headers\DefHeaders\RandomTesterDef.hpp" />
+    <ClInclude Include="src\Headers\DefHeaders\RectangleTesterDef.hpp" />
+    <ClInclude Include="src\Headers\DefHeaders\StopWatchTesterDef.hpp" />
+    <ClInclude Include="src\Headers\DefHeaders\SuperEnumTesterDef.hpp" />
+    <ClInclude Include="src\Headers\DefHeaders\TesterDef.hpp" />
+    <ClInclude Include="src\Headers\DefHeaders\UtilityMacrosDef.hpp" />
+    <ClInclude Include="src\Headers\Dependencies.hpp" />
     <ClInclude Include="src\Headers\LogTester.hpp" />
     <ClInclude Include="src\Headers\MathematicsTester.hpp" />
     <ClInclude Include="src\Headers\MiscTester.hpp" />
+    <ClInclude Include="src\Headers\pch.hpp" />
     <ClInclude Include="src\Headers\PointTester.hpp" />
     <ClInclude Include="src\Headers\RandomTester.hpp" />
     <ClInclude Include="src\Headers\RectangleTester.hpp" />

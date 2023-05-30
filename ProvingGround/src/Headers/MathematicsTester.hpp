@@ -17,7 +17,31 @@
 
 #pragma once
 
-namespace MathematicsTester
+#include "Dependencies.hpp"
+
+class MathematicsTester
 {
-	void test();
-}
+public:
+	MathematicsTester() = delete;
+	MathematicsTester(const MathematicsTester&) = delete;
+	MathematicsTester(MathematicsTester&&) = delete;
+	MathematicsTester& operator= (const MathematicsTester&) = delete;
+	MathematicsTester& operator= (MathematicsTester&&) = delete;
+	~MathematicsTester() = delete;
+
+	static inline void test();
+
+private:
+	static inline void testEquals();
+	static inline void testDistance();
+	static inline void testArccos();
+	static inline void testArcsin();
+	static consteval void testGetSign() noexcept;
+	static consteval void testIsPositive() noexcept;
+	static consteval void testIsNegative() noexcept;
+	static constexpr void testWillOverflow() noexcept;
+	static constexpr void testDegreesToRadians() noexcept;
+	static constexpr void testRadiansToDegrees() noexcept;
+};
+
+#include "DefHeaders/MathematicsTesterDef.hpp"

@@ -17,7 +17,28 @@
 
 #pragma once
 
-namespace LogTester
+#include "Dependencies.hpp"
+
+class LogTester
 {
-	void test();
-}
+public:
+	LogTester() = delete;
+	LogTester(const LogTester&) = delete;
+	LogTester(LogTester&&) = delete;
+	LogTester& operator= (const LogTester&) = delete;
+	LogTester& operator= (LogTester&&) = delete;
+	~LogTester() = delete;
+
+	static void inline test();
+
+private:
+	static inline void testLog();
+	static inline void testSetLevel();
+	static inline void testSetOutputStream();
+	static inline void testSetOutputFile();
+	static inline void testClear();
+	static inline void testGetFormattedString();
+	static constexpr void testGetLoggableLevels() noexcept;
+};
+
+#include "DefHeaders/LogTesterDef.hpp"

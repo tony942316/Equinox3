@@ -17,7 +17,23 @@
 
 #pragma once
 
-namespace BenchmarkTester
+#include "Dependencies.hpp"
+
+class BenchmarkTester
 {
-	void test();
-}
+public:
+	BenchmarkTester() = delete;
+	BenchmarkTester(const BenchmarkTester&) = delete;
+	BenchmarkTester(BenchmarkTester&&) = delete;
+	BenchmarkTester& operator= (const BenchmarkTester&) = delete;
+	BenchmarkTester& operator= (BenchmarkTester&&) = delete;
+	~BenchmarkTester() = delete;
+
+	static inline void test();
+
+private:
+	static inline std::vector<int> doWork();
+	static inline void testToString();
+};
+
+#include "DefHeaders/BenchmarkTesterDef.hpp"

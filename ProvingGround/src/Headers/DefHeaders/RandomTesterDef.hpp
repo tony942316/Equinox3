@@ -15,36 +15,20 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "RandomTester.hpp"
+#pragma once
 
-#include <iostream>
-#include <algorithm>
-
-#include <unordered_map>
-
-#include "UnitTest.hpp"
-#include "eqx_Random.hpp"
-
-namespace RandomTester
+inline void RandomTester::test()
 {
-	void testRandomNumber();
-	void testFlipCoin();
-	void testRollDice();
-	void testGenerateSeed();
-
-	void test()
-	{
-		std::cout << "Testing Random..." << std::endl;
-		testRandomNumber();
-		testFlipCoin();
-		testRollDice();
-		testGenerateSeed();
-		UnitTester::printStatus();
-		UnitTester::clear();
-	}
+	std::cout << "Testing Random..." << std::endl;
+	testRandomNumber();
+	testFlipCoin();
+	testRollDice();
+	testGenerateSeed();
+	UnitTester::printStatus();
+	UnitTester::clear();
 }
 
-void RandomTester::testRandomNumber()
+inline void RandomTester::testRandomNumber()
 {
 	constexpr auto runs = 1'000'000;
 	auto randNum = 0;
@@ -107,7 +91,7 @@ void RandomTester::testRandomNumber()
 		randNumDouble = eqx::Random::randomNumber(0.0,
 			std::numeric_limits<double>::max());
 		UnitTester::test(randNumDouble, 0.0, GTE<double, double>);
-		UnitTester::test(randNumDouble, std::numeric_limits<double>::max(), 
+		UnitTester::test(randNumDouble, std::numeric_limits<double>::max(),
 			LTE<double, double>);
 
 		randNumDouble = eqx::Random::randomNumber(
@@ -117,11 +101,11 @@ void RandomTester::testRandomNumber()
 		UnitTester::test(randNumDouble, 0.0, LTE<double, double>);
 
 		randNumDouble = eqx::Random::randomNumber(
-			std::numeric_limits<double>::lowest(), 
+			std::numeric_limits<double>::lowest(),
 			std::numeric_limits<double>::max());
 		UnitTester::test(randNumDouble, std::numeric_limits<double>::lowest(),
 			GTE<double, double>);
-		UnitTester::test(randNumDouble, std::numeric_limits<double>::max(), 
+		UnitTester::test(randNumDouble, std::numeric_limits<double>::max(),
 			LTE<double, double>);
 	}
 
@@ -130,7 +114,7 @@ void RandomTester::testRandomNumber()
 	testDist(dist3);
 }
 
-void RandomTester::testFlipCoin()
+inline void RandomTester::testFlipCoin()
 {
 	constexpr auto runs = 1'000'000;
 	auto randCoin = 0U;
@@ -154,7 +138,7 @@ void RandomTester::testFlipCoin()
 	UnitTester::test(deviation, 1.1, LTE<double, double>);
 }
 
-void RandomTester::testRollDice()
+inline void RandomTester::testRollDice()
 {
 	constexpr auto runs = 1'000'000;
 	auto randNum = 0U;
@@ -179,7 +163,7 @@ void RandomTester::testRollDice()
 	}
 }
 
-void RandomTester::testGenerateSeed()
+inline void RandomTester::testGenerateSeed()
 {
 	constexpr auto runs = 1'000'000;
 	auto seed = 0U;

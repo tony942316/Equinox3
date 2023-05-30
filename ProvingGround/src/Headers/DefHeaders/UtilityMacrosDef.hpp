@@ -15,32 +15,18 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "UtilityMacrosTester.hpp"
+#pragma once
 
-#include <iostream>
-
-#include <array>
-
-#include "UnitTest.hpp"
-#include "eqx_UtilityMacros.hpp"
-
-namespace UtilityMacrosTester
+inline void UtilityMacrosTester::test()
 {
-	void test()
-	{
-		std::cout << "Testing UtilityMacros..." << std::endl;
-		UnitTester::printStatus();
-		UnitTester::clear();
-	}
-	consteval void testCountArgs() noexcept;
-	constexpr void testStringArgs() noexcept;
-	constexpr void testForEach() noexcept;
-	constexpr void testForEachList();
+	std::cout << "Testing UtilityMacros..." << std::endl;
+	UnitTester::printStatus();
+	UnitTester::clear();
 }
 
 consteval void UtilityMacrosTester::testCountArgs() noexcept
 {
-	static_assert(std::is_same_v<decltype(EQX_COUNT_ARGS(1, 2, 3)), 
+	static_assert(std::is_same_v<decltype(EQX_COUNT_ARGS(1, 2, 3)),
 		unsigned int>);
 	static_assert(EQX_COUNT_ARGS(1, 2, 3, 4, 5) == 5ULL);
 }
@@ -50,10 +36,10 @@ constexpr void UtilityMacrosTester::testStringArgs() noexcept
 	static_assert(std::is_same_v<decltype(EQX_STRING_ARGS(1)), decltype("1")>);
 	constexpr auto arr = std::array<const char*, 5ULL>({
 		EQX_STRING_ARGS(1, 2, 3, 4, 5)
-	});
+		});
 	static_assert(arr == std::array<const char*, 5ULL>({
 		"1", "2", "3", "4", "5"
-	}));
+		}));
 }
 
 #define TEST_FOR_EACH_MACRO1(x) static_assert(x); val++;
@@ -78,18 +64,22 @@ constexpr void UtilityMacrosTester::testForEachList()
 #pragma warning(disable: 4100)
 	constexpr auto testForEachListAux = []<typename... Types>
 		(Types... args) constexpr
-		{
-			return (sizeof...(args));
-		};
+	{
+		return (sizeof...(args));
+	};
 #pragma warning(pop)
 
 
 	constexpr auto x = testForEachListAux
-		(EQX_FOR_EACH_LIST(TEST_FOR_EACH_LIST_MACRO, a, b, c, d, e, f, g));
+	(EQX_FOR_EACH_LIST(TEST_FOR_EACH_LIST_MACRO, a, b, c, d, e, f, g));
 	static_assert(x == 7ULL);
 
-	constexpr auto arr = std::array<const char*, 3ULL>({ 
+	constexpr auto arr = std::array<const char*, 3ULL>({
 		EQX_FOR_EACH_LIST(TEST_FOR_EACH_LIST_MACRO, 1, 2, 3)
-	});
+		});
 	static_assert(arr == std::array<const char*, 3ULL>({ "1", "2", "3" }));
 }
+
+#undef TEST_FOR_EACH_MACRO1
+#undef TEST_FOR_EACH_MACRO2
+#undef TEST_FOR_EACH_LIST_MACRO

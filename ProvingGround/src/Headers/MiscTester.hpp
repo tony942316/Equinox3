@@ -17,7 +17,25 @@
 
 #pragma once
 
-namespace MiscTester
+#include "Dependencies.hpp"
+
+class MiscTester
 {
-	void test();
-}
+public:
+	MiscTester() = delete;
+	MiscTester(const MiscTester&) = delete;
+	MiscTester(MiscTester&&) = delete;
+	MiscTester& operator= (const MiscTester&) = delete;
+	MiscTester& operator= (MiscTester&&) = delete;
+	~MiscTester() = delete;
+
+	static inline void test();
+
+private:
+	static inline void testToString();
+	static inline void testPairPrint();
+	static inline void testZip();
+	static consteval void testLiterals() noexcept;
+};
+
+#include "DefHeaders/MiscTesterDef.hpp"

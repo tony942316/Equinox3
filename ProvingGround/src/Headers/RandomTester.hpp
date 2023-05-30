@@ -17,7 +17,23 @@
 
 #pragma once
 
-namespace RandomTester
+class RandomTester
 {
-	void test();
-}
+public:
+	RandomTester() = delete;
+	RandomTester(const RandomTester&) = delete;
+	RandomTester(RandomTester&&) = delete;
+	RandomTester& operator= (const RandomTester&) = delete;
+	RandomTester& operator= (RandomTester&&) = delete;
+	~RandomTester() = delete;
+
+	static inline void test();
+
+private:
+	static inline void testRandomNumber();
+	static inline void testFlipCoin();
+	static inline void testRollDice();
+	static inline void testGenerateSeed();
+};
+
+#include "DefHeaders/RandomTesterDef.hpp"

@@ -17,7 +17,22 @@
 
 #pragma once
 
-namespace StopWatchTester
+class StopWatchTester
 {
-	void test();
-}
+public:
+	StopWatchTester() = delete;
+	StopWatchTester(const StopWatchTester&) = delete;
+	StopWatchTester(StopWatchTester&&) = delete;
+	StopWatchTester& operator= (const StopWatchTester&) = delete;
+	StopWatchTester& operator= (StopWatchTester&&) = delete;
+	~StopWatchTester() = delete;
+
+	static inline void test();
+
+private:
+	static inline void testGetTime();
+	static inline void testReadTime();
+	static inline void wasteTime(std::chrono::microseconds ms);
+};
+
+#include "DefHeaders/StopWatchTesterDef.hpp"

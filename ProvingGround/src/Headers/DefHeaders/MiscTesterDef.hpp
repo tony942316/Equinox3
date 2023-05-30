@@ -15,43 +15,19 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "MiscTester.hpp"
+#pragma once
 
-#include <iostream>
-#include <sstream>
-#include <utility>
-#include <algorithm>
-
-#include <array>
-#include <vector>
-#include <set>
-#include <unordered_set>
-#include <map>
-#include <unordered_map>
-
-#include "UnitTest.hpp"
-#include "eqx_Misc.hpp"
-
-namespace MiscTester
+inline void MiscTester::test()
 {
-	void testToString();
-	void testPairPrint();
-	void testZip();
-
-	void test()
-	{
-		std::cout << "Testing Misc..." << std::endl;
-		testToString();
-		testPairPrint();
-		testZip();
-		UnitTester::printStatus();
-		UnitTester::clear();
-	}
-
-	consteval void testLiterals() noexcept;
+	std::cout << "Testing Misc..." << std::endl;
+	testToString();
+	testPairPrint();
+	testZip();
+	UnitTester::printStatus();
+	UnitTester::clear();
 }
 
-void MiscTester::testToString()
+inline void MiscTester::testToString()
 {
 	using namespace std::string_view_literals;
 	using namespace std::string_literals;
@@ -73,7 +49,7 @@ void MiscTester::testToString()
 	UnitTester::test(eqx::toString(std::make_pair(5, 5)), "(5, 5)"s);
 	UnitTester::test(eqx::toString(std::make_pair("Yes", 5)), "(Yes, 5)"s);
 	UnitTester::test(
-		eqx::toString(std::make_pair(5, 5.123)),"(5, 5.123000)"s);
+		eqx::toString(std::make_pair(5, 5.123)), "(5, 5.123000)"s);
 	UnitTester::test(
 		eqx::toString(std::make_pair("Hello"sv, 6UL)), "(Hello, 6)"s);
 	UnitTester::test(
@@ -92,12 +68,12 @@ void MiscTester::testToString()
 		{ 2, "Two" },
 		{ 3, "Three" },
 		{ 4, "Four" }
-	});
-	UnitTester::test(eqx::toString(vecWPairs), 
+		});
+	UnitTester::test(eqx::toString(vecWPairs),
 		"{ (1, One), (2, Two), (3, Three), (4, Four) }"s);
 }
 
-void MiscTester::testPairPrint()
+inline void MiscTester::testPairPrint()
 {
 	using namespace eqx::pairPrint;
 	using namespace std::string_view_literals;
@@ -118,16 +94,7 @@ void MiscTester::testPairPrint()
 	UnitTester::test(temp, "(1.500000, Double)"sv);
 }
 
-consteval void MiscTester::testLiterals() noexcept
-{
-	using namespace eqx::literals;
-
-	static_assert(std::is_same_v<decltype(1_size), std::size_t>);
-	static_assert(std::is_same_v<decltype(1_short), short>);
-	static_assert(std::is_same_v<decltype(1_ushort), unsigned short>);
-}
-
-void MiscTester::testZip()
+inline void MiscTester::testZip()
 {
 	using namespace std::string_view_literals;
 
@@ -141,34 +108,34 @@ void MiscTester::testZip()
 		{ 1, 1 },
 		{ 2, 2 },
 		{ 3, 3 }
-	}));
+		}));
 
 	auto diffCollectionTest2 = eqx::zip(
 		std::vector<int>({ 1, 2, 3 }),
-		std::map<int, int>({ 
+		std::map<int, int>({
 			{ 1, 1 },
 			{ 2, 2 },
 			{ 3, 3 }
-		}));
-	UnitTester::test(diffCollectionTest2, 
+			}));
+	UnitTester::test(diffCollectionTest2,
 		std::vector<std::pair<int, std::pair<const int, int>>>({
 			{ 1, { 1, 1 } },
 			{ 2, { 2, 2 } },
 			{ 3, { 3, 3 } }
-		}));
+			}));
 
 	auto diffCollectionTest3 = eqx::zip(
 		std::unordered_map<int, std::string_view>({
 			{ 0, "XX"sv },
 			{ 10'000, "x"sv }
-		}),
+			}),
 		std::set<double>({ 0.001, 11.12234 }));
 	UnitTester::test(diffCollectionTest3,
 		std::vector<std::pair<
-			std::pair<const int, std::string_view>, double>>({
-			{ { 0, "XX"sv }, 0.001 },
-			{ { 10'000, "x"sv }, 11.12234 }
-		}));
+		std::pair<const int, std::string_view>, double>>({
+		{ { 0, "XX"sv }, 0.001 },
+		{ { 10'000, "x"sv }, 11.12234 }
+			}));
 
 	auto diffHeldTypeTest = eqx::zip(
 		std::vector<std::string_view>({ "Hello"sv, "Goodbye"sv }),
@@ -177,5 +144,14 @@ void MiscTester::testZip()
 		std::vector<std::pair<std::string_view, double>>({
 			{ "Hello"sv, 1.0 },
 			{ "Goodbye"sv, 2.0 }
-		}));
+			}));
+}
+
+consteval void MiscTester::testLiterals() noexcept
+{
+	using namespace eqx::literals;
+
+	static_assert(std::is_same_v<decltype(1_size), std::size_t>);
+	static_assert(std::is_same_v<decltype(1_short), short>);
+	static_assert(std::is_same_v<decltype(1_ushort), unsigned short>);
 }
