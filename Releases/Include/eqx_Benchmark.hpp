@@ -17,8 +17,7 @@
 
 #pragma once
 
-#include <functional>
-#include <chrono>
+#include "eqx_Dependencies.hpp"
 
 #include "eqx_StopWatch.hpp"
 

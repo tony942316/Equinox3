@@ -239,6 +239,7 @@
     <ClInclude Include="src\Headers\eqx_DefHeaders\eqx_RandomDef.hpp" />
     <ClInclude Include="src\Headers\eqx_DefHeaders\eqx_RectangleDef.hpp" />
     <ClInclude Include="src\Headers\eqx_DefHeaders\eqx_StopWatchDef.hpp" />
+    <ClInclude Include="src\Headers\eqx_Dependencies.hpp" />
     <ClInclude Include="src\Headers\eqx_Log.hpp" />
     <ClInclude Include="src\Headers\eqx_Mathematics.hpp" />
     <ClInclude Include="src\Headers\eqx_Misc.hpp" />

@@ -17,10 +17,7 @@
 
 #pragma once
 
-#include <string>
-#include <cmath>
-#include <cerrno>
-#include <functional>
+#include "eqx_Dependencies.hpp"
 
 #include "eqx_Misc.hpp"
 #include "eqx_Mathematics.hpp"

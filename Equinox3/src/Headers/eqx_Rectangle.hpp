@@ -17,7 +17,7 @@
 
 #pragma once
 
-#include <string>
+#include "eqx_Dependencies.hpp"
 
 #include "eqx_Misc.hpp"
 #include "eqx_Point.hpp"

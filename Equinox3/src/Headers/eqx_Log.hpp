@@ -17,13 +17,7 @@
 
 #pragma once
 
-#include <fstream>
-#include <iostream>
-#include <string>
-#include <string_view>
-#include <source_location>
-
-#include <array>
+#include "eqx_Dependencies.hpp"
 
 #include "eqx_SuperEnum.hpp"
 

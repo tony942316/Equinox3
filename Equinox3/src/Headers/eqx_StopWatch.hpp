@@ -17,7 +17,7 @@
 
 #pragma once
 
-#include <chrono>
+#include "eqx_Dependencies.hpp"
 
 namespace eqx
 {

@@ -17,11 +17,6 @@
 
 #pragma once
 
-#include <type_traits>
-#include <concepts>
-#include <limits>
-#include <cmath>
-
 namespace eqx
 {
 	template <eqx::integer T>

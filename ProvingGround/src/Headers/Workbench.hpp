@@ -22,6 +22,6 @@ inline void workbenchMain()
 	std::cout << "Workbench Start: ";
 	std::cin.get();
 
-	std::cout << "Workbench End: ";
+	std::cout << "\nWorkbench End: ";
 	std::cin.get();
 }

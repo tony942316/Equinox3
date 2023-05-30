@@ -17,6 +17,8 @@
 
 #pragma once
 
+#include "eqx_Dependencies.hpp"
+
 /**
  * @brief Macro For Use By Other Macros In The UtilityMacros Header, 
  *		NOT FOR EXTERNAL USE!

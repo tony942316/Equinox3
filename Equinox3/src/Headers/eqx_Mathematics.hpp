@@ -17,6 +17,8 @@
 
 #pragma once
 
+#include "eqx_Dependencies.hpp"
+
 #include "eqx_Misc.hpp"
 
 namespace eqx
