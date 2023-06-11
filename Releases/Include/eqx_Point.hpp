@@ -28,7 +28,8 @@ namespace eqx
 	 * @brief Point On The Cartesian Plane i.e. (X, Y), Note T
 	 *		Must Be An Arithmetic Type
 	 */
-	template <eqx::arithmetic T>
+	template <typename T>
+		requires Arithmetic<T>
 	class Point
 	{
 	public:
@@ -75,13 +76,31 @@ namespace eqx
 			operator- (const Point<T>& other) const noexcept;
 
 		/**
+		 * @brief x * other.x, y * other.y
+		 * 
+		 * @param scaler The Scaler We Multiply By
+		 * 
+		 * @returns Resulting Point
+		 */
+		[[nodiscard]] constexpr Point<T> operator* (T scaler) const noexcept;
+
+		/**
+		 * @brief x / other.x, y / other.y
+		 * 
+		 * @param scaler The Scaler We Divide By
+		 * 
+		 * @returns Resulting Point
+		 */
+		[[nodiscard]] constexpr Point<T> operator/ (T scaler) const noexcept;
+
+		/**
 		 * @brief x += other.x, y += other.y
 		 * 
 		 * @param other The Same Type Point We Add From
 		 * 
 		 * @returns *this
 		 */
-		constexpr Point<T> operator+= (const Point<T>& other) noexcept;
+		constexpr Point<T>& operator+= (const Point<T>& other) noexcept;
 
 		/**
 		 * @brief x -= other.x, y -= other.y
@@ -90,7 +109,25 @@ namespace eqx
 		 * 
 		 * @returns *this
 		 */
-		constexpr Point<T> operator-= (const Point<T>& other) noexcept;
+		constexpr Point<T>& operator-= (const Point<T>& other) noexcept;
+
+		/**
+		 * @brief x * other.x, y * other.y
+		 * 
+		 * @param scaler The Scaler We Multiply By
+		 * 
+		 * @returns *this
+		 */
+		constexpr Point<T>& operator*= (T scaler) noexcept;
+
+		/**
+		 * @brief x / other.x, y / other.y
+		 * 
+		 * @param scaler The Scaler We Divide By
+		 * 
+		 * @returns *this
+		 */
+		constexpr Point<T>& operator/= (T scaler) noexcept;
 
 		/**
 		 * @brief eqx::equals(x, other.x), eqx::equals(y, other.y)
@@ -150,7 +187,8 @@ namespace eqx
 	 *
 	 * @returns true If Points Are Equivalent
 	 */
-	template <std::floating_point T>
+	template <typename T>
+		requires std::floating_point<T>
 	[[nodiscard]] constexpr bool equals(const Point<T>& point1,
 		const Point<T>& point2, double error = 0.001) noexcept;
 
@@ -162,7 +200,8 @@ namespace eqx
 	 *
 	 * @returns true If Points Are Equivalent
 	 */
-	template <eqx::integer T>
+	template <typename T>
+		requires Integer<T>
 	[[nodiscard]] constexpr bool equals(const Point<T>& point1,
 		const Point<T>& point2) noexcept;
 
@@ -186,7 +225,8 @@ namespace eqx
 	 * 
 	 * @returns Normalized Point
 	 */
-	template <std::floating_point T>
+	template <typename T>
+		requires std::floating_point<T>
 	[[nodiscard]] Point<T> normalize(const Point<T>& point) noexcept;
 
 	/**

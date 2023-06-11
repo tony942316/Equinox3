@@ -17,5 +17,4 @@
 
 #pragma once
 
-#include "Dependencies.hpp"
-#include "Tester.hpp"
+#include "eqx_Dependencies.hpp"

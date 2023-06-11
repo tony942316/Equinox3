@@ -22,6 +22,7 @@ inline void StopWatchTester::test()
 	std::cout << "Testing StopWatch..." << std::endl;
 	testGetTime();
 	testReadTime();
+	testToString();
 	UnitTester::printStatus();
 	UnitTester::clear();
 }
@@ -34,9 +35,9 @@ inline void StopWatchTester::testGetTime()
 	wasteTime(1'000us);
 	watch.stop();
 
-	UnitTester::test(watch.getTime<tu_us>(), 100'000LL,
+	UnitTester::test(watch.getTime<t_US>(), 100'000LL,
 		LTE<long long, long long>);
-	UnitTester::test(watch.getTime<tu_us>(), 1'000LL,
+	UnitTester::test(watch.getTime<t_US>(), 1'000LL,
 		GTE<long long, long long>);
 }
 
@@ -46,10 +47,23 @@ inline void StopWatchTester::testReadTime()
 	using namespace eqx::shortTimeUnits;
 	auto watch = eqx::StopWatch();
 	wasteTime(1'000us);
-	const auto result = watch.readTime<tu_us>();
+	const auto result = watch.readTime<t_US>();
 
 	UnitTester::test(result, 100'000LL, LTE<long long, long long>);
 	UnitTester::test(result, 1'000LL, GTE<long long, long long>);
+}
+
+inline void StopWatchTester::testToString()
+{
+	using namespace std::chrono_literals;
+	using namespace eqx::shortTimeUnits;
+	auto watch = eqx::StopWatch();
+	wasteTime(1'000us);
+	watch.stop();
+
+	UnitTester::test(watch.toString<t_US>(), 
+		std::format("{}us", watch.getTime<t_US>()));
+	UnitTester::test(eqx::toString<t_US>(watch), watch.toString<t_US>());
 }
 
 inline void StopWatchTester::wasteTime(std::chrono::microseconds ms)

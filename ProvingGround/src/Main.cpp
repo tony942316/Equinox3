@@ -17,7 +17,10 @@
 
 #include "pch.hpp"
 
+#include "Dependencies.hpp"
+
 #include "Workbench.hpp"
+#include "Tester.hpp"
 
 int main()
 {

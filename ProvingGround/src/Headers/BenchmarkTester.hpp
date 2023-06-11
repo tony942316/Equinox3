@@ -32,8 +32,9 @@ public:
 	static inline void test();
 
 private:
-	static inline std::vector<int> doWork();
+	static inline void testGetBench();
 	static inline void testToString();
+	static inline void wasteTime(std::chrono::microseconds ms);
 };
 
 #include "DefHeaders/BenchmarkTesterDef.hpp"

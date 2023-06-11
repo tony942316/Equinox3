@@ -357,10 +357,10 @@ constexpr void MathematicsTester::testRadiansToDegrees() noexcept
 		}
 	};
 
-	constexpr auto pi6 = eqx::pi / 6;
-	constexpr auto pi4 = eqx::pi / 4;
-	constexpr auto pi3 = eqx::pi / 3;
-	constexpr auto pi2 = eqx::pi / 2;
+	constexpr auto pi6 = std::numbers::pi / 6;
+	constexpr auto pi4 = std::numbers::pi / 4;
+	constexpr auto pi3 = std::numbers::pi / 3;
+	constexpr auto pi2 = std::numbers::pi / 2;
 
 	static_assert(aproxEq(eqx::radiansToDegrees(0.0), 0.0));
 	static_assert(aproxEq(eqx::radiansToDegrees(pi6), 30.0));
@@ -371,7 +371,7 @@ constexpr void MathematicsTester::testRadiansToDegrees() noexcept
 	static_assert(aproxEq(eqx::radiansToDegrees(pi3 * 2.0), 120.0));
 	static_assert(aproxEq(eqx::radiansToDegrees(pi4 * 3.0), 135.0));
 	static_assert(aproxEq(eqx::radiansToDegrees(pi6 * 5.0), 150.0));
-	static_assert(aproxEq(eqx::radiansToDegrees(eqx::pi), 180.0));
+	static_assert(aproxEq(eqx::radiansToDegrees(std::numbers::pi), 180.0));
 	static_assert(aproxEq(eqx::radiansToDegrees(pi6 * 7.0), 210.0));
 	static_assert(aproxEq(eqx::radiansToDegrees(pi4 * 5.0), 225.0));
 	static_assert(aproxEq(eqx::radiansToDegrees(pi3 * 4.0), 240.0));
@@ -379,5 +379,5 @@ constexpr void MathematicsTester::testRadiansToDegrees() noexcept
 	static_assert(aproxEq(eqx::radiansToDegrees(pi3 * 5.0), 300.0));
 	static_assert(aproxEq(eqx::radiansToDegrees(pi4 * 7.0), 315.0));
 	static_assert(aproxEq(eqx::radiansToDegrees(pi6 * 11), 330.0));
-	static_assert(aproxEq(eqx::radiansToDegrees(eqx::pi * 2), 360.0));
+	static_assert(aproxEq(eqx::radiansToDegrees(std::numbers::pi * 2), 360.0));
 }

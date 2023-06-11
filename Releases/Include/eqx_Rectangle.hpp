@@ -31,7 +31,8 @@ namespace eqx
 	 *		Act As If They Are In Screen Space i.e. The Height Of The
 	 *		Rectangle Is Directed Downwards
 	 */
-	template <eqx::arithmetic T>
+	template <typename T>
+		requires Arithmetic<T>
 	class Rectangle
 	{
 	public:
@@ -122,7 +123,7 @@ namespace eqx
 		 * 
 		 * @returns eqx::Point<T> Representing The Center Point
 		 */
-		[[nodiscard]] constexpr eqx::Point<T> getCenterPoint() const noexcept;
+		[[nodiscard]] constexpr Point<T> getCenterPoint() const noexcept;
 
 		/**
 		 * @brief Creates Printable String Of Form "(x, y, w, h)"
@@ -145,11 +146,13 @@ namespace eqx
 	template <typename T>
 	[[nodiscard]] std::string toString(const Rectangle<T>& rect);
 
-	template <std::floating_point T>
+	template <typename T>
+		requires std::floating_point<T>
 	[[nodiscard]] constexpr bool equals(const Rectangle<T>& rect1,
 		const Rectangle<T>& rect2, double error = 0.001) noexcept;
 
-	template <eqx::integer T>
+	template <typename T>
+		requires Integer<T>
 	[[nodiscard]] constexpr bool equals(const Rectangle<T>& rect1,
 		const Rectangle<T>& rect2) noexcept;
 

@@ -21,16 +21,8 @@
 
 #include "eqx_UtilityMacros.hpp"
 
-namespace eqx
-{
-    /**
-     * @brief Constrain T To Be An Enum Type
-     */
-    template <typename T>
-    concept enumType = std::is_enum_v<T>;
-}
-
-template <eqx::enumType T>
+template <typename T>
+    requires std::is_enum_v<T>
 struct EnumPair
 {
     consteval EnumPair() noexcept
@@ -72,13 +64,15 @@ namespace eqx
     }
 }
 
-template <eqx::enumType T>
+template <typename T>
+    requires std::is_enum_v<T>
 constexpr bool operator== (EnumPair<T> lhs, EnumPair<T> rhs)
 {
     return lhs.m_Enum == rhs.m_Enum;
 }
 
-template <eqx::enumType T>
+template <typename T>
+    requires std::is_enum_v<T>
 constexpr bool operator!= (EnumPair<T> lhs, EnumPair<T> rhs)
 {
     return !(lhs == rhs);
@@ -189,7 +183,7 @@ constexpr bool operator!= (EnumPair<T> lhs, EnumPair<T> rhs)
 #define EQX_SUPER_ENUM(name, ...) \
     enum class name : std::size_t \
         { __VA_ARGS__ }; \
-    static inline constexpr auto name##Collection = \
+    constexpr static inline auto name##Collection = \
         eqx::P_makeArr<EQX_COUNT_ARGS(__VA_ARGS__), name> \
         (EQX_STRING_ARGS(__VA_ARGS__)); \
     P_EQX_SUPER_ENUM_FULL_IMPLEMENTATION(name)

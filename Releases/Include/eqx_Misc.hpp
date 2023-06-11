@@ -19,6 +19,8 @@
 
 #include "eqx_Dependencies.hpp"
 
+#include "eqx_UtilityMacros.hpp"
+
 #ifdef NDEBUG
 #define eqx_debugOnly_runtimeAssert(expr, message) 0;
 #else
@@ -31,7 +33,7 @@
  * @param expr Expression To Be Checked
  * @param msg Message To Print To std::cerr
  */
-inline void eqx_debugOnly_runtimeAssert(bool expr,
+constexpr void eqx_debugOnly_runtimeAssert(bool expr,
 	std::string_view msg = "") noexcept;
 
 #endif
@@ -39,90 +41,107 @@ inline void eqx_debugOnly_runtimeAssert(bool expr,
 namespace eqx
 {
 	/**
+	 * @brief Type Accurate nullptr
+	 */
+	template <typename T>
+	inline constexpr auto nullp = static_cast<T*>(nullptr);
+
+	/**
 	 * @brief Constrain T To Be A signed Integer Type, Note Unlike
 	 *		std::is_integeral The bool And char Types Are Not Included
 	 */
 	template <typename T>
-	concept signedInteger =
-		std::is_same_v<std::remove_cv_t<T>, signed short> ||
-		std::is_same_v<std::remove_cv_t<T>, signed int> ||
-		std::is_same_v<std::remove_cv_t<T>, signed long> ||
-		std::is_same_v<std::remove_cv_t<T>, signed long long>;
+	concept SignedInteger =
+		std::is_same_v<std::remove_cvref_t<T>, signed short> ||
+		std::is_same_v<std::remove_cvref_t<T>, signed int> ||
+		std::is_same_v<std::remove_cvref_t<T>, signed long> ||
+		std::is_same_v<std::remove_cvref_t<T>, signed long long>;
 
 	/**
 	 * @brief Constrain T To Be An unsigned Integer Type, Note Unlike
 	 *		std::is_integeral The bool And char Types Are Not Included
 	 */
 	template <typename T>
-	concept unsignedInteger =
-		std::is_same_v<std::remove_cv_t<T>, unsigned short> ||
-		std::is_same_v<std::remove_cv_t<T>, unsigned int> ||
-		std::is_same_v<std::remove_cv_t<T>, unsigned long> ||
-		std::is_same_v<std::remove_cv_t<T>, unsigned long long>;
+	concept UnsignedInteger =
+		std::is_same_v<std::remove_cvref_t<T>, unsigned short> ||
+		std::is_same_v<std::remove_cvref_t<T>, unsigned int> ||
+		std::is_same_v<std::remove_cvref_t<T>, unsigned long> ||
+		std::is_same_v<std::remove_cvref_t<T>, unsigned long long>;
 
 	/**
 	 * @brief Constrain T To Be An Integer Type, Note Unlike std::is_integeral
 	 *		The bool And char Types Are Not Included
 	 */
 	template <typename T>
-	concept integer = signedInteger<T> || unsignedInteger<T>;
+	concept Integer = SignedInteger<T> || UnsignedInteger<T>;
 
 	/**
 	 * brief Constrain T To Be A signed Arithmetic Type, Note Unlike
 	 *		std::is_arithmetic The bool And char Types Are Not Included
 	 */
 	template <typename T>
-	concept signedArithmetic = signedInteger<T> || std::floating_point<T>;
+	concept SignedArithmetic = SignedInteger<T> || std::floating_point<T>;
 
 	/**
 	 * brief Constrain T To Be An unsigned Arithmetic Type, Note Unlike
 	 *		std::is_arithmetic The bool And char Types Are Not Included
 	 */
 	template <typename T>
-	concept unsignedArithmetic = unsignedInteger<T> || std::floating_point<T>;
+	concept UnsignedArithmetic = UnsignedInteger<T> || std::floating_point<T>;
 
 	/**
 	 * @brief Constrain T To Be An Arithmetic Type, Note Unlike
 	 *		std::is_arithmetic The bool And char Types Are Not Included
 	 */
 	template <typename T>
-	concept arithmetic = signedArithmetic<T> || unsignedArithmetic<T>;
+	concept Arithmetic = SignedArithmetic<T> || UnsignedArithmetic<T>;
 
 	/**
 	 * @brief Constrain T To Be Convertable To A String
 	 */
 	template <typename T>
-	concept stringable = requires(const T& t)
+	concept Stringable = requires(const T& val)
 	{
-		std::to_string(t);
+		std::to_string(val);
 	};
 
 	/**
 	 * @brief Constrain T To Be A String Type
 	 */
 	template <typename T>
-	concept stringType =
-		std::is_same<std::remove_cv_t<T>, std::string>::value ||
-		std::is_same<std::remove_cv_t<T>, std::wstring>::value ||
-		std::is_same<std::remove_cv_t<T>, std::u8string>::value ||
-		std::is_same<std::remove_cv_t<T>, std::u16string>::value ||
-		std::is_same<std::remove_cv_t<T>, std::u32string>::value ||
-		std::is_same<std::remove_cv_t<T>, std::string_view>::value ||
-		std::is_same<std::remove_cv_t<T>, std::wstring_view>::value ||
-		std::is_same<std::remove_cv_t<T>, std::u8string_view>::value ||
-		std::is_same<std::remove_cv_t<T>, std::u16string_view>::value ||
-		std::is_same<std::remove_cv_t<T>, std::u32string_view>::value;
+	concept StringType =
+		std::is_same<std::remove_cvref_t<T>, std::string>::value ||
+		std::is_same<std::remove_cvref_t<T>, std::wstring>::value ||
+		std::is_same<std::remove_cvref_t<T>, std::u8string>::value ||
+		std::is_same<std::remove_cvref_t<T>, std::u16string>::value ||
+		std::is_same<std::remove_cvref_t<T>, std::u32string>::value ||
+		std::is_same<std::remove_cvref_t<T>, std::string_view>::value ||
+		std::is_same<std::remove_cvref_t<T>, std::wstring_view>::value ||
+		std::is_same<std::remove_cvref_t<T>, std::u8string_view>::value ||
+		std::is_same<std::remove_cvref_t<T>, std::u16string_view>::value ||
+		std::is_same<std::remove_cvref_t<T>, std::u32string_view>::value;
 
 	/**
 	 * @brief Constrain T To Be A Const Collection
 	 */
 	template <typename T>
-	concept constCollection = !eqx::stringType<T> &&
-		requires(const T& t)
+	concept ConstCollection = !StringType<T> &&
+		requires(const T& val)
 		{
-			std::ranges::cbegin(t);
-			std::ranges::cend(t);
-			std::ranges::size(t);
+			std::ranges::cbegin(val);
+			std::ranges::cend(val);
+			std::ranges::size(val);
+		};
+
+	/**
+	 * @brief Constrain T To Be Copyable To std::cout
+	 */
+	template <typename T>
+	concept Printable = (StringType<T> || ConstCollection<T>) && 
+		requires(T val)
+		{
+			std::ranges::copy(val, std::ostream_iterator<
+				std::ranges::range_value_t<T>>(std::cout));
 		};
 
 	/**
@@ -137,11 +156,12 @@ namespace eqx
 	/**
 	 * @brief Convert A Value To A std::string
 	 * 
-	 * @param val Value To Be Converted, Must Be eqx::stringable Compliant
+	 * @param val Value To Be Converted, Must Be eqx::Stringable Compliant
 	 * 
 	 * @returns Value Converted To std::string
 	 */
-	template <eqx::stringable T>
+	template <typename T>
+		requires Stringable<T>
 	[[nodiscard]] std::string toString(const T& val);
 
 	/**
@@ -151,7 +171,8 @@ namespace eqx
 	 *
 	 * @returns Value Converted To std::string
 	 */
-	template <eqx::stringType T>
+	template <typename T>
+		requires StringType<T>
 	[[nodiscard]] std::string toString(const T& val);
 
 	/**
@@ -174,7 +195,8 @@ namespace eqx
 	 * 
 	 * @returns Collection Converted To std::string
 	 */
-	template <eqx::constCollection T>
+	template <typename T>
+		requires ConstCollection<T>
 	[[nodiscard]] std::string toString(const T& val);
 
 	namespace pairPrint
@@ -195,6 +217,8 @@ namespace eqx
 
 	namespace literals
 	{
+		using namespace std::literals;
+
 		/**
 		 * @brief std::size_t Literal
 		 */
@@ -210,7 +234,32 @@ namespace eqx
 		 */
 		consteval unsigned short 
 			operator""_ushort (unsigned long long x) noexcept;
+
+		/**
+		 * @brief KiloBytes Literal Conversion
+		 */
+		constexpr long long operator""_KB(unsigned long long x) noexcept;
 	}
+
+	/**
+	 * @brief Print A String Or Range To std::cout
+	 * 
+	 * @param msg Message To Be Printed
+	 * @param delim Characters To Be Printed In Between Elements Of msg
+	 */
+	template <typename T>
+		requires Printable<T>
+	void print(T&& msg, std::string_view delim = "") noexcept;
+
+	/**
+	 * @brief Print A String Or Range To std::cout with a '\n'
+	 * 
+	 * @param msg Message To Be Printed
+	 * @param delim Characters To Be Printed In Between Elements Of msg
+	 */
+	template <typename T>
+		requires Printable<T>
+	void println(T&& msg, std::string_view delim = "") noexcept;
 
 	/**
 	 * @brief Checks If A Boolean Expression Is True, If Not Then Print
@@ -219,7 +268,8 @@ namespace eqx
 	 * @param expr Expression To Be Checked
 	 * @param msg Message To Print To std::cerr
 	 */
-	inline void runtimeAssert(bool expr, std::string_view msg = "") noexcept;
+	constexpr void runtimeAssert(bool expr, std::string_view msg = "") 
+		noexcept;
 
 	/**
 	 * @brief "Zip" Two Collections Together In The Form Of
@@ -230,7 +280,8 @@ namespace eqx
 	 * 
 	 * @returns std::vector<std::pair<C1 Held Value, C2 Held Value>>
 	 */
-	template <eqx::constCollection C1, eqx::constCollection C2>
+	template <typename C1, typename C2>
+		requires ConstCollection<C1> && ConstCollection<C2>
 	[[nodiscard]] inline auto zip(const C1& x, const C2& y);
 }
 

@@ -174,3 +174,61 @@ constexpr void PointTester::testMinus() noexcept
 	static_assert(testLambda(point2 - point3, -11.234, 2.346));
 	static_assert(testLambda(point3 - point3, 0.0, 0.0));
 }
+
+constexpr void PointTester::testTimes() noexcept
+{
+	constexpr auto point1 = eqx::Point<double>(1.0, 1.0);
+	constexpr auto point2 = eqx::Point<double>(-10.0, 10.0);
+	constexpr auto point3 = eqx::Point<double>(1.234, 7.654);
+
+	constexpr auto cabs =
+		[](double x) constexpr
+	{
+		return x >= 0 ? x : -x;
+	};
+
+	constexpr auto testLambda =
+		[](const eqx::Point<double>& point, double x, double y) constexpr
+	{
+		return cabs(point.x - x) < 0.001 && cabs(point.y - y) < 0.001;
+	};
+
+	static_assert(testLambda(point1 * 2.0, 2.0, 2.0));
+	static_assert(testLambda(point1 * -2.0, -2.0, -2.0));
+	static_assert(testLambda(point1 * 0.0, 0.0, 0.0));
+	static_assert(testLambda(point2 * 1.0, -10.0, 10.0));
+	static_assert(testLambda(point2 * -3.0, 30.0, -30.0));
+	static_assert(testLambda(point2 * 1.5, -15.0, 15.0));
+	static_assert(testLambda(point3 * 10.0, 12.34, 76.54));
+	static_assert(testLambda(point3 * -10.0, -12.34, -76.54));
+	static_assert(testLambda(point3 * 1.02, 1.25868, 7.80708));
+}
+
+constexpr void PointTester::testDivide() noexcept
+{
+
+	constexpr auto point1 = eqx::Point<double>(1.0, 1.0);
+	constexpr auto point2 = eqx::Point<double>(-10.0, 10.0);
+	constexpr auto point3 = eqx::Point<double>(1.234, 7.654);
+
+	constexpr auto cabs =
+		[](double x) constexpr
+	{
+		return x >= 0 ? x : -x;
+	};
+
+	constexpr auto testLambda =
+		[](const eqx::Point<double>& point, double x, double y) constexpr
+	{
+		return cabs(point.x - x) < 0.001 && cabs(point.y - y) < 0.001;
+	};
+
+	static_assert(testLambda(point1 / 2.0, 0.5, 0.5));
+	static_assert(testLambda(point1 / -2.0, -0.5, -0.5));
+	static_assert(testLambda(point2 / 1.0, -10.0, 10.0));
+	static_assert(testLambda(point2 / -3.0, 3.3333333, -3.3333333));
+	static_assert(testLambda(point2 / 1.5, -6.6666666, 6.6666666));
+	static_assert(testLambda(point3 / 10.0, 0.1234, 0.7654));
+	static_assert(testLambda(point3 / -10.0, -0.1234, -0.7654));
+	static_assert(testLambda(point3 / 1.02, 1.209803, 7.50392));
+}

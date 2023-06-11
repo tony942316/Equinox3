@@ -32,6 +32,7 @@ public:
 private:
 	static inline void testGetTime();
 	static inline void testReadTime();
+	static inline void testToString();
 	static inline void wasteTime(std::chrono::microseconds ms);
 };
 

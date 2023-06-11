@@ -20,6 +20,10 @@
 inline void LogTester::test()
 {
 	std::cout << "Testing Log..." << std::endl;
+	if (!eqx::Log::isInit())
+	{
+		eqx::Log::init();
+	}
 	const auto prevLogLevel = eqx::Log::getCurrentLogLevel();
 	testLog();
 	testSetLevel();
@@ -42,7 +46,7 @@ inline void LogTester::testLog()
 	auto ss = std::stringstream();
 	auto produced = std::string("");
 	const auto loc = std::source_location::current();
-	eqx::Log::setOutputStream(ss);
+	eqx::Log::setOutputStream(&ss);
 	eqx::Log::setLevel(eqx::Log::Level::All);
 
 	eqx::Log::log(eqx::Log::Level::Error, "TestLog"sv, eqx::Log::Type::None,
@@ -86,14 +90,14 @@ inline void LogTester::testSetOutputStream()
 	auto ss = std::stringstream();
 	auto produced = std::string("");
 	eqx::Log::setLevel(eqx::Log::Level::All);
-	eqx::Log::setOutputStream(ss);
+	eqx::Log::setOutputStream(&ss);
 
 	eqx::Log::log(eqx::Log::Level::Error, "testOutputStream"sv);
 	std::getline(ss, produced);
 	UnitTester::test(produced, ""s, NEQ<std::string, std::string>);
 
 	auto ss2 = std::stringstream();
-	eqx::Log::setOutputStream(ss2);
+	eqx::Log::setOutputStream(&ss2);
 
 	eqx::Log::log(eqx::Log::Level::Error, "testOutputStream"sv);
 	std::getline(ss2, produced);
@@ -112,7 +116,7 @@ inline void LogTester::testSetOutputFile()
 	auto produced = std::string("");
 	const auto loc = std::source_location::current();
 	eqx::Log::setLevel(eqx::Log::Level::All);
-	eqx::Log::setOutputStream(ss);
+	eqx::Log::setOutputStream(&ss);
 	eqx::Log::setOutputFile("TestOutputFile.txt"sv);
 
 	eqx::Log::log(eqx::Log::Level::Error, "testOutputFile"sv,
@@ -131,7 +135,7 @@ inline void LogTester::testClear()
 	using namespace std::string_view_literals;
 
 	auto ss = std::stringstream();
-	eqx::Log::setOutputStream(ss);
+	eqx::Log::setOutputStream(&ss);
 	eqx::Log::setLevel(eqx::Log::Level::All);
 
 	eqx::Log::log(eqx::Log::Level::Error, "testClear"sv,

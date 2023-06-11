@@ -38,6 +38,8 @@ private:
 	static constexpr void testConstruction() noexcept;
 	static constexpr void testPlus() noexcept;
 	static constexpr void testMinus() noexcept;
+	static constexpr void testTimes() noexcept;
+	static constexpr void testDivide() noexcept;
 };
 
 #include "DefHeaders/PointTesterDef.hpp"
