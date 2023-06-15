@@ -162,14 +162,11 @@ namespace eqx
 			getLoggableLevels() noexcept;
 
 	private:
-		constinit static inline auto s_OutputStream = 
-			static_cast<std::ostream*>(nullptr);
-		constinit static inline auto s_LogFile =
-			static_cast<std::ofstream*>(nullptr);
+		constinit static inline auto s_OutputStream = nullp<std::ostream>;
+		constinit static inline auto s_LogFile = nullp<std::ofstream>;
 		constinit static inline auto s_LogLevel = Level::None;
 		constinit static inline auto s_LastErrorType = Type::None;
-		constinit static inline auto s_LastMessage = 
-			static_cast<std::string*>(nullptr);
+		constinit static inline auto s_LastMessage = nullp<std::string>;
 		constinit static inline auto s_IsInit = false;
 	};
 }

@@ -1,0 +1,1 @@
+..\LogTesterDef.hpp(void __cdecl LogTester::testClear(void),141) [ERROR]: testClear

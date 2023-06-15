@@ -32,6 +32,7 @@ namespace Tester
 		PointTester::test();
 		RectangleTester::test();
 		BenchmarkTester::test();
+		StaticVectorTester::test();
 		std::cout << std::format("\n{:*<21}", "*") << std::endl;
 	}
 }

@@ -21,7 +21,7 @@
 
 namespace eqx
 {
-	namespace shortTimeUnits
+	namespace TimeTypes
 	{
 		using t_NS = std::chrono::nanoseconds;
 		using t_US = std::chrono::microseconds;

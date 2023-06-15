@@ -27,6 +27,7 @@
 #include "PointTester.hpp"
 #include "RectangleTester.hpp"
 #include "BenchmarkTester.hpp"
+#include "StaticVectorTester.hpp"
 
 namespace Tester
 {

@@ -27,6 +27,7 @@ namespace eqx
 	 * @brief Type Accurate Zero
 	 */
 	template <typename T>
+		requires std::is_arithmetic_v<T>
 	inline constexpr auto zero = narrowCast<T>(0);
 
 	/**

@@ -275,6 +275,7 @@
     <ClInclude Include="src\Headers\DefHeaders\PointTesterDef.hpp" />
     <ClInclude Include="src\Headers\DefHeaders\RandomTesterDef.hpp" />
     <ClInclude Include="src\Headers\DefHeaders\RectangleTesterDef.hpp" />
+    <ClInclude Include="src\Headers\DefHeaders\StaticVectorTesterDef.hpp" />
     <ClInclude Include="src\Headers\DefHeaders\StopWatchTesterDef.hpp" />
     <ClInclude Include="src\Headers\DefHeaders\SuperEnumTesterDef.hpp" />
     <ClInclude Include="src\Headers\DefHeaders\TesterDef.hpp" />
@@ -287,6 +288,7 @@
     <ClInclude Include="src\Headers\PointTester.hpp" />
     <ClInclude Include="src\Headers\RandomTester.hpp" />
     <ClInclude Include="src\Headers\RectangleTester.hpp" />
+    <ClInclude Include="src\Headers\StaticVectorTester.hpp" />
     <ClInclude Include="src\Headers\StopWatchTester.hpp" />
     <ClInclude Include="src\Headers\SuperEnumTester.hpp" />
     <ClInclude Include="src\Headers\Tester.hpp" />

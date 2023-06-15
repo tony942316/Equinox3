@@ -47,7 +47,7 @@ namespace eqx
 {
     /**
      * @brief Function For Use By EQX_SUPER_ENUM, NOT FOR EXTERNAL USE!
-     **/
+     */
     template <std::size_t N, typename EnumType, typename... Types>
     consteval std::array<EnumPair<EnumType>, N> P_makeArr(Types... args)
     {
@@ -81,7 +81,7 @@ constexpr bool operator!= (EnumPair<T> lhs, EnumPair<T> rhs)
 /**
  * @brief Macro For Use By Other Macros In The SuperEnum Header,
  *		NOT FOR EXTERNAL USE!
- **/
+ */
 #define P_EQX_SUPER_ENUM_TO_STRING(name) \
 	[[nodiscard]] static constexpr \
         std::string_view name##ToString(name value) noexcept \
@@ -90,7 +90,7 @@ constexpr bool operator!= (EnumPair<T> lhs, EnumPair<T> rhs)
 /**
  * @brief Macro For Use By Other Macros In The SuperEnum Header,
  *		NOT FOR EXTERNAL USE!
- **/
+ */
 #define P_EQX_SUPER_ENUM_GET_ENUMS(name) \
 	[[nodiscard]] static consteval \
         std::array<name, name##Collection.size()> get##name##Enums() \
@@ -106,7 +106,7 @@ constexpr bool operator!= (EnumPair<T> lhs, EnumPair<T> rhs)
 /**
  * @brief Macro For Use By Other Macros In The SuperEnum Header,
  *		NOT FOR EXTERNAL USE!
- **/
+ */
 #define P_EQX_SUPER_ENUM_GET_STRINGS(name)\
     [[nodiscard]] static consteval \
         std::array<std::string_view, name##Collection.size()> \
@@ -124,7 +124,7 @@ constexpr bool operator!= (EnumPair<T> lhs, EnumPair<T> rhs)
 /**
  * @brief Macro For Use By Other Macros In The SuperEnum Header,
  *		NOT FOR EXTERNAL USE!
- **/
+ */
 #define P_EQX_SUPER_ENUM_OSTREAM(name) \
 	friend std::ostream& operator<< (std::ostream& oStream, name val) \
 	{ \
@@ -135,7 +135,7 @@ constexpr bool operator!= (EnumPair<T> lhs, EnumPair<T> rhs)
 /**
  * @brief Macro For Use By Other Macros In The SuperEnum Header,
  *		NOT FOR EXTERNAL USE!
- **/
+ */
 #define P_EQX_SUPER_ENUM_FULL_IMPLEMENTATION(name) \
 	P_EQX_SUPER_ENUM_TO_STRING(name) \
 	P_EQX_SUPER_ENUM_GET_ENUMS(name) \
@@ -175,11 +175,11 @@ constexpr bool operator!= (EnumPair<T> lhs, EnumPair<T> rhs)
  * @param name The Name Of The enum class
  * @param ... The Values Of The enum class
  *
- * @returns An enum class Of std::size_t With All The Provided Values Aswell 
+ * @returns An enum class Of std::size_t With All The Provided Values, Aswell 
  *      As A std::array<EnumPair, sizeof...(...)> Called name##Collection,
  *      The Array Provides The Values Of The Enum With A std::string_view
  *      Of The Enum Value
- **/
+ */
 #define EQX_SUPER_ENUM(name, ...) \
     enum class name : std::size_t \
         { __VA_ARGS__ }; \

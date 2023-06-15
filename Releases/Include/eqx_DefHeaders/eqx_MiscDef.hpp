@@ -113,20 +113,22 @@ namespace eqx
 		}
 	}
 
-	template <typename T>
-		requires Printable<T>
-	void print(T&& msg, std::string_view delim) noexcept
+	void print(std::string_view msg, std::ostream& out) noexcept
 	{
-		using stdOut = std::ostream_iterator<std::ranges::range_value_t<T>>;
-		std::ranges::copy(msg, stdOut(std::cout, delim.data()));
+		try
+		{
+			out.write(msg.data(), std::ranges::size(msg));
+		}
+		catch (...)
+		{
+			runtimeAssert(false, "Stream Write Exception!");
+		}
 	}
 
-	template <typename T>
-		requires Printable<T>
-	void println(T&& msg, std::string_view delim) noexcept
+	void println(std::string_view msg, std::ostream& out) noexcept
 	{
-		print(std::forward<T>(msg), delim);
-		print(std::string_view("\n"));
+		print(msg, out);
+		print("\n", out);
 	}
 
 	constexpr void runtimeAssert(bool expr, std::string_view msg) noexcept
@@ -136,10 +138,7 @@ namespace eqx
 			// If you got here because of a constexpr evaluation
 			// go up the call stack to where this assert was called
 			// and ideally there is a message in the msg parameter
-			if (!std::is_constant_evaluated())
-			{
-				println(msg);
-			}
+			std::fprintf(stderr, msg.data());
 			std::abort();
 		}
 	}

@@ -75,5 +75,11 @@
     <ClInclude Include="src\Headers\eqx_Dependencies.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\Headers\eqx_StaticVector.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Headers\eqx_DefHeaders\eqx_StaticVectorDef.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

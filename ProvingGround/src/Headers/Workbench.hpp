@@ -19,9 +19,11 @@
 
 inline void workbenchMain()
 {
-	std::cout << "Workbench Start: ";
-	std::cin.get();
+	using namespace eqx::literals;
+	eqx::print("Workbench Start: ");
+	std::cin.get(); 
+ 
 
-	std::cout << "\nWorkbench End: ";
+	eqx::print("\nWorkbench End: ");
 	std::cin.get();
 }

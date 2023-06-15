@@ -146,11 +146,26 @@ namespace eqx
 	template <typename T>
 	[[nodiscard]] std::string toString(const Rectangle<T>& rect);
 
+	/**
+	 * @brief Compares Two eqx::Rectangles To Each Other Within A
+	 *		Given Tolerance
+	 *
+	 * @param rect1, rect2 Rectangles Compared
+	 *
+	 * @returns true If Rectanges Are Equivalent
+	 */
 	template <typename T>
 		requires std::floating_point<T>
 	[[nodiscard]] constexpr bool equals(const Rectangle<T>& rect1,
 		const Rectangle<T>& rect2, double error = 0.001) noexcept;
 
+	/**
+	 * @brief Compares Two eqx::Rectangles To Each Other
+	 *
+	 * @param rect1, rect2 Rectangles Compared
+	 *
+	 * @returns true If Rectanges Are Equivalent
+	 */
 	template <typename T>
 		requires Integer<T>
 	[[nodiscard]] constexpr bool equals(const Rectangle<T>& rect1,

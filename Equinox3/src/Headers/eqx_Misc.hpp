@@ -134,17 +134,6 @@ namespace eqx
 		};
 
 	/**
-	 * @brief Constrain T To Be Copyable To std::cout
-	 */
-	template <typename T>
-	concept Printable = (StringType<T> || ConstCollection<T>) && 
-		requires(T val)
-		{
-			std::ranges::copy(val, std::ostream_iterator<
-				std::ranges::range_value_t<T>>(std::cout));
-		};
-
-	/**
 	 * @brief Convert A const char* To A std::string
 	 * 
 	 * @param cstring Value To Be Converted
@@ -242,24 +231,20 @@ namespace eqx
 	}
 
 	/**
-	 * @brief Print A String Or Range To std::cout
+	 * @brief Print A String To A Stream
 	 * 
 	 * @param msg Message To Be Printed
-	 * @param delim Characters To Be Printed In Between Elements Of msg
+	 * @param out Stream To Print To
 	 */
-	template <typename T>
-		requires Printable<T>
-	void print(T&& msg, std::string_view delim = "") noexcept;
+	void print(std::string_view msg, std::ostream& out = std::cout) noexcept;
 
 	/**
-	 * @brief Print A String Or Range To std::cout with a '\n'
+	 * @brief Print A String To A Stream With A '\n'
 	 * 
 	 * @param msg Message To Be Printed
-	 * @param delim Characters To Be Printed In Between Elements Of msg
+	 * @param out Stream To Print To
 	 */
-	template <typename T>
-		requires Printable<T>
-	void println(T&& msg, std::string_view delim = "") noexcept;
+	void println(std::string_view msg, std::ostream& out = std::cout) noexcept;
 
 	/**
 	 * @brief Checks If A Boolean Expression Is True, If Not Then Print

@@ -29,7 +29,7 @@ inline void BenchmarkTester::test()
 inline void BenchmarkTester::testGetBench()
 {
 	using namespace std::literals;
-	using namespace eqx::shortTimeUnits;
+	using namespace eqx::TimeTypes;
 	auto bench = eqx::Benchmark();
 
 	bench.bench(wasteTime, 5us);
@@ -48,7 +48,7 @@ inline void BenchmarkTester::testGetBench()
 inline void BenchmarkTester::testToString()
 {
 	using namespace std::literals;
-	using namespace eqx::shortTimeUnits;
+	using namespace eqx::TimeTypes;
 	auto bench = eqx::Benchmark();
 	bench.bench(wasteTime, 5us);
 

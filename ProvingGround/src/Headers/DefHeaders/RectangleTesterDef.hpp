@@ -163,7 +163,7 @@ constexpr void RectangleTester::testIntersect() noexcept
 	static_assert(eqx::intersect(rect4, point4) == true);
 }
 
-constexpr void testIntersectExclusive() noexcept
+constexpr void RectangleTester::testIntersectExclusive() noexcept
 {
 	constexpr auto rect1 = eqx::Rectangle<double>(1.0, 1.0, 1.0, 1.0);
 	constexpr auto rect2 =

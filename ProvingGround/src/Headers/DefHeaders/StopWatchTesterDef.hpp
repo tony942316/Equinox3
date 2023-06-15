@@ -30,7 +30,7 @@ inline void StopWatchTester::test()
 inline void StopWatchTester::testGetTime()
 {
 	using namespace std::chrono_literals;
-	using namespace eqx::shortTimeUnits;
+	using namespace eqx::TimeTypes;
 	auto watch = eqx::StopWatch();
 	wasteTime(1'000us);
 	watch.stop();
@@ -44,7 +44,7 @@ inline void StopWatchTester::testGetTime()
 inline void StopWatchTester::testReadTime()
 {
 	using namespace std::chrono_literals;
-	using namespace eqx::shortTimeUnits;
+	using namespace eqx::TimeTypes;
 	auto watch = eqx::StopWatch();
 	wasteTime(1'000us);
 	const auto result = watch.readTime<t_US>();
@@ -56,7 +56,7 @@ inline void StopWatchTester::testReadTime()
 inline void StopWatchTester::testToString()
 {
 	using namespace std::chrono_literals;
-	using namespace eqx::shortTimeUnits;
+	using namespace eqx::TimeTypes;
 	auto watch = eqx::StopWatch();
 	wasteTime(1'000us);
 	watch.stop();

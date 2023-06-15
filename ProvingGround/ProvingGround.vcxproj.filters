@@ -101,5 +101,11 @@
     <ClInclude Include="src\Headers\DefHeaders\StopWatchTesterDef.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\Headers\StaticVectorTester.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Headers\DefHeaders\StaticVectorTesterDef.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

@@ -44,11 +44,11 @@ namespace eqx
 		{
 			if (s_OutputStream != nullptr)
 			{
-				*s_OutputStream << logString << std::endl;
+				println(logString, *s_OutputStream);
 			}
 			if (s_LogFile->is_open())
 			{
-				*s_LogFile << logString << std::endl;
+				println(logString, *s_LogFile);
 			}
 			s_LastErrorType = type;
 			*s_LastMessage = msg;
