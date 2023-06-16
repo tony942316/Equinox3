@@ -31,6 +31,18 @@ namespace eqx
 	inline constexpr auto zero = narrowCast<T>(0);
 
 	/**
+	 * @brief Take The Absolute Value Of A Number
+	 *		Equivilent To std::abs Except For This Is Constexpr (Pre-C++23)
+	 * 
+	 * @param val Number To Take The Absolute Value Of
+	 * 
+	 * @returns Absolute Value Of val
+	 */
+	template <typename T>
+		requires Arithmetic<T>
+	[[nodiscard]] constexpr T abs(T val) noexcept;
+
+	/**
 	 * @brief Check If Two Integer Types Are Equal
 	 * @brief T Must Be An Integer Type
 	 *
@@ -54,7 +66,7 @@ namespace eqx
 	 */
 	template <typename T>
 		requires std::floating_point<T>
-	[[nodiscard]] bool equals(T x, T y, 
+	[[nodiscard]] constexpr bool equals(T x, T y, 
 		T error = static_cast<T>(0.001)) noexcept;
 
 	/**
@@ -140,7 +152,7 @@ namespace eqx
 	 */
 	template <typename T>
 		requires Arithmetic<T>
-	[[nodiscard]] T distance(T x1, T x2) noexcept;
+	[[nodiscard]] constexpr T distance(T x1, T x2) noexcept;
 
 	/**
 	 * @brief Convert Degrees To Radians

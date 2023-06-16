@@ -59,6 +59,15 @@ namespace eqx
 
 	template <typename T>
 		requires Arithmetic<T>
+	[[nodiscard]] constexpr void 
+		Rectangle<T>::setLocation(const eqx::Point<T>& point) noexcept
+	{
+		x = point.x;
+		y = point.y;
+	}
+
+	template <typename T>
+		requires Arithmetic<T>
 	[[nodiscard]] constexpr Point<T> Rectangle<T>::getLocation() const noexcept
 	{
 		return getTopLeftPoint();
@@ -104,6 +113,19 @@ namespace eqx
 		auto dx = static_cast<T>(w * 0.5);
 		auto dy = static_cast<T>(h * 0.5);
 		return Point<T>(x + dx, y + dy);
+	}
+
+	template <typename T>
+		requires Arithmetic<T>
+	[[nodiscard]] constexpr Point<T> 
+		Rectangle<T>::getEmplaceCenter(const Rectangle<T>& other) 
+		const noexcept
+	{
+		runtimeAssert(other.w < w && other.h < h,
+			"Other Rectangle Is Wider Or Taller Than Source!");
+
+		return eqx::Point<T>(narrowCast<T>(x + 0.5 * (w - other.w)),
+			narrowCast<T>(y + 0.5 * (h - other.h)));
 	}
 
 	template <typename T>
@@ -206,5 +228,12 @@ namespace eqx
 		{
 			return true;
 		}
+	}
+
+	template <typename T>
+	[[nodiscard]] constexpr void emplaceCenter(const Rectangle<T>& source,
+		Rectangle<T>& toMove) noexcept
+	{
+		toMove.setLocation(source.getEmplaceCenter(toMove));
 	}
 }

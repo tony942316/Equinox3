@@ -23,7 +23,7 @@ namespace eqx
 		requires Arithmetic<T>
 	constexpr Point<T>::Point() noexcept
 		:
-		Point(eqx::zero<T>, eqx::zero<T>)
+		Point(zero<T>, zero<T>)
 	{
 	}
 
@@ -191,5 +191,27 @@ namespace eqx
 			sinVals.first : sinVals.second;
 
 		return correctValue;
+	}
+
+	template <typename T>
+		requires std::integral<T>
+	[[nodiscard]] constexpr T coordToIndex(const Point<T>& coord, T rowLength) 
+		noexcept
+	{
+		runtimeAssert(isPositive(rowLength), "rowLength Must Be Positive");
+		runtimeAssert(!isNegative(coord.x) && !isNegative(coord.y),
+			"Point Can't Have Negative Values");
+		runtimeAssert(coord.x < rowLength, "x Can't Be Larger Than rowLength");
+		return coord.x + coord.y * rowLength;
+	}
+
+	template <typename T>
+		requires std::integral<T>
+	[[nodiscard]] constexpr Point<T> indexToCoord(T index, T rowLength) 
+		noexcept
+	{
+		runtimeAssert(isPositive(rowLength), "rowLength Must Be Positive");
+		runtimeAssert(!isNegative(index), "index Can't Be Negative");
+		return Point<T>(index % rowLength, index / rowLength);
 	}
 }

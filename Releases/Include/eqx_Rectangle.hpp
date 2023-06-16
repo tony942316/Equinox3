@@ -82,6 +82,14 @@ namespace eqx
 			operator!= (const Rectangle<T>& other) const noexcept;
 
 		/**
+		 * @brief x = point.x, y = point.y
+		 * 
+		 * @param point Location To Set Our Rectangle
+		 */
+		[[nodiscard]] constexpr void setLocation(const eqx::Point<T>& point)
+			noexcept;
+
+		/**
 		 * @brief Create A Point At (X, Y), Note That This Is An
 		 *		Alias For GetTopLeftPoint()
 		 * 
@@ -124,6 +132,17 @@ namespace eqx
 		 * @returns eqx::Point<T> Representing The Center Point
 		 */
 		[[nodiscard]] constexpr Point<T> getCenterPoint() const noexcept;
+
+		/**
+		 * @brief Create A Point Where other Rectangle Is Perfectly Centered
+		 * 
+		 * @param other Square To Center
+		 * 
+		 * @returns eqx::Point<T> Representing Where The other Rectangle
+		 *		Would Need To Be Located To Center It
+		 */
+		[[nodiscard]] constexpr Point<T> 
+			getEmplaceCenter(const Rectangle<T>& other) const noexcept;
 
 		/**
 		 * @brief Creates Printable String Of Form "(x, y, w, h)"
@@ -218,6 +237,16 @@ namespace eqx
 	template <typename T>
 	[[nodiscard]] constexpr bool intersectExclusive(const Rectangle<T>& rect1,
 		const Rectangle<T>& rect2) noexcept;
+
+	/**
+	 * @brief Move A Rectangle To Be Centered In Another Rectangle
+	 *
+	 * @param source Larger Rectangle To Place Smaller Rectangle In
+	 * @param toMove Rectangle Centered In The source Rectangle
+	 */
+	template <typename T>
+	[[nodiscard]] constexpr void emplaceCenter(const Rectangle<T>& source, 
+		Rectangle<T>& toMove) noexcept;
 }
 
 /**

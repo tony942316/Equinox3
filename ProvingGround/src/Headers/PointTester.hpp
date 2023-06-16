@@ -30,16 +30,17 @@ public:
 	static inline void test();
 
 private:
-	static inline void testEquals();
 	static inline void testToString();
 	static inline void testDistance();
 	static inline void testNormalize();
 	static inline void testAngle();
+	static constexpr void testEquals() noexcept;
 	static constexpr void testConstruction() noexcept;
 	static constexpr void testPlus() noexcept;
 	static constexpr void testMinus() noexcept;
 	static constexpr void testTimes() noexcept;
 	static constexpr void testDivide() noexcept;
+	static constexpr void testIndexConversions() noexcept;
 };
 
 #include "DefHeaders/PointTesterDef.hpp"

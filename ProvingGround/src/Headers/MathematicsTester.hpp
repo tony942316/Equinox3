@@ -32,10 +32,11 @@ public:
 	static inline void test();
 
 private:
-	static inline void testEquals();
-	static inline void testDistance();
 	static inline void testArccos();
 	static inline void testArcsin();
+	static constexpr void testEquals() noexcept;
+	static constexpr void testAbs() noexcept;
+	static constexpr void testDistance() noexcept;
 	static consteval void testGetSign() noexcept;
 	static consteval void testIsPositive() noexcept;
 	static consteval void testIsNegative() noexcept;

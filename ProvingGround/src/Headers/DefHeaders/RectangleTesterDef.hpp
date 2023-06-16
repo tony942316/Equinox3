@@ -218,3 +218,26 @@ constexpr void RectangleTester::testIntersectExclusive() noexcept
 	static_assert(eqx::intersectExclusive(rect1, point2) == false);
 	static_assert(eqx::intersectExclusive(rect2, point1) == false);
 }
+
+constexpr void RectangleTester::testEmplaceCenter() noexcept
+{
+	constexpr auto rect1 = eqx::Rectangle<double>(1.0, 1.0, 1.0, 1.0);
+	constexpr auto rect2 =
+		eqx::Rectangle<double>(0.0, 0.0, 3.0, 3.0);
+	constexpr auto rect3 =
+		eqx::Rectangle<double>(1.459, 0.889, 0.374, 8.398);
+	constexpr auto rect4 =
+		eqx::Rectangle<double>(-5.689, -2.448, 3.589, 1.005);
+	constexpr auto rect5 = eqx::Rectangle<double>(0.0, 0.0, 15.0, 20.0);
+
+	static_assert(rect2.getEmplaceCenter(rect1) ==
+		eqx::Point<double>(1.0, 1.0));
+	static_assert(rect5.getEmplaceCenter(rect1) ==
+		eqx::Point<double>(7.0, 9.5));
+	static_assert(rect5.getEmplaceCenter(rect2) ==
+		eqx::Point<double>(6.0, 8.5));
+	static_assert(rect5.getEmplaceCenter(rect3) ==
+		eqx::Point<double>(7.313, 5.801));
+	static_assert(rect5.getEmplaceCenter(rect4) ==
+		eqx::Point<double>(5.7055, 9.4975));
+}

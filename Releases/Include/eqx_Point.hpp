@@ -239,6 +239,32 @@ namespace eqx
 	 */
 	template <typename T>
 	[[nodiscard]] double angle(const Point<T>& point) noexcept;
+
+	/**
+	 * @brief Convert A Point Into An Array Index
+	 * 
+	 * @param coord Point To Convert
+	 * @param rowLength Stride Of A Row In The Array
+	 * 
+	 * @returns An Index Representing The Point
+	 */
+	template <typename T>
+		requires std::integral<T>
+	[[nodiscard]] constexpr T coordToIndex(const Point<T>& coord, T rowLength) 
+		noexcept;
+
+	/**
+	 * @brief Convert An Array Index Into A 2-D Coordinate
+	 * 
+	 * @param index Index To Convert
+	 * @param rowLength Stride Of A Row In The Array
+	 * 
+	 * @returns A Point Representing The Index
+	 */
+	template <typename T>
+		requires std::integral<T>
+	[[nodiscard]] constexpr Point<T> indexToCoord(T index, T rowLength) 
+		noexcept;
 }
 
 /**

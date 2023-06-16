@@ -20,32 +20,12 @@
 inline void PointTester::test()
 {
 	std::cout << "Testing Point..." << std::endl;
-	testEquals();
 	testToString();
 	testDistance();
 	testNormalize();
 	testAngle();
 	UnitTester::printStatus();
 	UnitTester::clear();
-}
-
-inline void PointTester::testEquals()
-{
-	constexpr auto point1 = eqx::Point<double>(1.0, 1.0);
-	constexpr auto point2 = eqx::Point<double>(-10.0, 10.0);
-	constexpr auto point3 = eqx::Point<double>(1.234, 7.654);
-	constexpr auto point4 = eqx::Point<double>(-10.0, 10.0);
-
-	UnitTester::test(eqx::equals(point1, point1), true);
-	UnitTester::test(eqx::equals(point1, point2), false);
-	UnitTester::test(eqx::equals(point1, point3), false);
-	UnitTester::test(eqx::equals(point1, point4), false);
-	UnitTester::test(eqx::equals(point2, point2), true);
-	UnitTester::test(eqx::equals(point2, point3), false);
-	UnitTester::test(eqx::equals(point2, point4), true);
-	UnitTester::test(eqx::equals(point3, point3), true);
-	UnitTester::test(eqx::equals(point3, point4), false);
-	UnitTester::test(eqx::equals(point4, point4), true);
 }
 
 inline void PointTester::testToString()
@@ -108,6 +88,25 @@ inline void PointTester::testAngle()
 	UnitTester::test(eqx::angle(point1), 45.0);
 	UnitTester::test(eqx::angle(point2), 135.0);
 	UnitTester::test(eqx::angle(point3), 80.84141723);
+}
+
+constexpr void PointTester::testEquals() noexcept
+{
+	constexpr auto point1 = eqx::Point<double>(1.0, 1.0);
+	constexpr auto point2 = eqx::Point<double>(-10.0, 10.0);
+	constexpr auto point3 = eqx::Point<double>(1.234, 7.654);
+	constexpr auto point4 = eqx::Point<double>(-10.0, 10.0);
+
+	static_assert(eqx::equals(point1, point1) == true);
+	static_assert(eqx::equals(point1, point2) == false);
+	static_assert(eqx::equals(point1, point3) == false);
+	static_assert(eqx::equals(point1, point4) == false);
+	static_assert(eqx::equals(point2, point2) == true);
+	static_assert(eqx::equals(point2, point3) == false);
+	static_assert(eqx::equals(point2, point4) == true);
+	static_assert(eqx::equals(point3, point3) == true);
+	static_assert(eqx::equals(point3, point4) == false);
+	static_assert(eqx::equals(point4, point4) == true);
 }
 
 constexpr void PointTester::testConstruction() noexcept
@@ -231,4 +230,38 @@ constexpr void PointTester::testDivide() noexcept
 	static_assert(testLambda(point3 / 10.0, 0.1234, 0.7654));
 	static_assert(testLambda(point3 / -10.0, -0.1234, -0.7654));
 	static_assert(testLambda(point3 / 1.02, 1.209803, 7.50392));
+}
+
+constexpr void PointTester::testIndexConversions() noexcept
+{
+	constexpr auto Point1 = eqx::Point<int>(0, 0);
+	constexpr auto Point2 = eqx::Point<int>(0, 10);
+	constexpr auto Point3 = eqx::Point<int>(10, 0);
+	constexpr auto Point4 = eqx::Point<int>(10, 10);
+
+	static_assert(eqx::coordToIndex(Point1, 10) == 0);
+	static_assert(eqx::coordToIndex(Point1, 1) == 0);
+	static_assert(eqx::coordToIndex(Point1, 100) == 0);
+	static_assert(eqx::coordToIndex(Point2, 10) == 100);
+	static_assert(eqx::coordToIndex(Point2, 1) == 10);
+	static_assert(eqx::coordToIndex(Point2, 100) == 1000);
+	static_assert(eqx::coordToIndex(Point3, 100) == 10);
+	static_assert(eqx::coordToIndex(Point3, 50) == 10);
+	static_assert(eqx::coordToIndex(Point3, 10000) == 10);
+	static_assert(eqx::coordToIndex(Point4, 100) == 1010);
+	static_assert(eqx::coordToIndex(Point4, 50) == 510);
+	static_assert(eqx::coordToIndex(Point4, 10000) == 100010);
+
+	static_assert(eqx::indexToCoord(0, 10) == Point1);
+	static_assert(eqx::indexToCoord(0, 1) == Point1);
+	static_assert(eqx::indexToCoord(0, 100) == Point1);
+	static_assert(eqx::indexToCoord(100, 10) == Point2);
+	static_assert(eqx::indexToCoord(10, 1) == Point2);
+	static_assert(eqx::indexToCoord(1000, 100) == Point2);
+	static_assert(eqx::indexToCoord(10, 100) == Point3);
+	static_assert(eqx::indexToCoord(10, 50) == Point3);
+	static_assert(eqx::indexToCoord(10, 10000) == Point3);
+	static_assert(eqx::indexToCoord(1010, 100) == Point4);
+	static_assert(eqx::indexToCoord(510, 50) == Point4);
+	static_assert(eqx::indexToCoord(100010, 10000) == Point4);
 }

@@ -20,73 +20,10 @@
 inline void MathematicsTester::test()
 {
 	std::cout << "Testing Mathematics..." << std::endl;
-	testEquals();
-	testDistance();
 	testArccos();
 	testArcsin();
 	UnitTester::printStatus();
 	UnitTester::clear();
-}
-
-inline void MathematicsTester::testEquals()
-{
-	constexpr auto loc = std::source_location::current();
-	auto testLambda =
-		[&loc](bool expected, double p1, double p2, double e = 0.001)
-	{
-		auto info = std::string("");
-		info += "eqx::equals(";
-		info += std::to_string(p1);
-		info += ", ";
-		info += std::to_string(p2);
-		info += ", ";
-		info += std::to_string(e);
-		info += ")";
-		UnitTester::test(eqx::equals(p1, p2, e), expected,
-			EQ<bool, bool>, info, loc);
-	};
-
-	testLambda(true, 0.01, 0.01);
-	testLambda(false, 1.01, 0.01);
-
-	testLambda(false, 0.01, 0.02);
-	testLambda(false, 0.01, 0.02, 0.01);
-	testLambda(true, 0.01, 0.02, 0.1);
-
-	testLambda(false, 0.000001, 0.0000001, 0.0000001);
-	testLambda(false, 1000.0, 1100.0, 100.0);
-	testLambda(true, 1000.0, 1099.0, 100.0);
-
-
-}
-
-inline void MathematicsTester::testDistance()
-{
-	UnitTester::test(eqx::distance(0, 0), 0);
-	UnitTester::test(eqx::distance(0, 1), 1);
-	UnitTester::test(eqx::distance(1, 0), 1);
-	UnitTester::test(eqx::distance(-1, 1), 2);
-
-	UnitTester::test(eqx::distance(0.0, 0.0), 0.0);
-	UnitTester::test(eqx::distance(0.0, 1.0), 1.0);
-	UnitTester::test(eqx::distance(1.0, 0.0), 1.0);
-	UnitTester::test(eqx::distance(-1.0, 1.0), 2.0);
-
-	UnitTester::test(eqx::distance(0U, 0U), 0U);
-	UnitTester::test(eqx::distance(0U, 1U), 1U);
-
-	UnitTester::test(eqx::distance(-100, 250), 350);
-	UnitTester::test(eqx::distance(-250, 100), 350);
-	UnitTester::test(eqx::distance(0, 100'000), 100'000);
-
-	UnitTester::test(eqx::distance(-100.0, 250.0), 350.0);
-	UnitTester::test(eqx::distance(-250.0, 100.0), 350.0);
-	UnitTester::test(eqx::distance(0.0, 100'000.0), 100'000.0);
-	UnitTester::test(eqx::distance(1.5, 10.2), 8.7);
-	UnitTester::test(eqx::distance(-10.2, -1.5), 8.7);
-	UnitTester::test(eqx::distance(-1.054689, 1.5047896), 2.5594786);
-
-	UnitTester::test(eqx::distance(0U, 100'000U), 100'000U);
 }
 
 inline void MathematicsTester::testArccos()
@@ -137,6 +74,79 @@ inline void MathematicsTester::testArcsin()
 		PEQ<double, double, double, double>);
 	UnitTester::test(eqx::arcsin(-1.0), std::make_pair(270.0, 270.0),
 		PEQ<double, double, double, double>);
+}
+
+constexpr void MathematicsTester::testAbs() noexcept
+{
+	static_assert(eqx::abs(0) == 0);
+	static_assert(eqx::abs(1) == 1);
+	static_assert(eqx::abs(-1) == 1);
+	static_assert(eqx::abs(0.0) == 0.0);
+	static_assert(eqx::abs(0.1) == 0.1);
+	static_assert(eqx::abs(-0.1) == 0.1);
+	static_assert(eqx::abs(-100.05) == 100.05);
+	static_assert(eqx::abs(100.05) == 100.05);
+	static_assert(eqx::abs(std::numeric_limits<double>::lowest()) == 
+		std::numeric_limits<double>::max());
+}
+
+constexpr void MathematicsTester::testEquals() noexcept
+{
+	constexpr auto loc = std::source_location::current();
+	auto testLambda =
+		[&loc](bool expected, double p1, double p2, double e = 0.001)
+	{
+		auto info = std::string("");
+		info += "eqx::equals(";
+		info += std::to_string(p1);
+		info += ", ";
+		info += std::to_string(p2);
+		info += ", ";
+		info += std::to_string(e);
+		info += ")";
+		UnitTester::test(eqx::equals(p1, p2, e), expected,
+			EQ<bool, bool>, info, loc);
+	};
+
+	static_assert(eqx::equals(0.01, 0.01) == true);
+	static_assert(eqx::equals(1.01, 0.01) == false);
+
+	static_assert(eqx::equals(0.01, 0.02) == false);
+	static_assert(eqx::equals(0.01, 0.02, 0.01) == false);
+	static_assert(eqx::equals(0.01, 0.02, 0.1) == true);
+
+	static_assert(eqx::equals(0.000001, 0.0000001, 0.0000001) == false);
+	static_assert(eqx::equals(1000.0, 1100.0, 100.0) == false);
+	static_assert(eqx::equals(1000.0, 1099.0, 100.0) == true);
+}
+
+constexpr void MathematicsTester::testDistance() noexcept
+{
+	static_assert(eqx::distance(0, 0) == 0);
+	static_assert(eqx::distance(0, 1) == 1);
+	static_assert(eqx::distance(1, 0) == 1);
+	static_assert(eqx::distance(-1, 1) == 2);
+
+	static_assert(eqx::distance(0.0, 0.0) == 0.0);
+	static_assert(eqx::distance(0.0, 1.0) == 1.0);
+	static_assert(eqx::distance(1.0, 0.0) == 1.0);
+	static_assert(eqx::distance(-1.0, 1.0) == 2.0);
+
+	static_assert(eqx::distance(0U, 0U) == 0U);
+	static_assert(eqx::distance(0U, 1U) == 1U);
+
+	static_assert(eqx::distance(-100, 250) == 350);
+	static_assert(eqx::distance(-250, 100) == 350);
+	static_assert(eqx::distance(0, 100'000) == 100'000);
+
+	static_assert(eqx::distance(-100.0, 250.0) == 350.0);
+	static_assert(eqx::distance(-250.0, 100.0) == 350.0);
+	static_assert(eqx::distance(0.0, 100'000.0) == 100'000.0);
+	static_assert(eqx::distance(1.5, 10.2) == 8.7);
+	static_assert(eqx::distance(-10.2, -1.5) == 8.7);
+	static_assert(eqx::distance(-1.054689, 1.5047896) == 2.5594786000000003);
+
+	static_assert(eqx::distance(0U, 100'000U) == 100'000U);
 }
 
 consteval void MathematicsTester::testGetSign() noexcept

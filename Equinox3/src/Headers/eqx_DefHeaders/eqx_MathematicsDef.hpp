@@ -20,6 +20,13 @@
 namespace eqx
 {
 	template <typename T>
+		requires Arithmetic<T>
+	[[nodiscard]] constexpr T abs(T val) noexcept
+	{
+		return val < zero<T> ? val * narrowCast<T>(-1) : val;
+	}
+
+	template <typename T>
 		requires Integer<T>
 	[[nodiscard]] constexpr bool equals(T x, T y) noexcept
 	{
@@ -28,9 +35,9 @@ namespace eqx
 
 	template <typename T>
 		requires std::floating_point<T>
-	[[nodiscard]] bool equals(T x, T y, T error) noexcept
+	[[nodiscard]] constexpr bool equals(T x, T y, T error) noexcept
 	{
-		return (std::abs(x - y) < error);
+		return (abs(x - y) < error);
 	}
 
 	template <typename T>
@@ -106,7 +113,7 @@ namespace eqx
 
 	template <typename T>
 		requires Arithmetic<T>
-	[[nodiscard]] T distance(T x1, T x2) noexcept
+	[[nodiscard]] constexpr T distance(T x1, T x2) noexcept
 	{
 		if (x2 > x1)
 		{
@@ -116,7 +123,7 @@ namespace eqx
 		runtimeAssert(!willOverflowSubtraction(x1, x2),
 			"Arithmetic Overflow!");
 
-		return static_cast<T>(std::fabs(x1 - x2));
+		return abs(x1 - x2);
 	}
 
 	template <typename T>

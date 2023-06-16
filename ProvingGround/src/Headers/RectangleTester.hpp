@@ -35,6 +35,7 @@ private:
 	static constexpr void testGetPoints() noexcept;
 	static constexpr void testIntersect() noexcept;
 	static constexpr void testIntersectExclusive() noexcept;
+	static constexpr void testEmplaceCenter() noexcept;
 };
 
 #include "DefHeaders/RectangleTesterDef.hpp"
