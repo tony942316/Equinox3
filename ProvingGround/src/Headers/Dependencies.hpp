@@ -17,23 +17,8 @@
 
 #pragma once
 
-class StopWatchTester
-{
-public:
-	StopWatchTester() = delete;
-	StopWatchTester(const StopWatchTester&) = delete;
-	StopWatchTester(StopWatchTester&&) = delete;
-	StopWatchTester& operator= (const StopWatchTester&) = delete;
-	StopWatchTester& operator= (StopWatchTester&&) = delete;
-	~StopWatchTester() = delete;
+//EQX Lib
+#include "EquinoxSTD.hpp"
 
-	static inline void test();
-
-private:
-	static inline void testGetTime();
-	static inline void testReadTime();
-	static inline void testToString();
-	static inline void wasteTime(std::chrono::microseconds ms);
-};
-
-#include "DefHeaders/StopWatchTesterDef.hpp"
+//Unittester
+#include "UnitTest.hpp"

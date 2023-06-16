@@ -257,56 +257,5 @@ private:
 		return result;
 	}
 
-	static std::vector<std::string> s_FailedTests;
+	static inline std::vector<std::string> s_FailedTests;
 };
-
-/*
-class Primitives
-{
-public:
-	Primitives() noexcept;
-
-	std::vector<std::string> primitives;
-	std::vector<std::string> volatilePrimitives;
-	std::vector<std::string> constPrimitives;
-	std::vector<std::string> constVolatilePrimitives;
-
-	std::vector<std::string> containerPrimitives;
-	std::vector<std::string> allPrimitives;
-
-	std::vector<std::string> strings;
-	std::vector<std::string> volatileStrings;
-	std::vector<std::string> constStrings;
-	std::vector<std::string> constVolatileStrings;
-
-	std::vector<std::string> allStrings;
-
-	std::vector<std::string> allVectors;
-	std::vector<std::string> allLists;
-	std::vector<std::string> allFLists;
-	std::vector<std::string> allSets;
-	std::vector<std::string> allUSets;
-	std::vector<std::string> allQueues;
-	std::vector<std::string> allPQueues;
-	std::vector<std::string> allDeques;
-	std::vector<std::string> allStacks;
-	std::vector<std::string> allArrays;
-	std::vector<std::string> allMaps;
-	std::vector<std::string> allUMaps;
-
-	std::vector<std::string> allRangeCollections;
-	std::vector<std::string> allNonRangeCollections;
-	std::vector<std::string> allCollections;
-
-private:
-	void makePrimitives();
-	void makeStrings();
-	void makeCollections();
-
-	void appendStrVector(std::vector<std::string>& appendi,
-		const std::vector<std::string>& appender);
-};
-
-std::vector<std::string> makeMacroString(const std::string& macroName,
-	const std::vector<std::string>& macroDefTokens);
-void makeMacros();*/

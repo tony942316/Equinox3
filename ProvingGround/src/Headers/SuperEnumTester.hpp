@@ -17,7 +17,35 @@
 
 #pragma once
 
-namespace SuperEnumTester
+class SuperEnumTester
 {
-	void test();
-}
+public:
+	SuperEnumTester() = delete;
+	SuperEnumTester(const SuperEnumTester&) = delete;
+	SuperEnumTester(SuperEnumTester&&) = delete;
+	SuperEnumTester& operator= (const SuperEnumTester&) = delete;
+	SuperEnumTester& operator= (SuperEnumTester&&) = delete;
+	~SuperEnumTester() = delete;
+
+	static inline void test();
+
+private:
+	class SuperEnumShell
+	{
+	public:
+		EQX_SUPER_ENUM(Pub3,
+			v1,
+			v2,
+			v3)
+			EQX_SUPER_ENUM(Pub5, v1, v2, v3, v4, v5)
+			EQX_SUPER_ENUM(Pub7, v1, v2, v3, v4, v5,
+				v6, v7)
+	};
+
+	static inline void testStreaming();
+	static consteval void testEnumCollection() noexcept;
+	static constexpr void testGetEnums() noexcept;
+	static constexpr void testGetString() noexcept;
+};
+
+#include "DefHeaders/SuperEnumTesterDef.hpp"

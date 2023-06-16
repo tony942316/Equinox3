@@ -35,22 +35,39 @@ namespace eqx
 		m_EndTime = std::chrono::steady_clock::now();
 	}
 
-	template <timeUnit T>
+	template <typename T>
+		requires TimeUnit<T>
 	[[nodiscard]] T StopWatch::getDuration() const noexcept
 	{
 		return std::chrono::duration_cast<T>(m_EndTime - m_StartTime);
 	}
 
-	template <timeUnit T>
+	template <typename T>
+		requires TimeUnit<T>
 	[[nodiscard]] long long StopWatch::getTime() const noexcept
 	{
 		return getDuration<T>().count();
 	}
 
-	template <timeUnit T>
+	template <typename T>
+		requires TimeUnit<T>
 	[[nodiscard]] long long StopWatch::readTime() noexcept
 	{
 		stop();
 		return getTime<T>();
+	}
+
+	template <typename T>
+		requires TimeUnit<T>
+	[[nodiscard]] std::string StopWatch::toString() const
+	{
+		return std::format("{}", getDuration<T>());
+	}
+
+	template <typename T>
+		requires TimeUnit<T>
+	[[nodiscard]] std::string toString(const StopWatch& watch)
+	{
+		return watch.toString<T>();
 	}
 }

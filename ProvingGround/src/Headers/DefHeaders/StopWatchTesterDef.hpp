@@ -15,58 +15,58 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "StopWatchTester.hpp"
+#pragma once
 
-#include <iostream>
-#include <chrono>
-
-#include "UnitTest.hpp"
-#include "eqx_StopWatch.hpp"
-
-namespace StopWatchTester
+inline void StopWatchTester::test()
 {
-	void testGetTime();
-	void testReadTime();
-
-	void test()
-	{
-		std::cout << "Testing StopWatch..." << std::endl;
-		testGetTime();
-		testReadTime();
-		UnitTester::printStatus();
-		UnitTester::clear();
-	}
-
-	void wasteTime(std::chrono::microseconds ms);
+	std::cout << "Testing StopWatch..." << std::endl;
+	testGetTime();
+	testReadTime();
+	testToString();
+	UnitTester::printStatus();
+	UnitTester::clear();
 }
 
-void StopWatchTester::wasteTime(std::chrono::microseconds ms)
-{
-	std::this_thread::sleep_for(ms);
-}
-
-void StopWatchTester::testGetTime()
+inline void StopWatchTester::testGetTime()
 {
 	using namespace std::chrono_literals;
-	using namespace eqx::shortTimeUnits;
+	using namespace eqx::TimeTypes;
 	auto watch = eqx::StopWatch();
 	wasteTime(1'000us);
 	watch.stop();
 
-	UnitTester::test(watch.getTime<tu_us>(), 100'000LL, 
+	UnitTester::test(watch.getTime<t_US>(), 100'000LL,
 		LTE<long long, long long>);
-	UnitTester::test(watch.getTime<tu_us>(), 1'000LL,
+	UnitTester::test(watch.getTime<t_US>(), 1'000LL,
 		GTE<long long, long long>);
 }
 
-void StopWatchTester::testReadTime()
+inline void StopWatchTester::testReadTime()
 {
 	using namespace std::chrono_literals;
-	using namespace eqx::shortTimeUnits;
+	using namespace eqx::TimeTypes;
 	auto watch = eqx::StopWatch();
 	wasteTime(1'000us);
-	const auto result = watch.readTime<tu_us>();
+	const auto result = watch.readTime<t_US>();
 
 	UnitTester::test(result, 100'000LL, LTE<long long, long long>);
 	UnitTester::test(result, 1'000LL, GTE<long long, long long>);
+}
+
+inline void StopWatchTester::testToString()
+{
+	using namespace std::chrono_literals;
+	using namespace eqx::TimeTypes;
+	auto watch = eqx::StopWatch();
+	wasteTime(1'000us);
+	watch.stop();
+
+	UnitTester::test(watch.toString<t_US>(), 
+		std::format("{}us", watch.getTime<t_US>()));
+	UnitTester::test(eqx::toString<t_US>(watch), watch.toString<t_US>());
+}
+
+inline void StopWatchTester::wasteTime(std::chrono::microseconds ms)
+{
+	std::this_thread::sleep_for(ms);
 }

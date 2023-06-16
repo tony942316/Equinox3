@@ -17,4 +17,13 @@
 
 #pragma once
 
-void workbenchMain();
+inline void workbenchMain()
+{
+	using namespace eqx::literals;
+	eqx::print("Workbench Start: ");
+	std::cin.get(); 
+ 
+
+	eqx::print("\nWorkbench End: ");
+	std::cin.get();
+}

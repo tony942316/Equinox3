@@ -17,7 +17,23 @@
 
 #pragma once
 
-namespace UtilityMacrosTester
+class UtilityMacrosTester
 {
-	void test();
-}
+public:
+	UtilityMacrosTester() = delete;
+	UtilityMacrosTester(const UtilityMacrosTester&) = delete;
+	UtilityMacrosTester(UtilityMacrosTester&&) = delete;
+	UtilityMacrosTester& operator= (const UtilityMacrosTester&) = delete;
+	UtilityMacrosTester& operator= (UtilityMacrosTester&&) = delete;
+	~UtilityMacrosTester() = delete;
+
+	static inline void test();
+
+private:
+	static consteval void testCountArgs() noexcept;
+	static constexpr void testStringArgs() noexcept;
+	static constexpr void testForEach() noexcept;
+	static constexpr void testForEachList();
+};
+
+#include "DefHeaders/UtilityMacrosDef.hpp"
