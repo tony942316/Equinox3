@@ -22,6 +22,8 @@ inline void StopWatchTester::test()
 	std::cout << "Testing StopWatch..." << std::endl;
 	testGetTime();
 	testReadTime();
+	testGetSeconds();
+	testReadSeconds();
 	testToString();
 	UnitTester::printStatus();
 	UnitTester::clear();
@@ -51,6 +53,55 @@ inline void StopWatchTester::testReadTime()
 
 	UnitTester::test(result, 100'000LL, LTE<long long, long long>);
 	UnitTester::test(result, 1'000LL, GTE<long long, long long>);
+	UnitTester::test(result, watch.getTime<t_US>());
+}
+
+inline void StopWatchTester::testGetSeconds()
+{
+	using namespace std::chrono_literals;
+	using namespace eqx::TimeTypes;
+	auto watch = eqx::StopWatch();
+	wasteTime(1'000ms);
+	watch.stop();
+
+	UnitTester::test(watch.getSeconds(), 2.0,
+		LTE<double, double>);
+	UnitTester::test(watch.getSeconds(), 1.0,
+		GTE<double, double>);
+
+	watch.start();
+	wasteTime(500ms);
+	watch.stop();
+
+	UnitTester::test(watch.getSeconds(), 1.0,
+		LTE<double, double>);
+	UnitTester::test(watch.getSeconds(), 0.5,
+		GTE<double, double>);
+}
+
+inline void StopWatchTester::testReadSeconds()
+{
+	using namespace std::chrono_literals;
+	using namespace eqx::TimeTypes;
+	auto watch = eqx::StopWatch();
+	wasteTime(1'000ms);
+	auto result = watch.readSeconds();
+
+	UnitTester::test(result, 2.0,
+		LTE<double, double>);
+	UnitTester::test(result, 1.0,
+		GTE<double, double>);
+	UnitTester::test(result, watch.getSeconds());
+
+	watch.start();
+	wasteTime(500ms);
+	result = watch.readSeconds();
+
+	UnitTester::test(result, 1.0,
+		LTE<double, double>);
+	UnitTester::test(result, 0.5,
+		GTE<double, double>);
+	UnitTester::test(result, watch.getSeconds());
 }
 
 inline void StopWatchTester::testToString()

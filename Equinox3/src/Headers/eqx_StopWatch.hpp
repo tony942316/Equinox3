@@ -97,6 +97,21 @@ namespace eqx
 		[[nodiscard]] long long readTime() noexcept;
 
 		/**
+		 * @brief Gives Time Past In Seconds With Fine Precision
+		 * 
+		 * @returns double 1500 Milliseconds Would Be 1.5 Seconds
+		 */
+		[[nodiscard]] inline double getSeconds() const noexcept;
+
+		/**
+		 * @brief Calls this->stop Then 
+		 *		Gives Time Past In Seconds With Fine Precision
+		 * 
+		 * @returns double 1500 Milliseconds Would Be 1.5 Seconds
+		 */
+		[[nodiscard]] inline double readSeconds() noexcept;
+
+		/**
 		 * @brief Gives The String Representation Of The Current Duration
 		 * 
 		 * @returns std::string "{TimePast}ms"

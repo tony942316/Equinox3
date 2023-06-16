@@ -57,6 +57,16 @@ namespace eqx
 		return getTime<T>();
 	}
 
+	[[nodiscard]] inline double StopWatch::getSeconds() const noexcept
+	{
+		return getTime<std::chrono::nanoseconds>() / 1E9;
+	}
+
+	[[nodiscard]] inline double StopWatch::readSeconds() noexcept
+	{
+		return readTime<std::chrono::nanoseconds>() / 1E9;
+	}
+
 	template <typename T>
 		requires TimeUnit<T>
 	[[nodiscard]] std::string StopWatch::toString() const
