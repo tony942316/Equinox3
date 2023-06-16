@@ -57,12 +57,12 @@ namespace eqx
 		return getTime<T>();
 	}
 
-	[[nodiscard]] double StopWatch::getSeconds() const noexcept
+	[[nodiscard]] inline double StopWatch::getSeconds() const noexcept
 	{
 		return getTime<std::chrono::nanoseconds>() / 1E9;
 	}
 
-	[[nodiscard]] double StopWatch::readSeconds() noexcept
+	[[nodiscard]] inline double StopWatch::readSeconds() noexcept
 	{
 		return readTime<std::chrono::nanoseconds>() / 1E9;
 	}

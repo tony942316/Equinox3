@@ -101,7 +101,7 @@ namespace eqx
 		 * 
 		 * @returns double 1500 Milliseconds Would Be 1.5 Seconds
 		 */
-		[[nodiscard]] double getSeconds() const noexcept;
+		[[nodiscard]] inline double getSeconds() const noexcept;
 
 		/**
 		 * @brief Calls this->stop Then 
@@ -109,7 +109,7 @@ namespace eqx
 		 * 
 		 * @returns double 1500 Milliseconds Would Be 1.5 Seconds
 		 */
-		[[nodiscard]] double readSeconds() noexcept;
+		[[nodiscard]] inline double readSeconds() noexcept;
 
 		/**
 		 * @brief Gives The String Representation Of The Current Duration
