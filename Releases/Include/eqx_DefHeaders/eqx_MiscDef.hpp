@@ -113,7 +113,7 @@ namespace eqx
 		}
 	}
 
-	void print(std::string_view msg, std::ostream& out) noexcept
+	inline void print(std::string_view msg, std::ostream& out) noexcept
 	{
 		try
 		{
@@ -125,7 +125,7 @@ namespace eqx
 		}
 	}
 
-	void println(std::string_view msg, std::ostream& out) noexcept
+	inline void println(std::string_view msg, std::ostream& out) noexcept
 	{
 		print(msg, out);
 		print("\n", out);
