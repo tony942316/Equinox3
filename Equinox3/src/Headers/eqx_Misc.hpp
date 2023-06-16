@@ -236,7 +236,8 @@ namespace eqx
 	 * @param msg Message To Be Printed
 	 * @param out Stream To Print To
 	 */
-	void print(std::string_view msg, std::ostream& out = std::cout) noexcept;
+	inline void print(std::string_view msg, std::ostream& out = std::cout) 
+		noexcept;
 
 	/**
 	 * @brief Print A String To A Stream With A '\n'
@@ -244,7 +245,8 @@ namespace eqx
 	 * @param msg Message To Be Printed
 	 * @param out Stream To Print To
 	 */
-	void println(std::string_view msg, std::ostream& out = std::cout) noexcept;
+	inline void println(std::string_view msg, std::ostream& out = std::cout) 
+		noexcept;
 
 	/**
 	 * @brief Checks If A Boolean Expression Is True, If Not Then Print
